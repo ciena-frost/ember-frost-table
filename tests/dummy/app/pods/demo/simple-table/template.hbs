@@ -1,0 +1,60 @@
+{{! template-lint-disable bare-strings }}
+{{!-- BEGIN-SNIPPET simple-api }}
+  {{frost-table
+    columns=(array
+      (hash
+        className= // e.g. 'name-column'
+        label= // e.g. 'Name'
+        propertyName= // e.g. 'name'
+      )
+    )
+    items=(array
+      (hash
+        name='Jane Doe'
+      )
+      (hash
+        name='John Doe'
+      )
+    )
+    hook= // e.g. 'myTable'
+  }}
+{{ END-SNIPPET --}}
+
+
+<div class='frost-demo-api'>
+  <div class='frost-demo-title'>
+    API
+  </div>
+  <div class='frost-demo-snippet'>
+    {{code-snippet name='simple-api.hbs'}}
+  </div>
+</div>
+<div class='frost-demo-live'>
+  <div class='frost-demo-title'>
+    Live demo
+  </div>
+  <div class='frost-demo-snippet'>
+    {{code-snippet name='simple.hbs'}}
+  </div>
+  <div class='frost-demo-launch'>
+    {{! BEGIN-SNIPPET simple }}
+    {{frost-table
+      columns=(array
+        (hash
+          label='Name'
+          propertyName='name'
+        )
+        (hash
+          label='Real Name'
+          propertyName='realName'
+        )
+        (hash
+          label='Universe'
+          propertyName='universe'
+        )
+      )
+      items=heroes
+    }}
+    {{! END-SNIPPET }}
+  </div>
+</div>

@@ -1,0 +1,20 @@
+{{! Template for the frost-table component }}
+<thead class="{{concat css '-header'}}">
+  {{#each columns as |column|}}
+    <th class="{{concat css '-header-cell'}} {{concat css '-cell'}} {{column.className}}">
+      <span>{{column.label}}</span>
+    </th>
+  {{/each}}
+</thead>
+
+<tbody class="{{concat css '-body'}}">
+  {{#each items as |item| }}
+    <tr class="{{concat css '-body-row'}}">
+      {{#each columns as |column|}}
+        <td class="{{concat css '-body-cell'}} {{concat css '-cell'}} {{column.className}}">
+          <span>{{get item column.propertyName}}</span>
+        </td>
+      {{/each}}
+    </tr>
+  {{/each}}
+</tbody>

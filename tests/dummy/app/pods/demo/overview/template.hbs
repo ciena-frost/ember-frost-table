@@ -2,41 +2,12 @@
 <div class='frost-demo-notes'>
   <h1>TLDR</h1>
   <p>
-    <b>ember-frost-modal</b> is a modal platform and component library built
-    using <a href='https://github.com/ef4/ember-elsewhere' target='_blank' rel='noopener'>ember-elsewhere</a>
-    and <a href='https://github.com/ember-animation/liquid-fire' target='_blank' rel='noopener'>liquid-fire</a>.
+    <code>ember-frost-table</code> is a platform for building simple tables with a couple handy features,
+    like fixed headers and frozen columns.
   </p>
   <p>
-    The modal platform consists of:
-    {{!--
-    <ul>
-      <li>a binding to {{#link-to 'demo.blur'}}blur{{/link-to}} the background when a modal is active</li>
-      <li>a {{#link-to 'demo.remote-outlet'}}remote outlet{{/link-to}} that controls:
-        <ul>
-          <li>background opacity</li>
-          <li>capturing clicks outside of the modal</li>
-          <li>positioning the modal on the page</li>
-        </ul>
-      </li>
-      <li>a {{#link-to 'demo.basic-binding'}}local binding{{/link-to}} that controls:
-        <ul>
-          <li>visiblity of a given modal component with custom parameters</li>
-          <li>close, cancel and confirm actions</li>
-          <li>animation transitions</li>
-          <li>outlet customization</li>
-        </ul>
-      </li>
-    </ul>
-    --}}
-  </p>
-  <p>
-    Unlike some other modal platforms, modals are components that remain completely within the Ember
-    rendered DOM and lifecycle, so complex content can be included in modals with assurance that bindings
-    and DOM management are handled as expected for an Ember component.
-  </p>
-  <p>
-    The component library currently ships with <b>6</b> unique components and <b>1</b> animation.  At least
-    1 more component and 2 more animations are in development and we would be happy to add more.
+    In the simplest use-case, a <code>frost-table</code> takes an array of column definitions and an array
+    of data items. It then displays the data in the items array one per row, using the columns it was given.
   </p>
   <div class='frost-demo-overview-links'>
     {{!--
@@ -44,11 +15,11 @@
       <div class='content text'>Moar platform, I want to learn!</div>
     {{/link-to}}
     --}}
-    {{frost-button
+    {{#frost-link 'demo.simple-table'
       priority='primary'
       size='medium'
-      text='Enough talk, show me components!'
-      onClick=(action (mut isInfoVisible) true)
     }}
+      Enough talk, show me components!
+    {{/frost-link}}
   </div>
 </div>

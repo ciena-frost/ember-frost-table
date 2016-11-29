@@ -21,7 +21,7 @@ Router.map(function () {
     // this.route('info')
     // this.route('overflow')
     this.route('overview', { path: '/' })
-    // this.route('remote-outlet')
+    this.route('simple-table')
     // this.route('warn')
   })
 })
