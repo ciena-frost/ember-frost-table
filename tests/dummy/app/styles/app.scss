@@ -1,0 +1,155 @@
+@import 'node_modules/ember-frost-core/addon/styles/frost-theme';
+@import 'node_modules/ember-frost-core/addon/styles/frost-app';
+
+$blockquote-border-color: #c76c0c;
+$blockquote-color: #666;
+$blockquote-shadow-color: #ccc;
+$blockquote-quote-color: #999;
+$frost-modal-demos-shadow-color: rgba(0, 0, 0, .13);
+
+.demo-notification-container {
+  position: fixed;
+  top: 60px;
+  right: 10px;
+  width: 80%;
+  max-width: 400px;
+  margin: auto;
+  z-index: 999;
+}
+
+// TODO Move to ember-frost-tabs
+.frost-tabs {
+  .tab-nav {
+    .tab {
+      cursor: pointer;
+    }
+  }
+}
+
+dl {
+  dd {
+    margin: 10px 0 10px 10px;
+    font-style: italic;
+  }
+
+  dt {
+    span {
+      padding: 2px 4px;
+      border-radius: 3px;
+      background: $frost-color-night-3;
+      color: $frost-color-white;
+    }
+  }
+}
+
+.sep {
+  border-top: 1px solid $frost-color-lgrey-2;
+  border-bottom: 0;
+}
+
+.frost-demo {
+  display: flex;
+  flex-direction: row;
+}
+
+.frost-demos {
+  height: 100vh;
+  padding: 0 20px;
+  box-shadow: 0 0 5px 3px $frost-modal-demos-shadow-color;
+}
+
+.frost-demo-selectors {
+  min-width: 100px;
+  height: calc(100vh - 61px);
+  margin: 10px 0 10px 10px;
+  padding-right: 20px;
+  font-size: $frost-font-s;
+
+  a {
+    display: block;
+    transition: color .3s;
+    color: $frost-color-grey-2;
+    font-style: normal;
+    text-decoration: initial;
+    cursor: pointer;
+
+    &:hover {
+      color: $frost-color-blue-3;
+    }
+
+    &.active {
+      color: $frost-color-blue-1;
+    }
+
+    + a {
+      padding-top: 10px;
+    }
+  }
+}
+
+.frost-demo-selector-title {
+  padding-top: 10px;
+  font-style: italic;
+
+  + a {
+    padding-top: 10px;
+  }
+
+  > a,
+  > .frost-demo-selector-title {
+    padding: 10px 0 0 10px;
+  }
+}
+
+.frost-demo-overview-links {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 40px;
+  padding-top: 60px;
+  border-top: 1px solid $frost-color-lgrey-2;
+}
+
+.frost-demo-example {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  height: 100vh;
+  margin-left: 20px;
+}
+
+.frost-demo-api,
+.frost-demo-live {
+  flex: 1;
+  margin-right: 20px;
+
+  .frost-tabs {
+    margin-top: 15px;
+  }
+}
+
+.frost-demo-title {
+  margin-top: 20px;
+  color: $frost-color-grey-2;
+  font-size: $frost-font-m;
+  font-weight: bold;
+}
+
+.frost-demo-snippet {
+  margin: 0 20px;
+  font-size: $frost-font-s;
+
+  > pre {
+    padding: 20px;
+  }
+}
+
+.frost-demo-notes {
+  margin: 0 20px 0 10px;
+  font-size: $frost-font-s;
+}
+
+.frost-footer-component {
+  width: 40px;
+  height: 40px;
+}

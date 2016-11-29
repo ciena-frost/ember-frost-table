@@ -19,9 +19,5 @@ module.exports = {
     if (this.options.babel.optional.indexOf('es7.decorators') === -1) {
       this.options.babel.optional.push('es7.decorators')
     }
-  },
-
-  included: function (app, parentAddon) {
-    this._super.included.apply(this, arguments)
   }
 }
