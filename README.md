@@ -7,19 +7,19 @@
 [npm-img]: https://img.shields.io/npm/v/ember-frost-table.svg "NPM Version"
 [npm-url]: https://www.npmjs.com/package/ember-frost-table
 
-[ember-observer-badge]: http://emberobserver.com/badges/ember-frost-table.svg "Ember Observer score"
-[ember-observer-badge-url]: http://emberobserver.com/addons/ember-frost-table
+[eo]: http://emberobserver.com/badges/ember-frost-table.svg "Ember Observer score"
+[eo-url]: http://emberobserver.com/addons/ember-frost-table
 
 [ember-img]: https://img.shields.io/badge/ember-2.3+-orange.svg "Ember 2.3+"
 
-[bithound-img]: https://www.bithound.io/github/ciena-frost/ember-frost-table/badges/score.svg "bitHound"
-[bithound-url]: https://www.bithound.io/github/ciena-frost/ember-frost-table
+[bh-img]: https://www.bithound.io/github/ciena-frost/ember-frost-table/badges/score.svg "bitHound"
+[bh-url]: https://www.bithound.io/github/ciena-frost/ember-frost-table
 
 # ember-frost-table
 
 | Dependencies | Health | Security | Observer |
 | ------------ | ------ | -------- | -------- |
-| ![Ember][ember-img] | [![Travis][ci-img]][ci-url] | [![bitHound][bithound-img]][bithound-url] | [![EmberObserver][ember-observer-badge]][ember-observer-badge-url] |
+| ![Ember][ember-img] | [![Travis][ci-img]][ci-url] | [![bitHound][bh-img]][bh-url] | [![EmberObserver][eo]][eo-url] |
 | [![NPM][npm-img]][npm-url] | [![Coveralls][cov-img]][cov-url] | | |
 
 
@@ -30,10 +30,12 @@ ember install ember-frost-table
 ```
 
 ## API and Examples
-Detailed API and example usage can be found in the sample application in `tests/dummy`, which is also running at http://ciena-frost.github.io/ember-frost-table
+Detailed API and example usage can be found in the sample application in `tests/dummy`,
+which is also running at http://ciena-frost.github.io/ember-frost-table
 
 ## Testing with ember-hook
-This addon has been optimized for use with [ember-hook](https://github.com/Ticketfly/ember-hook). You can set a `hook` name on your table template. This will allow you to access the internal table content for testing.
+This addon has been optimized for use with [ember-hook](https://github.com/Ticketfly/ember-hook).
+You can set a `hook` name on your table template. This will allow you to access the internal table content for testing.
 
 ## Development
 ### Setup

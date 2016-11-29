@@ -1,10 +1,10 @@
-import Ember from 'ember';
-import Table from 'ember-light-table';
+import Ember from 'ember'
+import Table from 'ember-light-table'
 
 const {
   isEmpty,
   computed
-} = Ember;
+} = Ember
 
 export default Ember.Controller.extend({
   columns: null,
@@ -16,37 +16,37 @@ export default Ember.Controller.extend({
   canLoadMore: true,
   model: null,
 
-  table: computed('model', function() {
-    return new Table(this.get('columns'), this.get('model'), { enableSync: true });
+  table: computed('model', function () {
+    return new Table(this.get('columns'), this.get('model'), { enableSync: true })
   }),
 
-  fetchRecords() {
-    this.set('isLoading', true);
+  fetchRecords () {
+    this.set('isLoading', true)
     this.store.query('user', this.getProperties(['page', 'limit', 'sort', 'dir'])).then(records => {
-      this.get('model').pushObjects(records.toArray());
-      this.set('isLoading', false);
-      this.set('canLoadMore', !isEmpty(records));
-    });
+      this.get('model').pushObjects(records.toArray())
+      this.set('isLoading', false)
+      this.set('canLoadMore', !isEmpty(records))
+    })
   },
 
   actions: {
-    onScrolledToBottom() {
-      if(this.get('canLoadMore')) {
-        this.incrementProperty('page');
-        this.fetchRecords();
+    onScrolledToBottom () {
+      if (this.get('canLoadMore')) {
+        this.incrementProperty('page')
+        this.fetchRecords()
       }
     },
 
-    onColumnClick(column) {
+    onColumnClick (column) {
       if (column.sorted) {
         this.setProperties({
           dir: column.ascending ? 'asc' : 'desc',
           sort: column.get('valuePath'),
           page: 1
-        });
-        this.get('model').clear();
-        this.fetchRecords();
+        })
+        this.get('model').clear()
+        this.fetchRecords()
       }
     }
   }
-});
+})
