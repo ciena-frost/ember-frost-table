@@ -1,60 +1,57 @@
 {
   "name": "ember-frost-table",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
-  "keywords": [
-    "ember-addon"
-  ],
+  "version": "0.0.1",
+  "description": "A simple table component",
   "license": "MIT",
-  "author": "",
+  "author": "Adam Meadows (https://github.com/job13er)",
+  "contributors": [],
   "directories": {
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "",
+  "repository": "git@github.com:ciena-frost/ember-frost-table.git",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "ember try:each"
+    "test": "npm run lint && COVERAGE=true ember test",
+    "eslint": "eslint *.js addon app blueprints config tests --fix",
+    "md-lint": "remark *.md",
+    "sass-lint": "sass-lint -q -v",
+    "lint": "npm run eslint && npm run sass-lint && npm run md-lint"
   },
-  "dependencies": {
-    "ember-cli-babel": "^5.1.6",
-    "ember-cli-htmlbars": "^1.0.11",
-    "ember-computed-decorators": "^0.2.2",
-    "ember-light-table": "1.4.0",
-    "ember-composable-helpers": "^1.1.2",
-    "ember-get-config": "0.1.9",
-    "ember-in-viewport": "2.1.0",
-    "ember-scrollable": "0.3.2",
-    "ember-truth-helpers": "1.2.0",
-    "ember-wormhole": "0.4.0"
+  "engines": {
+    "node": ">= 6.0.0"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
-    "ember-ajax": "^2.4.1",
     "ember-cli": "^2.8.0",
     "ember-cli-app-version": "^2.0.0",
     "ember-cli-dependency-checker": "^1.3.0",
     "ember-cli-htmlbars-inline-precompile": "^0.3.1",
     "ember-cli-inject-live-reload": "^1.4.1",
-    "ember-cli-mirage": "0.2.2",
-    "ember-cli-qunit": "^3.0.1",
-    "ember-cli-release": "^0.2.9",
     "ember-cli-sass": "5.5.2",
     "ember-cli-sri": "^2.1.0",
     "ember-cli-test-loader": "^1.1.0",
     "ember-cli-uglify": "^1.2.0",
     "ember-code-snippet": "1.8.0",
+    "ember-computed-decorators": "^0.2.2",
     "ember-data": "^2.8.0",
     "ember-disable-prototype-extensions": "^1.1.0",
     "ember-export-application-global": "^1.0.5",
+    "ember-get-config": "0.1.11",
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.0.3",
+    "ember-truth-helpers": "1.2.0",
     "loader.js": "^4.0.10"
   },
-  "engines": {
-    "node": ">= 0.12.0"
+  "dependencies": {
+    "ember-cli-babel": "^5.1.6",
+    "ember-cli-htmlbars": "^1.0.11"
   },
+  "keywords": [
+    "ember-addon",
+    "frost"
+  ],
   "ember-addon": {
     "configPath": "tests/dummy/config"
   }
