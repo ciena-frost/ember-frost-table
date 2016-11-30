@@ -154,3 +154,32 @@ dl {
   width: 40px;
   height: 40px;
 }
+
+
+// Table example styles
+// BEGIN-SNIPPET hero-styles
+.frost-table-body-row-cell > span {
+  height: 50px;
+}
+
+.name-col > span {
+  display: inline-block;
+  width: 100px;
+}
+
+.real-name-col > span {
+  display: inline-block;
+  width: 150px;
+}
+
+.universe-col > span {
+  display: inline-block;
+  width: 50px;
+}
+
+.top,
+.bottom {
+  width: 500px;
+  overflow: auto;
+}
+// END-SNIPPET

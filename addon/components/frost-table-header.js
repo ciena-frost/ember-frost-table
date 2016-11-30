@@ -1,12 +1,12 @@
 /**
- * Component definition for the frost-table component
+ * Component definition for the frost-table-header component
  */
 
 import Ember from 'ember'
 const {Component} = Ember
 import PropTypesMixin, {PropTypes} from 'ember-prop-types'
 
-import layout from '../templates/components/frost-table'
+import layout from '../templates/components/frost-table-header'
 
 export default Component.extend(PropTypesMixin, {
   // == Dependencies ==========================================================
@@ -15,7 +15,7 @@ export default Component.extend(PropTypesMixin, {
 
   classNameBindings: ['css'],
   layout,
-  tagName: 'table',
+  tagName: 'thead',
 
   // == PropTypes =============================================================
 
@@ -33,7 +33,6 @@ export default Component.extend(PropTypesMixin, {
     })),
     css: PropTypes.string,
     hook: PropTypes.string.isRequired,
-    items: PropTypes.array,
 
     // state
 
@@ -48,8 +47,7 @@ export default Component.extend(PropTypesMixin, {
     return {
       // options
       columns: [],
-      css: this.getCss(),
-      items: []
+      css: this.getCss()
 
       // state
     }

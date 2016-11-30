@@ -1,5 +1,5 @@
 {{! template-lint-disable bare-strings }}
-{{!-- BEGIN-SNIPPET simple-api }}
+{{!-- BEGIN-SNIPPET table-api }}
   {{frost-table
     columns=(array
       (hash
@@ -8,6 +8,7 @@
         propertyName= // e.g. 'name'
       )
     )
+    hook= // e.g. 'myTable'
     items=(array
       (hash
         name='Jane Doe'
@@ -16,7 +17,6 @@
         name='John Doe'
       )
     )
-    hook= // e.g. 'myTable'
   }}
 {{ END-SNIPPET --}}
 
@@ -26,7 +26,7 @@
     API
   </div>
   <div class='frost-demo-snippet'>
-    {{code-snippet name='simple-api.hbs'}}
+    {{code-snippet name='table-api.hbs'}}
   </div>
 </div>
 <div class='frost-demo-live'>
@@ -34,10 +34,10 @@
     Live demo
   </div>
   <div class='frost-demo-snippet'>
-    {{code-snippet name='simple.hbs'}}
+    {{code-snippet name='table.hbs'}}
   </div>
   <div class='frost-demo-launch'>
-    {{! BEGIN-SNIPPET simple }}
+    {{! BEGIN-SNIPPET table }}
     {{frost-table
       columns=(array
         (hash
@@ -53,6 +53,7 @@
           propertyName='universe'
         )
       )
+      hook='myTable'
       items=heroes
     }}
     {{! END-SNIPPET }}

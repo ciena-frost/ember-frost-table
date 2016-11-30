@@ -4,54 +4,58 @@
 
 @import 'variables';
 
+// Common cell styles
+@mixin table-cell {
+  padding: $frost-table-cell-padding;
+  border-right: solid 1px $frost-color-lgrey-1;
+  text-align: left;
+
+  &:last-child {
+    border-right: 0;
+  }
+
+  &.right {
+    text-align: right;
+  }
+}
+
 .frost-table {
+  table-layout: fixed;
+
   &-header {
     background-color: $frost-color-white;
     color: $frost-color-grey-4;
     font-weight: bold;
 
     &-cell {
+      @include table-cell;
       min-width: 40px;
       height: $frost-table-header-height;
-      padding: $frost-table-header-padding;
-    }
-  }
-
-  &-cell {
-    border-right: solid 1px $frost-color-lgrey-1;
-
-    &.left {
-      text-align: left;
-    }
-
-    &.right {
-      text-align: right;
     }
   }
 
   &-body {
     &-cell {
-      padding: $frost-table-cell-vertical-padding $frost-table-cell-horizontal-padding;
+      @include table-cell;
+    }
+  }
+
+  &-row {
+    &:nth-child(even) {
+      background-color: $frost-color-white;
     }
 
-    // tr
-    &-row {
-      &:nth-child(even) {
-        background-color: $frost-color-white;
-      }
+    &:nth-child(odd) {
+      background-color: $frost-color-lgrey-3;
+    }
 
-      &:nth-child(odd) {
-        background-color: $frost-color-lgrey-3;
-      }
+    // NOTE: keep the .even and .odd below the :nth-child() rules so they can override the default nth-row behavior
+    &.even {
+      background-color: $frost-color-white;
+    }
 
-      // NOTE: keep the .even and .odd below the :nth-child() rules so they can override the default nth-row behavior
-      &.even {
-        background-color: $frost-color-white;
-      }
-
-      &.odd {
-        background-color: $frost-color-lgrey-3;
-      }
+    &.odd {
+      background-color: $frost-color-lgrey-3;
     }
   }
 }

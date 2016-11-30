@@ -22,7 +22,7 @@ const heroes = [
     universe: 'DC'
   },
   {
-    name: 'Acquaman',
+    name: 'Aquaman',
     realName: 'Arthur Curry',
     teamAffiliatinos: ['JLA'],
     universe: 'DC'

@@ -1,12 +1,12 @@
 /**
- * Component definition for the frost-table component
+ * Component definition for the frost-table-body-row component
  */
 
 import Ember from 'ember'
 const {Component} = Ember
 import PropTypesMixin, {PropTypes} from 'ember-prop-types'
 
-import layout from '../templates/components/frost-table'
+import layout from '../templates/components/frost-table-row'
 
 export default Component.extend(PropTypesMixin, {
   // == Dependencies ==========================================================
@@ -15,7 +15,7 @@ export default Component.extend(PropTypesMixin, {
 
   classNameBindings: ['css'],
   layout,
-  tagName: 'table',
+  tagName: 'tr',
 
   // == PropTypes =============================================================
 
@@ -31,16 +31,17 @@ export default Component.extend(PropTypesMixin, {
       label: PropTypes.string,
       propertyName: PropTypes.string.isRequired
     })),
+    cellCss: PropTypes.string,
     css: PropTypes.string,
     hook: PropTypes.string.isRequired,
-    items: PropTypes.array,
+    item: PropTypes.object,
 
     // state
 
     // keywords
     classNameBindings: PropTypes.arrayOf(PropTypes.string),
     layout: PropTypes.any,
-    tagName: PropTypes.any
+    tagName: PropTypes.string
   },
 
   /** @returns {Object} the default property values when not provided by consumer */
@@ -48,8 +49,9 @@ export default Component.extend(PropTypesMixin, {
     return {
       // options
       columns: [],
+      cellCss: this.getCss(),
       css: this.getCss(),
-      items: []
+      item: {}
 
       // state
     }

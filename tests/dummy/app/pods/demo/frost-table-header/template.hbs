@@ -1,0 +1,54 @@
+{{! template-lint-disable bare-strings }}
+{{!-- BEGIN-SNIPPET table-header-api }}
+  {{frost-table-header
+    columns=(array
+      (hash
+        className= // e.g. 'name-column'
+        label= // e.g. 'Name'
+        propertyName= // e.g. 'name'
+      )
+    )
+    hook= // e.g. 'myTableHeader'
+  }}
+{{ END-SNIPPET --}}
+
+
+<div class='frost-demo-api'>
+  <div class='frost-demo-title'>
+    API
+  </div>
+  <div class='frost-demo-snippet'>
+    {{code-snippet name='table-header-api.hbs'}}
+  </div>
+</div>
+<div class='frost-demo-live'>
+  <div class='frost-demo-title'>
+    Live demo
+  </div>
+  <div class='frost-demo-snippet'>
+    {{code-snippet name='table-header.hbs'}}
+  </div>
+  <div class='frost-demo-launch'>
+    {{! BEGIN-SNIPPET table-header }}
+    <table class='frost-table'>
+      {{frost-table-header
+        columns=(array
+          (hash
+            label='Name'
+            propertyName='name'
+          )
+          (hash
+            label='Real Name'
+            propertyName='realName'
+          )
+          (hash
+            label='Universe'
+            propertyName='universe'
+          )
+        )
+        hook='myTableHeader'
+      }}
+    </table>
+    {{! END-SNIPPET }}
+  </div>
+</div>

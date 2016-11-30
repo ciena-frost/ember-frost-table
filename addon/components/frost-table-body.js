@@ -1,12 +1,12 @@
 /**
- * Component definition for the frost-table component
+ * Component definition for the frost-table-body component
  */
 
 import Ember from 'ember'
 const {Component} = Ember
 import PropTypesMixin, {PropTypes} from 'ember-prop-types'
 
-import layout from '../templates/components/frost-table'
+import layout from '../templates/components/frost-table-body'
 
 export default Component.extend(PropTypesMixin, {
   // == Dependencies ==========================================================
@@ -15,7 +15,7 @@ export default Component.extend(PropTypesMixin, {
 
   classNameBindings: ['css'],
   layout,
-  tagName: 'table',
+  tagName: 'tbody',
 
   // == PropTypes =============================================================
 
@@ -38,9 +38,7 @@ export default Component.extend(PropTypesMixin, {
     // state
 
     // keywords
-    classNameBindings: PropTypes.arrayOf(PropTypes.string),
-    layout: PropTypes.any,
-    tagName: PropTypes.any
+    layout: PropTypes.any
   },
 
   /** @returns {Object} the default property values when not provided by consumer */
