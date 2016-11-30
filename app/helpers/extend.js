@@ -1,1 +1,1 @@
-export { default, extend } from 'ember-frost-table/helpers/extend';
+export { default, extend } from 'ember-frost-table/helpers/extend'
