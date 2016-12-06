@@ -1,0 +1,39 @@
+{{! template-lint-disable bare-strings }}
+<div class='frost-demo-notes'>
+  <h1>TLDR</h1>
+  <p>
+    <code>ember-frost-table</code> is a platform for building simple tables with a couple handy features,
+    like fixed headers and frozen columns.
+  </p>
+  <p>
+    In the simplest use-case, a <code>frost-table</code> takes an array of column definitions and an array
+    of data items. It then displays the data in the items array one per row, using the columns it was given.
+  </p>
+  <p>
+    The main component exported is <code>frost-table</code> which lets you display a very simple table.
+    The individual portions of the table are also available as components, in case you need to build a modified table.
+    The available sub-components are:
+    <ul>
+      <li>
+        {{#link-to 'demo.frost-table-header'}}
+          <code>frost-table-header</code>
+        {{/link-to}}
+      </li>
+      <li>
+        {{#link-to 'demo.frost-table-body'}}
+          <code>frost-table-body</code>
+        {{/link-to}}
+      </li>
+      <li>
+        {{#link-to 'demo.frost-table-row'}}
+          <code>frost-table-row</code>
+        {{/link-to}}
+      </li>
+    </ul>
+  </p>
+  <div class='frost-demo-overview-links'>
+    {{#link-to 'demo.frost-table' class='frost-link primary medium'}}
+      <div class='content text'>Enough talk, show me components!</div>
+    {{/link-to}}
+  </div>
+</div>

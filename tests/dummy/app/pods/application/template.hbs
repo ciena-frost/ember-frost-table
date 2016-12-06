@@ -1,0 +1,9 @@
+<div class="demo-notification-container">
+  {{#each notifications as |notification|}}
+    {{notification-message notification=notification}}
+  {{/each}}
+</div>
+
+<div class='demo-body'>
+  {{outlet}}
+</div>

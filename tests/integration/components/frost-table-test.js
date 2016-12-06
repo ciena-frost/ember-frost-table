@@ -1,0 +1,62 @@
+/**
+ * Integration test for the frost-table component
+ */
+
+import {expect} from 'chai'
+import Ember from 'ember'
+const {$, get} = Ember
+import {describeComponent, it} from 'ember-mocha'
+import hbs from 'htmlbars-inline-precompile'
+import {$hook, initialize as initializeHook} from 'ember-hook'
+import wait from 'ember-test-helpers/wait'
+import {beforeEach, describe} from 'mocha'
+
+import {integration} from 'dummy/tests/helpers/ember-test-utils/describe-component'
+import {columns, heroes} from './data'
+
+describeComponent(...integration('frost-table'), function () {
+  beforeEach(function () {
+    initializeHook()
+    this.setProperties({
+      columns,
+      heroes,
+      myHook: 'myTable'
+    })
+  })
+
+  describe('after render', function () {
+    beforeEach(function () {
+      this.render(hbs`
+        {{frost-table
+          columns=columns
+          hook=myHook
+          items=heroes
+        }}
+      `)
+
+      return wait()
+    })
+
+    it('should have an element', function () {
+      expect(this.$()).to.have.length(1)
+    })
+
+    it('should render a header', function () {
+      expect($hook('myTable-header')).to.have.length(1)
+    })
+
+    it('should give the header the set of columns', function () {
+      const columnNames = $hook('myTable-header-cell').toArray().map((el) => $(el).text())
+      expect(columnNames).to.eql(columns.map((col) => col.label))
+    })
+
+    it('should render a body', function () {
+      expect($hook('myTable-body')).to.have.length(1)
+    })
+
+    it('should be able to grab a cell via a hook', function () {
+      const expected = get(heroes[1], columns[1].propertyName)
+      expect($hook('myTable-body-row-cell', {row: 1, column: 1})).to.have.text(expected)
+    })
+  })
+})

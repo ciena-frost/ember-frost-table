@@ -1,0 +1,21 @@
+{{! template-lint-disable bare-strings }}
+<div class='frost-demo'>
+  <div class='frost-demos'>
+    <div class='frost-demo-title'>
+      Demos
+    </div>
+    {{#frost-scroll class='frost-demo-selectors'}}
+      {{#link-to 'demo.overview'}}Overview{{/link-to}}
+      <div class='frost-demo-selector-title'>
+        Components
+        {{#link-to 'demo.frost-table'}}frost-table{{/link-to}}
+        {{#link-to 'demo.frost-table-header'}}frost-table-header{{/link-to}}
+        {{#link-to 'demo.frost-table-body'}}frost-table-body{{/link-to}}
+        {{#link-to 'demo.frost-table-row'}}frost-table-row{{/link-to}}
+      </div>
+    {{/frost-scroll}}
+  </div>
+  {{#frost-scroll class='frost-demo-example'}}
+    {{outlet}}
+  {{/frost-scroll}}
+</div>

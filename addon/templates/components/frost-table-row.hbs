@@ -1,0 +1,9 @@
+{{! Template for the frost-table-row component }}
+{{#each columns as |column index|}}
+  <td
+    class="{{concat cellCss '-cell'}} {{column.className}}"
+    data-test={{hook (concat hook '-cell') hookQualifiers column=index}}
+  >
+    {{~ get item column.propertyName ~}}
+  </td>
+{{/each}}

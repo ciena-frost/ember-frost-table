@@ -1,0 +1,10 @@
+{{! Template for the frost-table-body component }}
+{{#each items as |item index| }}
+  {{frost-table-row
+    cellCss=css
+    columns=columns
+    hook=(concat hook '-row')
+    hookQualifiers=(extend hookQualifiers row=index)
+    item=item
+  }}
+{{/each}}
