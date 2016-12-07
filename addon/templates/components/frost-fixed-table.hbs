@@ -1,0 +1,93 @@
+{{! Template for the frost-fixed-table component }}
+<div
+  class={{concat css '-header'}}
+  data-test={{hook (concat hookPrefix '-header') hookQualifiers}}
+>
+  {{!--
+    Strange as it seems, we want middle above left/right so that left/right are on top of middle.
+    The left and right are positioned absolutely so that they stay where they should be
+  --}}
+  <div class={{concat css '-header-middle'}}>
+    {{#frost-scroll}}
+      {{frost-table-header
+        cellTagName='div'
+        columns=middleColumns
+        hook=(concat hookPrefix '-header-middle')
+        hookQualifiers=hookQualifiers
+        tagName='div'
+      }}
+    {{/frost-scroll}}
+  </div>
+  <div class={{concat css '-header-left'}}>
+    {{frost-table-header
+      cellTagName='div'
+      columns=leftColumns
+      hook=(concat hookPrefix '-header-left')
+      hookQualifiers=hookQualifiers
+      tagName='div'
+    }}
+  </div>
+  <div class={{concat css '-header-right'}}>
+    {{frost-table-header
+      cellTagName='div'
+      columns=rightColumns
+      hook=(concat hookPrefix '-header-right')
+      hookQualifiers=hookQualifiers
+      tagName='div'
+    }}
+  </div>
+</div>
+
+<div
+  class={{concat css '-body'}}
+  data-test={{hook (concat hookPrefix '-body') hookQualifiers}}
+>
+  {{!--
+    Strange as it seems, we want middle above left/right so that left/right are on top of middle.
+    The left and right are positioned absolutely so that they stay where they should be
+  --}}
+  <div class={{concat css '-middle'}}>
+    {{#frost-scroll}}
+      {{#each items as |item index|}}
+        {{frost-table-row
+          cellTagName='div'
+          columns=middleColumns
+          hook=(concat hookPrefix '-middle')
+          hookQualifiers=(extend hookQualifiers row=index)
+          item=item
+          tagName='div'
+        }}
+      {{/each}}
+    {{/frost-scroll}}
+  </div>
+
+  <div class={{concat css '-left'}}>
+    {{#frost-scroll}}
+      {{#each items as |item index|}}
+        {{frost-table-row
+          cellTagName='div'
+          columns=leftColumns
+          hook=(concat hookPrefix '-left')
+          hookQualifiers=(extend hookQualifiers row=index)
+          item=item
+          tagName='div'
+        }}
+      {{/each}}
+    {{/frost-scroll}}
+  </div>
+
+  <div class={{concat css '-right'}}>
+    {{#frost-scroll}}
+      {{#each items as |item index|}}
+        {{frost-table-row
+          cellTagName='div'
+          columns=rightColumns
+          hook=(concat hookPrefix '-right')
+          hookQualifiers=(extend hookQualifiers row=index)
+          item=item
+          tagName='div'
+        }}
+      {{/each}}
+    {{/frost-scroll}}
+  </div>
+</div>

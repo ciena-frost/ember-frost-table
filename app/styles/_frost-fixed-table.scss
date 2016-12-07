@@ -1,0 +1,72 @@
+//
+// Styles specific for the frost-fixed-table component (and its pieces)
+//
+
+.frost-fixed-table {
+  position: relative;
+
+  &-header,
+  &-body {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &-header {
+    &-left {
+      position: absolute;
+      left: 0;
+    }
+
+    &-middle {
+      position: relative;
+      overflow: hidden;
+
+      // NOTE this level of specificity is required to override perfect-scroll default styles
+      .ps-container > .ps-scrollbar-x-rail {
+        display: none;
+      }
+    }
+
+    &-right {
+      position: absolute;
+      right: 0;
+    }
+  }
+
+  &-left,
+  &-middle,
+  &-right {
+    overflow: hidden;
+  }
+
+  &-left {
+    position: absolute;
+    left: 0;
+    box-shadow: 23px 0 15px -4px $frost-table-box-shadow-color;
+
+    // NOTE this level of specificity is required to override perfect-scroll default styles
+    .ps-container > .ps-scrollbar-y-rail {
+      display: none;
+    }
+  }
+
+  &-middle {
+    position: relative;
+
+    // NOTE this level of specificity is required to override perfect-scroll default styles
+    .ps-container > .ps-scrollbar-y-rail {
+      display: none;
+    }
+  }
+
+  &-right {
+    position: absolute;
+    right: 0;
+    box-shadow: -23px 0 15px -4px $frost-table-box-shadow-color;
+  }
+
+  .frost-table-cell {
+    @include frost-table-truncate-text;
+    display: inline-block;
+  }
+}

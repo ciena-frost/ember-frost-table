@@ -1,0 +1,9 @@
+//
+// Mixins used by the styles for the ember-frost-table components
+//
+
+@mixin frost-table-truncate-text {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

@@ -1,9 +1,11 @@
 {{! Template for the frost-table-header component }}
-{{#each columns as |column|}}
-  <th
-    class="{{concat css '-cell'}} {{column.className}}"
-    data-test={{hook (concat hook '-cell') hookQualifiers column=index}}
-  >
+{{#each columns as |column index|}}
+  {{#frost-table-cell
+    tagName=cellTagName
+    class=(concat cellCss '-cell' ' ' column.className)
+    hook=(concat hookPrefix '-cell')
+    hookQualifiers=(extend hookQualifiers column=index)
+  }}
     {{~ column.label ~}}
-  </th>
+  {{/frost-table-cell}}
 {{/each}}

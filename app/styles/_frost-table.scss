@@ -1,0 +1,51 @@
+//
+// Styles specific for the frost-table component (and its pieces)
+//
+
+.frost-table {
+  table-layout: fixed;
+
+  &-cell {
+    padding: $frost-table-cell-padding;
+    border-right: solid 1px $frost-color-lgrey-1;
+    text-align: left;
+
+    &:last-child {
+      border-right: 0;
+    }
+
+    &.right {
+      text-align: right;
+    }
+  }
+
+  &-header {
+    background-color: $frost-color-white;
+    color: $frost-color-grey-4;
+    font-weight: bold;
+
+    &-cell {
+      min-width: 40px;
+      height: $frost-table-header-height;
+    }
+  }
+
+  &-row {
+    &:nth-child(even) {
+      background-color: $frost-color-white;
+    }
+
+    &:nth-child(odd) {
+      background-color: $frost-color-lgrey-3;
+    }
+
+    // NOTE: keep the .even and .odd below the :nth-child() rules so they can override the default nth-row behavior
+    &.even {
+      background-color: $frost-color-white;
+    }
+
+    &.odd {
+      background-color: $frost-color-lgrey-3;
+    }
+  }
+}

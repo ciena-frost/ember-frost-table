@@ -2,55 +2,38 @@
  * Component definition for the frost-table-body-row component
  */
 
-import Ember from 'ember'
-const {Component} = Ember
-import PropTypesMixin, {PropTypes} from 'ember-prop-types'
+import {Component} from 'ember-frost-core'
+import {PropTypes} from 'ember-prop-types'
 
+import {ColumnPropType} from 'ember-frost-table/typedefs'
 import layout from '../templates/components/frost-table-row'
 
-export default Component.extend(PropTypesMixin, {
+export default Component.extend({
   // == Dependencies ==========================================================
 
   // == Keyword Properties ====================================================
 
-  classNameBindings: ['css'],
   layout,
   tagName: 'tr',
 
   // == PropTypes =============================================================
 
-  /**
-   * Properties for this component. Options are expected to be (potentially)
-   * passed in to the component. State properties are *not* expected to be
-   * passed in/overwritten.
-   */
   propTypes: {
     // options
-    columns: PropTypes.arrayOf(PropTypes.shape({
-      className: PropTypes.string,
-      label: PropTypes.string,
-      propertyName: PropTypes.string.isRequired
-    })),
     cellCss: PropTypes.string,
-    css: PropTypes.string,
-    hook: PropTypes.string.isRequired,
-    item: PropTypes.object,
+    cellTagName: PropTypes.string,
+    columns: PropTypes.arrayOf(ColumnPropType),
+    item: PropTypes.object
 
     // state
-
-    // keywords
-    classNameBindings: PropTypes.arrayOf(PropTypes.string),
-    layout: PropTypes.any,
-    tagName: PropTypes.string
   },
 
-  /** @returns {Object} the default property values when not provided by consumer */
   getDefaultProps () {
     return {
       // options
+      cellTagName: 'td',
+      cellCss: this.get('css'),
       columns: [],
-      cellCss: this.getCss(),
-      css: this.getCss(),
       item: {}
 
       // state
@@ -60,13 +43,6 @@ export default Component.extend(PropTypesMixin, {
   // == Computed Properties ===================================================
 
   // == Functions =============================================================
-
-  /**
-   * @returns {String} the base css class for this component (the component name)
-   */
-  getCss () {
-    return this.toString().replace(/^.+:(.+)::.+$/, '$1')
-  },
 
   // == DOM Events ============================================================
 
