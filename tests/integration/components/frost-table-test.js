@@ -47,7 +47,7 @@ describe(test.label, function () {
     })
 
     it('should give the header the set of columns', function () {
-      const columnNames = $hook('myTable-header-cell').toArray().map((el) => $(el).text())
+      const columnNames = $hook('myTable-header-cell').toArray().map((el) => $(el).text().trim())
       expect(columnNames).to.eql(columns.map((col) => col.label))
     })
 
@@ -57,7 +57,7 @@ describe(test.label, function () {
 
     it('should be able to grab a cell via a hook', function () {
       const expected = get(heroes[1], columns[1].propertyName)
-      expect($hook('myTable-body-row-cell', {row: 1, column: 1})).to.have.text(expected)
+      expect($hook('myTable-body-row-cell', {row: 1, column: 1}).text().trim()).to.equal(expected)
     })
   })
 })

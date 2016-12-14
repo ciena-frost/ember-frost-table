@@ -4,8 +4,10 @@
     columns=(array
       (hash
         className= // e.g. 'name-column'
+        headerRenderer= // a component to render the header for this column
         label= // e.g. 'Name'
         propertyName= // e.g. 'name'
+        renderer= // a component to render the data cells for this column
       )
     )
     hook= // e.g. 'myTable'
@@ -41,12 +43,14 @@
     {{frost-table
       columns=(array
         (hash
+          headerRenderer=(component 'text-input-renderer')
           label='Name'
           propertyName='name'
         )
         (hash
           label='Real Name'
           propertyName='realName'
+          renderer=(component 'text-input-renderer')
         )
         (hash
           label='Universe'

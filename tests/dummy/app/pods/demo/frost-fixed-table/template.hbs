@@ -4,8 +4,10 @@
     columns=(array
       (hash
         className= // e.g. 'name-column'
+        headerRenderer= // a component to render the header for this column
         label= // e.g. 'Name'
         propertyName= // e.g. 'name'
+        renderer= // a component to render the data cells for this column
       )
     )
     hook= // e.g. 'myTable'
@@ -42,6 +44,7 @@
       columns=(array
         (hash
           className='name-col'
+          headerRenderer=(component 'text-input-renderer')
           frozen=true
           label='Name'
           propertyName='name'
@@ -55,11 +58,7 @@
           className='real-name-col'
           label='Real Name'
           propertyName='realName'
-        )
-        (hash
-          className='real-name-col'
-          label='Real Name'
-          propertyName='realName'
+          renderer=(component 'text-input-renderer')
         )
         (hash
           className='real-name-col'

@@ -1,26 +1,22 @@
 /**
- * Component definition for the frost-table-cell component
+ * Component definition for the frost-table-cell-renderer component
+ * This component can be used as a base-class for any cell renderer
  */
 
 import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
-
-import layout from '../templates/components/frost-table-cell'
 
 export default Component.extend({
   // == Dependencies ==========================================================
 
   // == Keyword Properties ====================================================
 
-  layout,
-  tagName: 'td',
-
   // == PropTypes =============================================================
 
   propTypes: {
-    cellRenderer: PropTypes.any,
-    item: PropTypes.object,
-    value: PropTypes.any
+    // options
+    item: PropTypes.object.isRequired,
+    value: PropTypes.any.isRequired
   },
 
   // == Computed Properties ===================================================

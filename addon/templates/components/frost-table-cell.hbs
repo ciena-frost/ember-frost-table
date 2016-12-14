@@ -1,0 +1,11 @@
+{{! Template for the frost-table-cell component }}
+{{#if cellRenderer}}
+  {{component cellRenderer
+    hook=(concat hookPrefix '-renderer')
+    hookQualifiers=hookQualifiers
+    item=item
+    value=value
+  }}
+{{else}}
+  {{value}}
+{{/if}}

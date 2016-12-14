@@ -168,14 +168,24 @@ dl {
 .frost-fixed-table {
   max-width: 500px;
   max-height: 500px;
+
+  .name-col {
+    &.frost-table-header-cell {
+      padding: 0;
+    }
+  }
+
+  .frost-table-cell {
+    height: 55px;
+  }
 }
 
 .name-col {
-  width: 100px;
+  width: 200px;
 }
 
 .real-name-col {
-  width: 175px;
+  width: 250px;
 }
 
 .universe-col {
