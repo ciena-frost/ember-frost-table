@@ -1,3 +1,7 @@
+# 0.3.1
+* **Fixed** paths in coverage report
+
+
 # 0.3.0
 * **Added** support for custom renderers for cells
 * **Added** codecov.io integration
