@@ -1,3 +1,8 @@
+# 0.3.0
+* **Added** support for custom renderers for cells
+* **Added** codecov.io integration
+
+
 # 0.2.0
  * **Added** `frost-fixed-table` component which allows for frozen left and right columns and a fixed header row, but relies on fixed column widths/heights to work properly. 
 * **Updated** `ember-frost-core`
