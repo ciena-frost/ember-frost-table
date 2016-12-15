@@ -1,0 +1,15 @@
+//
+// Some overrides we need for perfect-scrollbar, specifically, we need to be able to apply the :hover styles when
+// the container isn't actually hovered, but rather, when a class name is added.
+// By necesity, these are gonna be fragile, and may need to be tweaked when we update perfect-scrollbar
+//
+
+.ps-container-hover {
+  .ps-scrollbar-y-rail {
+    opacity: .6;
+  }
+
+  .ps-scrollbar-x-rail {
+    opacity: .6;
+  }
+}

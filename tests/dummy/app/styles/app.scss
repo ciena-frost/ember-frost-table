@@ -155,31 +155,30 @@ dl {
   height: 40px;
 }
 
+.frost-table-demo {
+  padding: 10px ;
+}
+
+.frost-fixed-table-api {
+  max-width: 500px;
+}
 
 // Table example styles
 // BEGIN-SNIPPET hero-styles
-.frost-table-body-row-cell > span {
-  height: 50px;
+.frost-fixed-table {
+  max-width: 500px;
+  max-height: 500px;
 }
 
-.name-col > span {
-  display: inline-block;
+.name-col {
   width: 100px;
 }
 
-.real-name-col > span {
-  display: inline-block;
-  width: 150px;
+.real-name-col {
+  width: 175px;
 }
 
-.universe-col > span {
-  display: inline-block;
-  width: 50px;
-}
-
-.top,
-.bottom {
-  width: 500px;
-  overflow: auto;
+.universe-col {
+  width: 90px;
 }
 // END-SNIPPET

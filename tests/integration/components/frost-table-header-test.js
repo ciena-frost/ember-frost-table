@@ -5,18 +5,19 @@
 import {expect} from 'chai'
 import Ember from 'ember'
 const {$} = Ember
-import {describeComponent, it} from 'ember-mocha'
-import hbs from 'htmlbars-inline-precompile'
-import {$hook, initialize as initializeHook} from 'ember-hook'
+import {$hook} from 'ember-hook'
 import wait from 'ember-test-helpers/wait'
-import {beforeEach, describe} from 'mocha'
+import hbs from 'htmlbars-inline-precompile'
+import {beforeEach, describe, it} from 'mocha'
 
-import {integration} from 'dummy/tests/helpers/ember-test-utils/describe-component'
+import {integration} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 import {columns} from './data'
 
-describeComponent(...integration('frost-table-header'), function () {
+const test = integration('frost-table-header')
+describe(test.label, function () {
+  test.setup()
+
   beforeEach(function () {
-    initializeHook()
     this.setProperties({
       columns,
       myHook: 'myTableHeader'

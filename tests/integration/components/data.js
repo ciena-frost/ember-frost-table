@@ -15,6 +15,41 @@ export const columns = [
   }
 ]
 
+export const fixedColumns = [
+  {
+    className: 'name-col',
+    frozen: true,
+    label: 'Name',
+    propertyName: 'name'
+  },
+  {
+    className: 'real-name-col',
+    label: 'Real Name',
+    propertyName: 'realName'
+  },
+  {
+    className: 'real-name-col',
+    label: 'Real Name',
+    propertyName: 'realName'
+  },
+  {
+    className: 'real-name-col',
+    label: 'Real Name',
+    propertyName: 'realName'
+  },
+  {
+    className: 'real-name-col',
+    label: 'Real Name',
+    propertyName: 'realName'
+  },
+  {
+    className: 'universe-col',
+    frozen: true,
+    label: 'Universe',
+    propertyName: 'universe'
+  }
+]
+
 export const heroes = [
   {
     name: 'Superman',

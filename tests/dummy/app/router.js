@@ -8,6 +8,7 @@ const Router = Ember.Router.extend({
 Router.map(function () {
   this.route('demo', { path: '/' }, function () {
     this.route('overview', { path: '/' })
+    this.route('frost-fixed-table')
     this.route('frost-table')
     this.route('frost-table-body')
     this.route('frost-table-header')
