@@ -19,38 +19,64 @@ describe(test.label, function () {
 
   beforeEach(function () {
     sandbox = sinon.sandbox.create()
+    this.setProperties({
+      myHook: 'myThing',
+      value: 'my value'
+    })
   })
 
   afterEach(function () {
     sandbox.restore()
   })
 
-  // FIXME: actually add real tests in next PR when frost-table-cell supports custom renderer components
-  it.skip('should have real tests', function () {
-    expect(true).to.equal(false)
-  })
-
-  describe('after render', function () {
+  describe('after render with value', function () {
     beforeEach(function () {
-      this.setProperties({
-        myHook: 'myThing'
-      })
-
       this.render(hbs`
         {{frost-table-cell
           hook=myHook
+          value=value
         }}
       `)
 
       return wait()
     })
 
-    it('should have an element', function () {
-      expect(this.$()).to.have.length(1)
+    it('should have an element with the proper className', function () {
+      expect(this.$('.frost-table-cell')).to.have.length(1)
     })
 
     it('should be accessible via the hook', function () {
       expect($hook('myThing')).to.have.length(1)
+    })
+
+    it('should render the given value', function () {
+      expect($hook('myThing').text().trim()).to.equal('my value')
+    })
+  })
+
+  describe('after render with custom renderer', function () {
+    beforeEach(function () {
+      this.render(hbs`
+        {{frost-table-cell
+          cellRenderer=(component 'text-input-renderer')
+          hook=myHook
+          value=value
+        }}
+      `)
+
+      return wait()
+    })
+
+    it('should have an element with the proper className wrapping the custom renderer', function () {
+      expect(this.$('.frost-table-cell .text-input-renderer')).to.have.length(1)
+    })
+
+    it('should be accessible via the hook', function () {
+      expect($hook('myThing')).to.have.length(1)
+    })
+
+    it('should render the given value', function () {
+      expect($hook('myThing-renderer-text-input').val()).to.equal('my value')
     })
   })
 })

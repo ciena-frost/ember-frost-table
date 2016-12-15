@@ -36,9 +36,66 @@ describe(test.label, function () {
       return wait()
     })
 
+    it('should have a frost-table-cell per column', function () {
+      expect(this.$('.frost-table-cell')).to.have.length(columns.length)
+    })
+
     it('should display proper column labels', function () {
-      const columnNames = $hook('myTableHeader-cell').toArray().map((el) => $(el).text())
+      const columnNames = $hook('myTableHeader-cell').toArray().map((el) => $(el).text().trim())
       expect(columnNames).to.eql(columns.map((col) => col.label))
+    })
+
+    describe('when columns updated to have custom cell renderers', function () {
+      beforeEach(function () {
+        const newColumns = [
+          {
+            className: 'name-col',
+            label: 'Name',
+            renderer: 'text-input-renderer',
+            propertyName: 'name'
+          },
+          {
+            className: 'real-name-col',
+            label: 'Real Name',
+            renderer: 'text-input-renderer',
+            propertyName: 'realName'
+          }
+        ]
+
+        this.set('columns', newColumns)
+
+        return wait()
+      })
+
+      it('should not have any text-input-renderer components', function () {
+        expect(this.$('.text-input-renderer')).to.have.length(0)
+      })
+    })
+
+    describe('when one column updated to have custom header renderer', function () {
+      beforeEach(function () {
+        const newColumns = [
+          {
+            className: 'name-col',
+            headerRenderer: 'text-input-renderer',
+            label: 'Name',
+            propertyName: 'name'
+          },
+          {
+            className: 'real-name-col',
+            label: 'Real Name',
+            propertyName: 'realName'
+          }
+        ]
+
+        this.set('columns', newColumns)
+
+        return wait()
+      })
+
+      it('should have one text-input-renderer components', function () {
+        expect(this.$('.text-input-renderer')).to.have.length(1)
+      })
     })
   })
 })

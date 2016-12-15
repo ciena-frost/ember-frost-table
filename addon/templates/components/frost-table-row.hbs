@@ -1,11 +1,12 @@
 {{! Template for the frost-table-row component }}
 {{#each columns as |column index|}}
-  {{#frost-table-cell
-    tagName=cellTagName
+  {{frost-table-cell
+    cellRenderer=column.renderer
     class=(concat cellCss '-cell' ' ' column.className)
     hook=(concat hookPrefix '-cell')
     hookQualifiers=(extend hookQualifiers column=index)
+    item=item
+    tagName=cellTagName
+    value=(get item column.propertyName)
   }}
-    {{~ get item column.propertyName ~}}
-  {{/frost-table-cell}}
 {{/each}}

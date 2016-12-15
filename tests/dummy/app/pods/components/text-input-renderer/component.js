@@ -1,27 +1,19 @@
 /**
- * Component definition for the frost-table-cell component
+ * Component definition for the text-input-renderer component
  */
 
-import {Component} from 'ember-frost-core'
-import {PropTypes} from 'ember-prop-types'
+import {CellRenderer} from 'ember-frost-table'
 
-import layout from '../templates/components/frost-table-cell'
+import layout from './template'
 
-export default Component.extend({
+export default CellRenderer.extend({
   // == Dependencies ==========================================================
 
   // == Keyword Properties ====================================================
 
   layout,
-  tagName: 'td',
 
   // == PropTypes =============================================================
-
-  propTypes: {
-    cellRenderer: PropTypes.any,
-    item: PropTypes.object,
-    value: PropTypes.any
-  },
 
   // == Computed Properties ===================================================
 

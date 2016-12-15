@@ -43,7 +43,7 @@ describe(test.label, function () {
     })
 
     it('should display proper cell data', function () {
-      const cellData = $hook('myTableBody-row-cell').toArray().map((el) => $(el).text())
+      const cellData = $hook('myTableBody-row-cell').toArray().map((el) => $(el).text().trim())
 
       const expected = []
       heroes.forEach((hero) => {

@@ -168,8 +168,12 @@ export default Component.extend({
   _calculateWidth (cellSelector) {
     let width = 0
 
+    // It appears that there needs to be an additional 3 pixels for each cell in order for it to render correctly now
+    // I'm not actually sure why that might be, something to do with margins/border/padding of the cells perhaps?
+    const FUDGE_FACTOR = 3
+
     this.$(cellSelector).toArray().forEach((el) => {
-      width += $(el).outerWidth()
+      width += $(el).outerWidth() + FUDGE_FACTOR
     })
 
     return width

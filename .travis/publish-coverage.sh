@@ -6,4 +6,4 @@ then
   exit 0
 fi
 
-cat coverage/lcov.info | coveralls
+bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
