@@ -14,7 +14,11 @@ export default Component.extend({
   // == PropTypes =============================================================
 
   propTypes: {
-    // options
+    // optional
+    callbackDispatch: PropTypes.func,
+    colIndex: PropTypes.number,
+
+    // required
     item: PropTypes.object.isRequired,
     value: PropTypes.any.isRequired
   },
@@ -30,5 +34,10 @@ export default Component.extend({
   // == Actions ===============================================================
 
   actions: {
+    handleInput (e) {
+      if (this.get('callbackDispatch')) {
+        this.get('callbackDispatch')('input', e.target.value)
+      }
+    }
   }
 })

@@ -5,9 +5,9 @@ import Ember from 'ember'
 const {$} = Ember
 import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
+import {ColumnPropType, ItemsPropType} from 'ember-frost-table/typedefs'
 import {PropTypes} from 'ember-prop-types'
 
-import {ColumnPropType, ItemsPropType} from 'ember-frost-table/typedefs'
 import layout from '../templates/components/frost-fixed-table'
 
 export default Component.extend({
@@ -21,6 +21,7 @@ export default Component.extend({
 
   propTypes: {
     // options
+    callbackHandler: PropTypes.func,
     columns: PropTypes.arrayOf(ColumnPropType),
     items: ItemsPropType
   },
@@ -95,6 +96,7 @@ export default Component.extend({
     for (let i = 0; i < columns.length; i++) {
       const column = columns[i]
       if (column.frozen) {
+        column.colIndex = i  // Add a `colIndex` field so that our split tables can dispatch the right events
         frozenColumns.push(column)
       } else {
         return frozenColumns
@@ -126,6 +128,7 @@ export default Component.extend({
         }
       } else {
         foundUnFrozen = true
+        column.colIndex = i  // Add a `colIndex` field so that our split tables can dispatch the right events
         unFrozenColumns.push(column)
       }
     }
@@ -149,6 +152,7 @@ export default Component.extend({
     for (let i = columns.length - 1; i > 0; i--) {
       const column = columns[i]
       if (column.frozen) {
+        column.colIndex = i  // Add a `colIndex` field so that our split tables can dispatch the right events
         frozenColumns.push(column)
       } else {
         return frozenColumns.reverse()
@@ -334,5 +338,20 @@ export default Component.extend({
   // == Actions ===============================================================
 
   actions: {
+    /**
+     * Generic action dispatcher, so that cell renderers can indicate arbitrary events.
+     * Your handler is then responsible for doing stuff based on actions like 'click' or 'input'.
+     *
+     * @param {Number} row - data rows are zero based, and header has row -1
+     * @param {Number} col - column index
+     * @param {String} action - this comes after row/col as Ember lets us include those in action closures easily.
+     * @param {Object[]} args - any additional data
+     */
+    genericDispatch (row, col, action, args) {
+      const handler = this.get('callbackHandler')
+      if (handler) {
+        handler(action, row, col, args)
+      }
+    }
   }
 })

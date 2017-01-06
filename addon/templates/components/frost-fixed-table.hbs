@@ -9,7 +9,9 @@
   --}}
   <div class={{concat css '-header-middle'}}>
     {{#frost-scroll}}
+      {{! We pass a row index of -1 since the row indices are zero-based }}
       {{frost-table-header
+        callbackDispatch=(action 'genericDispatch' -1)
         cellTagName='div'
         columns=middleColumns
         hook=(concat hookPrefix '-header-middle')
@@ -20,6 +22,7 @@
   </div>
   <div class={{concat css '-header-left'}}>
     {{frost-table-header
+      callbackDispatch=(action 'genericDispatch' -1)
       cellTagName='div'
       columns=leftColumns
       hook=(concat hookPrefix '-header-left')
@@ -29,6 +32,7 @@
   </div>
   <div class={{concat css '-header-right'}}>
     {{frost-table-header
+      callbackDispatch=(action 'genericDispatch' -1)
       cellTagName='div'
       columns=rightColumns
       hook=(concat hookPrefix '-header-right')
@@ -50,6 +54,7 @@
     {{#frost-scroll}}
       {{#each items as |item index|}}
         {{frost-table-row
+          callbackDispatch=(action 'genericDispatch' index)
           cellTagName='div'
           columns=middleColumns
           hook=(concat hookPrefix '-middle')
@@ -65,6 +70,7 @@
     {{#frost-scroll}}
       {{#each items as |item index|}}
         {{frost-table-row
+          callbackDispatch=(action 'genericDispatch' index)
           cellTagName='div'
           columns=leftColumns
           hook=(concat hookPrefix '-left')
@@ -80,6 +86,7 @@
     {{#frost-scroll}}
       {{#each items as |item index|}}
         {{frost-table-row
+          callbackDispatch=(action 'genericDispatch' index)
           cellTagName='div'
           columns=rightColumns
           hook=(concat hookPrefix '-right')

@@ -18,7 +18,9 @@ export default Component.extend({
   // == PropTypes =============================================================
 
   propTypes: {
+    callbackDispatch: PropTypes.func,
     cellRenderer: PropTypes.any,
+    colIndex: PropTypes.number,
     item: PropTypes.object,
     value: PropTypes.any
   },
@@ -34,5 +36,10 @@ export default Component.extend({
   // == Actions ===============================================================
 
   actions: {
+    handleCallback (...args) {
+      if (this.get('callbackDispatch')) {
+        this.get('callbackDispatch')(...args)
+      }
+    }
   }
 })
