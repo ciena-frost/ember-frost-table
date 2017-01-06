@@ -1,6 +1,7 @@
 {{! template-lint-disable bare-strings }}
 {{!-- BEGIN-SNIPPET fixed-table-api }}
   {{frost-fixed-table
+    callbackHandler= // a handler that dispatches ('action', row, col, args)
     columns=(array
       (hash
         className= // e.g. 'name-column'
@@ -21,6 +22,12 @@
     )
   }}
 {{ END-SNIPPET --}}
+{{!-- BEGIN-SNIPPET dispatcher-example }}
+    dispatchNotifications (action, row, col, ...args) {
+      // Invoke real handlers based on action
+      console.log(action, row, col, args)
+    }
+{{ END-SNIPPET --}}
 
 
 <div class='frost-demo-api frost-fixed-table-api'>
@@ -38,9 +45,13 @@
   <div class='frost-demo-snippet'>
     {{code-snippet name='fixed-table.hbs'}}
   </div>
+  <div class='frost-demo-snippet'>
+    {{code-snippet name='dispatcher-example.hbs'}}
+  </div>
   <div class='frost-demo-launch frost-table-demo'>
     {{! BEGIN-SNIPPET fixed-table }}
     {{frost-fixed-table
+      callbackHandler=(action 'dispatchNotifications')
       columns=(array
         (hash
           className='name-col'
