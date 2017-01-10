@@ -1,5 +1,5 @@
 import Ember from 'ember'
-const {inject, Logger} = Ember
+const {Logger, inject} = Ember
 import HeroesController from '../heroes-controller'
 
 export default HeroesController.extend({

@@ -3,14 +3,14 @@
  */
 
 import {expect} from 'chai'
-import hbs from 'htmlbars-inline-precompile'
 import {$hook} from 'ember-hook'
 import wait from 'ember-test-helpers/wait'
+import hbs from 'htmlbars-inline-precompile'
 import {afterEach, beforeEach, describe, it} from 'mocha'
 import sinon from 'sinon'
 
-import {integration} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 import {fixedColumns, heroes} from './data'
+import {integration} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 
 const test = integration('frost-fixed-table')
 describe(test.label, function () {

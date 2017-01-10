@@ -10,8 +10,8 @@ import wait from 'ember-test-helpers/wait'
 import hbs from 'htmlbars-inline-precompile'
 import {beforeEach, describe, it} from 'mocha'
 
-import {integration} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 import {columns} from './data'
+import {integration} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 
 const test = integration('frost-table-header')
 describe(test.label, function () {
