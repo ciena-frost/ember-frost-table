@@ -263,8 +263,15 @@ describe(test.label, function () {
 
         heroes.forEach((hero, rowIndex) => {
           middleColumns.forEach((column, columnIndex) => {
-            it(`should set a hook on the cell in row: ${rowIndex}, column: ${columnIndex}`, function () {
-              const $cell = $hook('myTable-middle-cell', {row: rowIndex, column: columnIndex})
+            // The fixed table uses column indices that are unique across left/middle/right,
+            // so we expect to find hooks and event index identifiers that start with an index
+            // that is offset by the number of columns in the sections to the left of us.
+            const colIndex = columnIndex + 1
+            it(`should set a hook with a unique column index of ${colIndex}
+                on the cell in row: ${rowIndex}, column: ${columnIndex})
+                of the middle section
+                `, function () {
+              const $cell = $hook('myTable-middle-cell', {row: rowIndex, column: colIndex})
               expect($cell.text().trim()).to.equal(hero[column.propertyName])
             })
           })
@@ -302,8 +309,15 @@ describe(test.label, function () {
 
         heroes.forEach((hero, rowIndex) => {
           rightColumns.forEach((column, columnIndex) => {
-            it(`should set a hook on the cell in row: ${rowIndex}, column: ${columnIndex}`, function () {
-              const $cell = $hook('myTable-right-cell', {row: rowIndex, column: columnIndex})
+            // The fixed table uses column indices that are unique across left/middle/right,
+            // so we expect to find hooks and event index identifiers that start with an index
+            // that is offset by the number of columns in the sections to the left of us.
+            const colIndex = columnIndex + 5
+            it(`should set a hook with a unique column index of ${colIndex}
+                on the cell in row: ${rowIndex}, column: ${columnIndex})
+                of the right section
+                `, function () {
+              const $cell = $hook('myTable-right-cell', {row: rowIndex, column: colIndex})
               expect($cell.text().trim()).to.equal(hero[column.propertyName])
             })
           })
