@@ -50,6 +50,39 @@ export const fixedColumns = [
   }
 ]
 
+export const fixedColumnsWithCustomRenderers = [
+  {
+    className: 'name-col',
+    frozen: true,
+    headerRenderer: 'text-input-renderer',
+    label: 'Name',
+    propertyName: 'name',
+    renderer: 'text-input-renderer'
+  },
+  {
+    className: 'real-name-col',
+    headerRenderer: 'text-input-renderer',
+    label: 'Real Name',
+    propertyName: 'realName',
+    renderer: 'text-input-renderer'
+  },
+  {
+    className: 'real-name-col',
+    headerRenderer: 'text-input-renderer',
+    label: 'Real Name',
+    propertyName: 'realName',
+    renderer: 'text-input-renderer'
+  },
+  {
+    className: 'universe-col',
+    frozen: true,
+    headerRenderer: 'text-input-renderer',
+    label: 'Universe',
+    propertyName: 'universe',
+    renderer: 'text-input-renderer'
+  }
+]
+
 export const heroes = [
   {
     name: 'Superman',

@@ -3,16 +3,19 @@
  */
 
 import {expect} from 'chai'
+import Ember from 'ember'
+const {$} = Ember
 import {$hook} from 'ember-hook'
 import wait from 'ember-test-helpers/wait'
 import hbs from 'htmlbars-inline-precompile'
 import {afterEach, beforeEach, describe, it} from 'mocha'
 import sinon from 'sinon'
 
-import {fixedColumns, heroes} from './data'
+import {fixedColumns, fixedColumnsWithCustomRenderers, heroes} from './data'
 import {integration} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 
-const test = integration('frost-fixed-table')
+const test = integration('frost-fixed-table', ['text-input-renderer'])
+
 describe(test.label, function () {
   test.setup()
 
@@ -337,6 +340,156 @@ describe(test.label, function () {
 
         it('should not use <td>', function () {
           expect($rightWrapper.find('td')).to.have.length(0)
+        })
+      })
+    })
+  })
+
+  describe('events', function () {
+    let dispatcher
+
+    beforeEach(function () {
+      dispatcher = sandbox.stub()
+      this.setProperties({
+        actions: {dispatcher},
+        fixedColumns: fixedColumnsWithCustomRenderers
+      })
+
+      this.render(hbs`
+        {{frost-fixed-table
+          callbackHandler=(action 'dispatcher')
+          columns=fixedColumns
+          hook=myHook
+          items=heroes
+        }}
+      `)
+
+      return wait()
+    })
+
+    describe('the header', function () {
+      const headerRow = -1  // differentiates from data row 0
+
+      describe('the left section', function () {
+        describe('when an event is triggered by a renderer', function () {
+          beforeEach(function () {
+            // FIXME: Fix this to use qualifiers on '...renderer-input' hook
+            // the renderer has a hook, but the input inside of it doesn't have the right qualifiers.
+            const cellRenderer = $hook('myTable-header-left-cell-renderer', {column: 0})
+            $('input', cellRenderer).val('foo').trigger('input')
+            return wait()
+          })
+
+          it('it should be emitted by the table', function () {
+            expect(dispatcher).to.have.been.calledWith('input', headerRow, 0, 'foo')
+          })
+        })
+      })
+
+      describe('the middle section', function () {
+        const middleColumns = fixedColumnsWithCustomRenderers.slice(1, 3)
+        middleColumns.forEach((column, middleColIndex) => {
+          const colIndex = middleColIndex + 1  // offset by single left column
+          describe(`when the renderer for column ${colIndex} triggers an event`, function () {
+            beforeEach(function () {
+              // FIXME: Fix this to use qualifiers on '...renderer-input' hook
+              const cellRenderer = $hook('myTable-header-middle-cell-renderer', {column: colIndex})
+              $('input', cellRenderer).val('foo').trigger('input')
+              return wait()
+            })
+
+            it('it should be emitted by the table', function () {
+              expect(dispatcher).to.have.been.calledWith('input', headerRow, colIndex, 'foo')
+            })
+          })
+        })
+      })
+
+      describe('the right section', function () {
+        describe('when an event is triggered by a renderer', function () {
+          beforeEach(function () {
+            // FIXME: Fix this to use qualifiers on '...renderer-input' hook
+            const cellRenderer = $hook('myTable-header-right-cell-renderer', {column: 3})
+            $('input', cellRenderer).val('foo').trigger('input')
+            return wait()
+          })
+
+          it('it should be emitted by the table (with global column index 3)', function () {
+            expect(dispatcher).to.have.been.calledWith('input', headerRow, 3, 'foo')
+          })
+        })
+      })
+    })
+
+    describe('the body', function () {
+      describe('the left section', function () {
+        const leftColumns = fixedColumnsWithCustomRenderers.slice(0, 1)
+
+        heroes.forEach((hero, rowIndex) => {
+          leftColumns.forEach((column, columnIndex) => {
+            describe(`when an event is triggered from the cell in
+                      row: ${rowIndex}, column: ${columnIndex}`, function () {
+              beforeEach(function () {
+                // FIXME: Fix this to use qualifiers on '...renderer-input' hook
+                // the renderer has a hook, but the input inside of it doesn't have the right qualifiers.
+                const cellRenderer = $hook('myTable-left-cell-renderer', {row: rowIndex, column: columnIndex})
+                $('input', cellRenderer).val('foo').trigger('input')
+                return wait()
+              })
+
+              it('it should be emitted by the table', function () {
+                expect(dispatcher).to.have.been.calledWith('input', rowIndex, columnIndex, 'foo')
+              })
+            })
+          })
+        })
+      })
+
+      describe('the middle section', function () {
+        const middleColumns = fixedColumnsWithCustomRenderers.slice(1, 3)
+
+        heroes.forEach((hero, rowIndex) => {
+          middleColumns.forEach((column, columnIndex) => {
+            const colIndex = columnIndex + 1  // left column count offsets all of our hooks + events
+            describe(`when an event is triggered from the cell in
+                      row: ${rowIndex}, column: ${columnIndex}`, function () {
+              beforeEach(function () {
+                // FIXME: Fix this to use qualifiers on '...renderer-input' hook
+                // the renderer has a hook, but the input inside of it doesn't have the right qualifiers.
+                const cellRenderer = $hook('myTable-middle-cell-renderer', {row: rowIndex, column: colIndex})
+                $('input', cellRenderer).val('foo').trigger('input')
+                return wait()
+              })
+
+              it(`it should be emitted by the table (with global column index ${colIndex})`, function () {
+                expect(dispatcher).to.have.been.calledWith('input', rowIndex, colIndex, 'foo')
+              })
+            })
+          })
+        })
+      })
+
+      describe('the right section', function () {
+        const rightColumns = fixedColumnsWithCustomRenderers.slice(3)
+
+        heroes.forEach((hero, rowIndex) => {
+          rightColumns.forEach((column, columnIndex) => {
+            const colIndex = columnIndex + 3  // left + right column count offsets all of our hooks + events
+            describe(`when an event is triggered from the cell in
+                      row: ${rowIndex}, column: ${columnIndex}`, function () {
+              beforeEach(function () {
+                // FIXME: Fix this to use qualifiers on '...renderer-input' hook
+                // the renderer has a hook, but the input inside of it doesn't have the right qualifiers.
+                const cellRenderer = $hook('myTable-right-cell-renderer', {row: rowIndex, column: colIndex})
+                $('input', cellRenderer).val('foo').trigger('input')
+                return wait()
+              })
+
+              it(`it should be emitted by the table (with global column index ${colIndex})`, function () {
+                expect(dispatcher).to.have.been.calledWith('input', rowIndex, colIndex, 'foo')
+              })
+            })
+          })
         })
       })
     })
