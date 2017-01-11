@@ -54,31 +54,31 @@ export const heroes = [
   {
     name: 'Superman',
     realName: 'Clark Kent (Kal-El)',
-    teamAffiliatinos: ['JLA'],
+    teamAffiliations: ['JLA'],
     universe: 'DC'
   },
   {
     name: 'Batman',
     realName: 'Bruce Wayne',
-    teamAffiliatinos: ['JLA'],
+    teamAffiliations: ['JLA'],
     universe: 'DC'
   },
   {
     name: 'Wonder Woman',
     realName: 'Diana Prince',
-    teamAffiliatinos: ['JLA'],
+    teamAffiliations: ['JLA'],
     universe: 'DC'
   },
   {
     name: 'Aquaman',
     realName: 'Arthur Curry',
-    teamAffiliatinos: ['JLA'],
+    teamAffiliations: ['JLA'],
     universe: 'DC'
   },
   {
     name: 'Flash',
     realName: 'Barry Allen',
-    teamAffiliatinos: ['JLA'],
+    teamAffiliations: ['JLA'],
     universe: 'DC'
   }
 ]
