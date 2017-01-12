@@ -20,7 +20,8 @@ describe(test.label, function () {
   beforeEach(function () {
     this.setProperties({
       columns,
-      myHook: 'myTableHeader'
+      myHook: 'myTableHeader',
+      onCallback: () => {}
     })
   })
 
@@ -30,6 +31,7 @@ describe(test.label, function () {
         {{frost-table-header
           columns=columns
           hook=myHook
+          onCallback=onCallback
         }}
       `)
 

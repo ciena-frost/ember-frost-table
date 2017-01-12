@@ -47,5 +47,20 @@ export default Component.extend({
   // == Actions ===============================================================
 
   actions: {
+    /**
+     * Wrap our arguments in a single object, so that cell renderers can trigger arbitrary events.
+     * Your handler is then responsible for doing stuff based on actions like 'click' or 'input'.
+     *
+     * @param {Number} row - data rows are zero based, and header has row -1
+     * @param {Number} col - column index
+     * @param {String} action - this comes after row/col as Ember lets us include those in action closures easily.
+     * @param {Object[]} args - any additional data
+     */
+    handleCallback (row, col, action, args) {
+      const handler = this.get('onCallback')
+      if (handler) {
+        handler({action, row, col, args})
+      }
+    }
   }
 })

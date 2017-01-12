@@ -18,12 +18,14 @@ describe(test.label, function () {
   describe('after render', function () {
     beforeEach(function () {
       this.setProperties({
-        myHook: 'myThing'
+        myHook: 'myThing',
+        onCallback: () => {}
       })
 
       this.render(hbs`
         {{frost-table-cell-renderer
           hook=myHook
+          onCallback=onCallback
         }}
       `)
 

@@ -21,7 +21,8 @@ describe(test.label, function () {
     this.setProperties({
       columns,
       hero: heroes[2],
-      myHook: 'myTableRow'
+      myHook: 'myTableRow',
+      onCallback: () => {}
     })
   })
 
@@ -32,6 +33,7 @@ describe(test.label, function () {
           columns=columns
           hook=myHook
           item=hero
+          onCallback=onCallback
         }}
       `)
 
