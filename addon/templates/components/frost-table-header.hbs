@@ -1,14 +1,14 @@
 {{! Template for the frost-table-header component }}
 {{! frost-fixed-table's columns are broken in to several separate rows,
     so if we encounter that we want to use it instead of index. }}
-{{#each columns as |column index|}}
+{{#each columns as |column|}}
   {{frost-table-cell
     cellRenderer=column.headerRenderer
-    colIndex=(or column.colIndex index)
+    colIndex=column.index
     class=(concat cellCss '-cell' ' ' column.className)
     hook=(concat hookPrefix '-cell')
-    hookQualifiers=(extend hookQualifiers column=(or column.colIndex index))
-    onCallback=(action onCallback (or column.colIndex index))
+    hookQualifiers=(extend hookQualifiers column=column.index)
+    onCallback=(action onCallback column.index)
     tagName=cellTagName
     value=column.label
   }}

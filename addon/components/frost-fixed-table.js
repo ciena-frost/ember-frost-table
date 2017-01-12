@@ -84,6 +84,12 @@ export default Component.extend({
 
   @readOnly
   @computed('columns')
+  indexedColumns (columns) {
+    return columns.map((column, index) => Object.assign({index}, column))
+  },
+
+  @readOnly
+  @computed('indexedColumns')
   /**
    * Get the set of columns that are supposed to be frozen on the left
    *
@@ -98,7 +104,6 @@ export default Component.extend({
     for (let i = 0; i < columns.length; i++) {
       const column = columns[i]
       if (column.frozen) {
-        column.colIndex = i  // Add a `colIndex` field so that our split tables can dispatch the right events
         frozenColumns.push(column)
       } else {
         return frozenColumns
@@ -109,7 +114,7 @@ export default Component.extend({
   },
 
   @readOnly
-  @computed('columns')
+  @computed('indexedColumns')
   /**
    * Get the set of columns that are supposed to be in the middle (between the frozen left and frozen right columns)
    *
@@ -130,7 +135,6 @@ export default Component.extend({
         }
       } else {
         foundUnFrozen = true
-        column.colIndex = i  // Add a `colIndex` field so that our split tables can dispatch the right events
         unFrozenColumns.push(column)
       }
     }
@@ -139,7 +143,7 @@ export default Component.extend({
   },
 
   @readOnly
-  @computed('columns')
+  @computed('indexedColumns')
   /**
    * Get the set of columns that are supposed to be frozen on the right
    *
@@ -154,7 +158,6 @@ export default Component.extend({
     for (let i = columns.length - 1; i > 0; i--) {
       const column = columns[i]
       if (column.frozen) {
-        column.colIndex = i  // Add a `colIndex` field so that our split tables can dispatch the right events
         frozenColumns.push(column)
       } else {
         return frozenColumns.reverse()
