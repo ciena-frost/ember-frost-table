@@ -21,16 +21,18 @@ export default Component.extend({
 
   propTypes: {
     // options
-    callbackHandler: PropTypes.func,
     columns: PropTypes.arrayOf(ColumnPropType),
-    items: ItemsPropType
+    items: ItemsPropType,
+    onCallback: PropTypes.func
   },
 
   getDefaultProps () {
     return {
       // options
       columns: [],
-      items: []
+      items: [],
+      // do nothing by default, as the grid may not have any custom renderers that would need to emit events
+      onCallback: () => {}
     }
   },
 
@@ -339,7 +341,7 @@ export default Component.extend({
 
   actions: {
     /**
-     * Generic action dispatcher, so that cell renderers can indicate arbitrary events.
+     * Wrap our arguments in a single object, so that cell renderers can trigger arbitrary events.
      * Your handler is then responsible for doing stuff based on actions like 'click' or 'input'.
      *
      * @param {Number} row - data rows are zero based, and header has row -1
@@ -347,10 +349,10 @@ export default Component.extend({
      * @param {String} action - this comes after row/col as Ember lets us include those in action closures easily.
      * @param {Object[]} args - any additional data
      */
-    genericDispatch (row, col, action, args) {
-      const handler = this.get('callbackHandler')
+    handleCallback (row, col, action, args) {
+      const handler = this.get('onCallback')
       if (handler) {
-        handler(action, row, col, args)
+        handler({action, row, col, args})
       }
     }
   }

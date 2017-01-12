@@ -15,11 +15,11 @@ export default Component.extend({
 
   propTypes: {
     // optional
-    callbackDispatch: PropTypes.func,
     colIndex: PropTypes.number,
 
     // required
     item: PropTypes.object.isRequired,
+    onCallback: PropTypes.func.isRequired,
     value: PropTypes.any.isRequired
   },
 
@@ -34,10 +34,13 @@ export default Component.extend({
   // == Actions ===============================================================
 
   actions: {
+    /**
+     * Default handler for input events
+     * @param {Event} e - the input event from a child component's input event
+     */
     handleInput (e) {
-      if (this.get('callbackDispatch')) {
-        this.get('callbackDispatch')('input', e.target.value)
-      }
+      const onCallback = this.get('onCallback')
+      onCallback('input', e.target.value)
     }
   }
 })

@@ -11,32 +11,32 @@
     {{#frost-scroll}}
       {{! We pass a row index of -1 since the row indices are zero-based }}
       {{frost-table-header
-        callbackDispatch=(action 'genericDispatch' -1)
         cellTagName='div'
         columns=middleColumns
         hook=(concat hookPrefix '-header-middle')
         hookQualifiers=hookQualifiers
+        onCallback=(action 'handleCallback' -1)
         tagName='div'
       }}
     {{/frost-scroll}}
   </div>
   <div class={{concat css '-header-left'}}>
     {{frost-table-header
-      callbackDispatch=(action 'genericDispatch' -1)
       cellTagName='div'
       columns=leftColumns
       hook=(concat hookPrefix '-header-left')
       hookQualifiers=hookQualifiers
+      onCallback=(action 'handleCallback' -1)
       tagName='div'
     }}
   </div>
   <div class={{concat css '-header-right'}}>
     {{frost-table-header
-      callbackDispatch=(action 'genericDispatch' -1)
       cellTagName='div'
       columns=rightColumns
       hook=(concat hookPrefix '-header-right')
       hookQualifiers=hookQualifiers
+      onCallback=(action 'handleCallback' -1)
       tagName='div'
     }}
   </div>
@@ -54,12 +54,12 @@
     {{#frost-scroll}}
       {{#each items as |item index|}}
         {{frost-table-row
-          callbackDispatch=(action 'genericDispatch' index)
           cellTagName='div'
           columns=middleColumns
           hook=(concat hookPrefix '-middle')
           hookQualifiers=(extend hookQualifiers row=index)
           item=item
+          onCallback=(action 'handleCallback' index)
           tagName='div'
         }}
       {{/each}}
@@ -70,12 +70,12 @@
     {{#frost-scroll}}
       {{#each items as |item index|}}
         {{frost-table-row
-          callbackDispatch=(action 'genericDispatch' index)
           cellTagName='div'
           columns=leftColumns
           hook=(concat hookPrefix '-left')
           hookQualifiers=(extend hookQualifiers row=index)
           item=item
+          onCallback=(action 'handleCallback' index)
           tagName='div'
         }}
       {{/each}}
@@ -86,12 +86,12 @@
     {{#frost-scroll}}
       {{#each items as |item index|}}
         {{frost-table-row
-          callbackDispatch=(action 'genericDispatch' index)
           cellTagName='div'
           columns=rightColumns
           hook=(concat hookPrefix '-right')
           hookQualifiers=(extend hookQualifiers row=index)
           item=item
+          onCallback=(action 'handleCallback' index)
           tagName='div'
         }}
       {{/each}}

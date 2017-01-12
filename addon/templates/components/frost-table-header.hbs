@@ -3,12 +3,12 @@
     so if we encounter that we want to use it instead of index. }}
 {{#each columns as |column index|}}
   {{frost-table-cell
-    callbackDispatch=(action 'handleCallback' (or column.colIndex index))
     cellRenderer=column.headerRenderer
     colIndex=(or column.colIndex index)
     class=(concat cellCss '-cell' ' ' column.className)
     hook=(concat hookPrefix '-cell')
     hookQualifiers=(extend hookQualifiers column=(or column.colIndex index))
+    onCallback=(action onCallback (or column.colIndex index))
     tagName=cellTagName
     value=column.label
   }}

@@ -3,13 +3,13 @@
   {{! frost-fixed-table's columns are broken in to several separate rows,
       so if we encounter that we want to use it instead of index. }}
   {{frost-table-cell
-    callbackDispatch=(action 'handleCallback' (or column.colIndex index))
     cellRenderer=column.renderer
     class=(concat cellCss '-cell' ' ' column.className)
     colIndex=(or column.colIndex index)
     hook=(concat hookPrefix '-cell')
     hookQualifiers=(extend hookQualifiers column=(or column.colIndex index))
     item=item
+    onCallback=(action onCallback (or column.colIndex index))
     tagName=cellTagName
     value=(get item column.propertyName)
   }}
