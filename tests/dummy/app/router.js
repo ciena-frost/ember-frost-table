@@ -1,12 +1,12 @@
-/* eslint-disable ember-standard/destructure */
 import Ember from 'ember'
+const {Router} = Ember
 import config from './config/environment'
 
-const Router = Ember.Router.extend({
+const DemoRouter = Router.extend({
   location: config.locationType
 })
 
-Router.map(function () {
+DemoRouter.map(function () {
   this.route('demo', {path: '/'}, function () {
     this.route('overview', {path: '/'})
     this.route('frost-fixed-table')
@@ -17,4 +17,4 @@ Router.map(function () {
   })
 })
 
-export default Router
+export default DemoRouter
