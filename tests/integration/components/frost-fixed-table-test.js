@@ -14,7 +14,7 @@ import sinon from 'sinon'
 import {fixedColumns, fixedColumnsWithCustomRenderers, heroes} from './data'
 import {integration} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 
-const test = integration('frost-fixed-table', ['text-input-renderer'])
+const test = integration('frost-fixed-table')
 
 describe(test.label, function () {
   test.setup()
@@ -269,12 +269,14 @@ describe(test.label, function () {
             // The fixed table uses column indices that are unique across left/middle/right,
             // so we expect to find hooks and event index identifiers that start with an index
             // that is offset by the number of columns in the sections to the left of us.
-            const colIndex = columnIndex + 1
-            it(`should set a hook with a unique column index of ${colIndex}
-                on the cell in row: ${rowIndex}, column: ${columnIndex})
-                of the middle section
-                `, function () {
-              const $cell = $hook('myTable-middle-cell', {row: rowIndex, column: colIndex})
+            const globalIndex = columnIndex + 1
+            const msg = `
+              should set a hook with a unique column index of ${globalIndex}
+              on the cell in row: ${rowIndex}, column: ${columnIndex})
+              of the middle section
+            `
+            it(msg, function () {
+              const $cell = $hook('myTable-middle-cell', {row: rowIndex, column: globalIndex})
               expect($cell.text().trim()).to.equal(hero[column.propertyName])
             })
           })
@@ -315,12 +317,14 @@ describe(test.label, function () {
             // The fixed table uses column indices that are unique across left/middle/right,
             // so we expect to find hooks and event index identifiers that start with an index
             // that is offset by the number of columns in the sections to the left of us.
-            const colIndex = columnIndex + 5
-            it(`should set a hook with a unique column index of ${colIndex}
-                on the cell in row: ${rowIndex}, column: ${columnIndex})
-                of the right section
-                `, function () {
-              const $cell = $hook('myTable-right-cell', {row: rowIndex, column: colIndex})
+            const globalIndex = columnIndex + 5
+            const msg = `
+              should set a hook with a unique column index of ${globalIndex}
+              on the cell in row: ${rowIndex}, column: ${columnIndex})
+              of the right section
+            `
+            it(msg, function () {
+              const $cell = $hook('myTable-right-cell', {row: rowIndex, column: globalIndex})
               expect($cell.text().trim()).to.equal(hero[column.propertyName])
             })
           })
@@ -431,19 +435,18 @@ describe(test.label, function () {
         const leftColumns = fixedColumnsWithCustomRenderers.slice(0, 1)
 
         heroes.forEach((hero, rowIndex) => {
-          leftColumns.forEach((column, globalIndex) => {
-            describe(`when an event is triggered from the cell in
-                      row: ${rowIndex}, column: ${globalIndex}`, function () {
+          leftColumns.forEach((column, index) => {
+            describe(`when an event is triggered from the cell in row: ${rowIndex}, column: ${index}`, function () {
               beforeEach(function () {
                 // FIXME: Fix this to use qualifiers on '...renderer-input' hook
                 // the renderer has a hook, but the input inside of it doesn't have the right qualifiers.
-                const $cellRenderer = $hook('myTable-left-cell-renderer', {row: rowIndex, column: globalIndex})
+                const $cellRenderer = $hook('myTable-left-cell-renderer', {row: rowIndex, column: index})
                 $('input', $cellRenderer).val('foo').trigger('input')
                 return wait()
               })
 
               it('it should be emitted by the table', function () {
-                expect(onCallback).to.have.been.calledWith(_action({row: rowIndex, col: globalIndex}))
+                expect(onCallback).to.have.been.calledWith(_action({row: rowIndex, col: index}))
               })
             })
           })
@@ -456,8 +459,7 @@ describe(test.label, function () {
         heroes.forEach((hero, rowIndex) => {
           middleColumns.forEach((column, index) => {
             const globalIndex = index + 1  // left column count offsets all of our hooks + events
-            describe(`when an event is triggered from the cell in
-                      row: ${rowIndex}, column: ${index}`, function () {
+            describe(`when an event is triggered from the cell in row: ${rowIndex}, column: ${index}`, function () {
               beforeEach(function () {
                 // FIXME: Fix this to use qualifiers on '...renderer-input' hook
                 // the renderer has a hook, but the input inside of it doesn't have the right qualifiers.
@@ -480,8 +482,7 @@ describe(test.label, function () {
         heroes.forEach((hero, rowIndex) => {
           rightColumns.forEach((column, index) => {
             const globalIndex = index + 3  // left + right column count offsets all of our hooks + events
-            describe(`when an event is triggered from the cell in
-                      row: ${rowIndex}, column: ${index}`, function () {
+            describe(`when an event is triggered from the cell in row: ${rowIndex}, column: ${index}`, function () {
               beforeEach(function () {
                 // FIXME: Fix this to use qualifiers on '...renderer-input' hook
                 // the renderer has a hook, but the input inside of it doesn't have the right qualifiers.
