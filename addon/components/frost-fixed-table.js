@@ -20,9 +20,11 @@ export default Component.extend({
   // == PropTypes =============================================================
 
   propTypes: {
+    // required:
+    columns: PropTypes.arrayOf(ColumnPropType).isRequired,
+    items: ItemsPropType.isRequired,
+
     // options
-    columns: PropTypes.arrayOf(ColumnPropType),
-    items: ItemsPropType,
     onCallback: PropTypes.func
   },
 
