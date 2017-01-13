@@ -20,7 +20,6 @@ export default Component.extend({
   propTypes: {
     onCallback: PropTypes.func.required,
     cellRenderer: PropTypes.any,
-    colIndex: PropTypes.number,
     item: PropTypes.object,
     value: PropTypes.any
   },

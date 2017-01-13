@@ -14,9 +14,6 @@ export default Component.extend({
   // == PropTypes =============================================================
 
   propTypes: {
-    // optional
-    colIndex: PropTypes.number,
-
     // required
     item: PropTypes.object.isRequired,
     onCallback: PropTypes.func.isRequired,

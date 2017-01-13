@@ -4,7 +4,6 @@
 {{#each columns as |column|}}
   {{frost-table-cell
     cellRenderer=column.headerRenderer
-    colIndex=column.index
     class=(concat cellCss '-cell' ' ' column.className)
     hook=(concat hookPrefix '-cell')
     hookQualifiers=(extend hookQualifiers column=column.index)

@@ -2,7 +2,6 @@
 {{#if cellRenderer}}
   {{! When we rendered our row, it already bound our row and column indices as parameters for the callback handler. }}
   {{component cellRenderer
-    colIndex=colIndex
     hook=(concat hookPrefix '-renderer')
     hookQualifiers=hookQualifiers
     item=item
