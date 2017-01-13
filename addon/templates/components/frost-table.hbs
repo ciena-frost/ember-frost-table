@@ -1,6 +1,6 @@
 {{! Template for the frost-table component }}
 {{frost-table-header
-  columns=columns
+  columns=indexedColumns
   hook=(concat hook '-header')
   hookQualifiers=hookQualifiers
   onCallback=(action 'handleCallback' -1)
@@ -8,7 +8,7 @@
 {{! Note row index of -1 to indicate header, since data rows are indexed from zero }}
 
 {{frost-table-body
-  columns=columns
+  columns=indexedColumns
   hook=(concat hook '-body')
   hookQualifiers=hookQualifiers
   onCallback=(action 'handleCallback')

@@ -2,6 +2,7 @@
  * Component definition for the frost-table component
  */
 
+import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
@@ -37,6 +38,17 @@ export default Component.extend({
   },
 
   // == Computed Properties ===================================================
+
+  @readOnly
+  @computed('columns')
+  /**
+   * Pre-computed indices
+   * @param {Column[]} columns - the column data we want to present
+   * @returns {Column[]} indexed - columns with an 'index' property added
+   */
+  indexedColumns (columns) {
+    return columns.map((column, index) => Object.assign({index}, column))
+  },
 
   // == Functions =============================================================
 

@@ -84,6 +84,11 @@ export default Component.extend({
 
   @readOnly
   @computed('columns')
+  /**
+   * Pre-computed indices
+   * @param {Column[]} columns - the column data we want to present
+   * @returns {Column[]} indexed - columns with an 'index' property added
+   */
   indexedColumns (columns) {
     return columns.map((column, index) => Object.assign({index}, column))
   },

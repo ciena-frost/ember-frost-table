@@ -14,11 +14,15 @@ import sinon from 'sinon'
 import {unit} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 import {createSelectorStub} from 'dummy/tests/helpers/selector-stub'
 
+function _rewriteIndices (cols) {
+  return cols.map((column, index) => Object.assign({index}, column))
+}
+
 const test = unit('frost-fixed-table')
 describe(test.label, function () {
   test.setup()
 
-  let component, columns, sandbox
+  let component, columns, indexedColumns, sandbox
 
   beforeEach(function () {
     sandbox = sinon.sandbox.create()
@@ -50,6 +54,9 @@ describe(test.label, function () {
         propertyName: 'summary2'
       }
     ]
+
+    // The table component should add these for hooks.
+    indexedColumns = _rewriteIndices(columns)
   })
 
   afterEach(function () {
@@ -84,7 +91,7 @@ describe(test.label, function () {
         })
 
         it('should have the first frozen columns', function () {
-          expect(component.get('leftColumns')).to.eql(columns.slice(0, 2))
+          expect(component.get('leftColumns')).to.eql(indexedColumns.slice(0, 2))
         })
       })
 
@@ -106,7 +113,7 @@ describe(test.label, function () {
         })
 
         it('should have the middle non-frozen columns', function () {
-          expect(component.get('middleColumns')).to.eql(columns.slice(2, 5))
+          expect(component.get('middleColumns')).to.eql(indexedColumns.slice(2, 5))
         })
       })
 
@@ -116,7 +123,7 @@ describe(test.label, function () {
         })
 
         it('should have the first non-frozen columns', function () {
-          expect(component.get('middleColumns')).to.eql(columns.slice(2, 5))
+          expect(component.get('middleColumns')).to.eql(_rewriteIndices(columns.slice(2, 5)))
         })
       })
 
@@ -126,7 +133,7 @@ describe(test.label, function () {
         })
 
         it('should have the last non-frozen columns', function () {
-          expect(component.get('middleColumns')).to.eql(columns.slice(2, 5))
+          expect(component.get('middleColumns')).to.eql(indexedColumns.slice(2, 5))
         })
       })
 
@@ -148,7 +155,7 @@ describe(test.label, function () {
         })
 
         it('should have the last frozen columns', function () {
-          expect(component.get('rightColumns')).to.eql(columns.slice(-2))
+          expect(component.get('rightColumns')).to.eql(indexedColumns.slice(-2))
         })
       })
 
