@@ -20,7 +20,7 @@ export default Component.extend({
 
   propTypes: {
     // options
-    onCallback: PropTypes.func.required,
+    onCallback: PropTypes.func.isRequired,
     cellCss: PropTypes.string,
     cellTagName: PropTypes.string,
     columns: PropTypes.arrayOf(ColumnPropType),

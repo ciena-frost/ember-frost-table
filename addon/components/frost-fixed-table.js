@@ -32,7 +32,7 @@ export default Component.extend({
       columns: [],
       items: [],
       // do nothing by default, as the grid may not have any custom renderers that would need to emit events
-      onCallback: () => {}
+      onCallback () {}
     }
   },
 
@@ -355,13 +355,10 @@ export default Component.extend({
      * @param {Number} row - data rows are zero based, and header has row -1
      * @param {Number} col - column index
      * @param {String} action - this comes after row/col as Ember lets us include those in action closures easily.
-     * @param {Object[]} args - any additional data
+     * @param {Object} args - any additional data (e.g. an array or object)
      */
     handleCallback (row, col, action, args) {
-      const handler = this.get('onCallback')
-      if (handler) {
-        handler({action, row, col, args})
-      }
+      this.onCallback({action, args, col, row})
     }
   }
 })

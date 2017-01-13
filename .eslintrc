@@ -2,7 +2,7 @@
   "extends": ["frost-standard"],
   "rules": {
     "ocd/sort-import-declarations": [
-      1,
+      2,
       {
         "localPrefixes": [
           "../",
