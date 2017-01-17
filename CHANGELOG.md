@@ -1,3 +1,12 @@
+# 1.0.0
+- `frost-fixed-table` and `frost-table` can now handle custom callback propagation from individual cells in the header or body sections.
+- Custom table cell renders are now given an `onCallback(action, args)` method that they can call to propagate events or any other notification that needs to escape the table.
+- Passing an `onCallback({action, args, col, row})` to the table will allow the consumer of the table to receive these events.
+- Linting warnings have been fixed, and warnings from `ocd/sort-import-declarations` are now reported as errors.
+- **Breaking change**: Columns in `frost-fixed-table` sections now have globally unique column indices in their ember hooks, rather than having each of the left/middle/right sections index from zero, so that the generic event callback can uniquely identify table cells more easily
+- **Breaking change**: `items` and `columns` arguments are now required.
+
+
 # 0.3.1
 * **Fixed** paths in coverage report
 
