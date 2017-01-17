@@ -3,8 +3,8 @@
  */
 
 import {expect} from 'chai'
-import {describe, it} from 'mocha'
 import * as tableExports from 'ember-frost-table'
+import {describe, it} from 'mocha'
 
 describe('index', function () {
   const components = [

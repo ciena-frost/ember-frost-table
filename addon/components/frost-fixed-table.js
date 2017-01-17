@@ -7,8 +7,8 @@ import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
-import {ColumnPropType, ItemsPropType} from 'ember-frost-table/typedefs'
 import layout from '../templates/components/frost-fixed-table'
+import {ColumnPropType, ItemsPropType} from 'ember-frost-table/typedefs'
 
 export default Component.extend({
   // == Dependencies ==========================================================
@@ -20,16 +20,21 @@ export default Component.extend({
   // == PropTypes =============================================================
 
   propTypes: {
+    // required:
+    columns: PropTypes.arrayOf(ColumnPropType).isRequired,
+    items: ItemsPropType.isRequired,
+
     // options
-    columns: PropTypes.arrayOf(ColumnPropType),
-    items: ItemsPropType
+    onCallback: PropTypes.func
   },
 
   getDefaultProps () {
     return {
       // options
       columns: [],
-      items: []
+      items: [],
+      // do nothing by default, as the grid may not have any custom renderers that would need to emit events
+      onCallback () {}
     }
   },
 
@@ -82,6 +87,17 @@ export default Component.extend({
   @readOnly
   @computed('columns')
   /**
+   * Pre-computed indices
+   * @param {Column[]} columns - the column data we want to present
+   * @returns {Column[]} indexed - columns with an 'index' property added
+   */
+  indexedColumns (columns) {
+    return columns.map((column, index) => Object.assign({index}, column))
+  },
+
+  @readOnly
+  @computed('indexedColumns')
+  /**
    * Get the set of columns that are supposed to be frozen on the left
    *
    * The set of leftColumns is defined as all the columns with `frozen` === `true`
@@ -105,7 +121,7 @@ export default Component.extend({
   },
 
   @readOnly
-  @computed('columns')
+  @computed('indexedColumns')
   /**
    * Get the set of columns that are supposed to be in the middle (between the frozen left and frozen right columns)
    *
@@ -134,7 +150,7 @@ export default Component.extend({
   },
 
   @readOnly
-  @computed('columns')
+  @computed('indexedColumns')
   /**
    * Get the set of columns that are supposed to be frozen on the right
    *
@@ -334,5 +350,17 @@ export default Component.extend({
   // == Actions ===============================================================
 
   actions: {
+    /**
+     * Wrap our arguments in a single object, so that cell renderers can trigger arbitrary events.
+     * Your handler is then responsible for doing stuff based on actions like 'click' or 'input'.
+     *
+     * @param {Number} row - data rows are zero based, and header has row -1
+     * @param {Number} col - column index
+     * @param {String} action - this comes after row/col as Ember lets us include those in action closures easily.
+     * @param {Object} args - any additional data (e.g. an array or object)
+     */
+    handleCallback (row, col, action, args) {
+      this.onCallback({action, args, col, row})
+    }
   }
 })

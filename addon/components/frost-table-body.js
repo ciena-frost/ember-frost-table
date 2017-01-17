@@ -5,8 +5,8 @@
 import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
-import {ColumnPropType, ItemsPropType} from 'ember-frost-table/typedefs'
 import layout from '../templates/components/frost-table-body'
+import {ColumnPropType, ItemsPropType} from 'ember-frost-table/typedefs'
 
 export default Component.extend({
   // == Dependencies ==========================================================
@@ -19,6 +19,9 @@ export default Component.extend({
   // == PropTypes =============================================================
 
   propTypes: {
+    // required
+    onCallback: PropTypes.func.isRequired,
+
     // options
     columns: PropTypes.arrayOf(ColumnPropType),
     items: ItemsPropType

@@ -1,9 +1,11 @@
 {{! Template for the frost-table-cell component }}
 {{#if cellRenderer}}
+  {{! When we rendered our row, it already bound our row and column indices as parameters for the callback handler. }}
   {{component cellRenderer
     hook=(concat hookPrefix '-renderer')
     hookQualifiers=hookQualifiers
     item=item
+    onCallback=onCallback
     value=value
   }}
 {{else}}

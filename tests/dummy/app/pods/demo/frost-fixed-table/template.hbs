@@ -19,7 +19,15 @@
         name='John Doe'
       )
     )
+    onCallback= // a handler that handles an object with {action, row, col, args}
   }}
+{{ END-SNIPPET --}}
+{{!-- BEGIN-SNIPPET dispatcher-example }}
+    dispatchNotifications ({action, row, col, args}) {
+      // row will be -1 for events that come from the header row,
+      // and zero indexed for data rows.
+      Logger.log(action, row, col, args)
+    }
 {{ END-SNIPPET --}}
 
 
@@ -38,9 +46,13 @@
   <div class='frost-demo-snippet'>
     {{code-snippet name='fixed-table.hbs'}}
   </div>
+  <div class='frost-demo-snippet'>
+    {{code-snippet name='dispatcher-example.hbs'}}
+  </div>
   <div class='frost-demo-launch frost-table-demo'>
     {{! BEGIN-SNIPPET fixed-table }}
     {{frost-fixed-table
+      onCallback=(action 'dispatchNotifications')
       columns=(array
         (hash
           className='name-col'
@@ -62,8 +74,8 @@
         )
         (hash
           className='real-name-col'
-          label='Real Name'
-          propertyName='realName'
+          label='Team Affiliations'
+          propertyName='teamAffiliations'
         )
         (hash
           className='universe-col'

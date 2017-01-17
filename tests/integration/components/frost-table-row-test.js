@@ -5,13 +5,13 @@
 import {expect} from 'chai'
 import Ember from 'ember'
 const {$, get} = Ember
-import hbs from 'htmlbars-inline-precompile'
 import {$hook} from 'ember-hook'
 import wait from 'ember-test-helpers/wait'
+import hbs from 'htmlbars-inline-precompile'
 import {beforeEach, describe, it} from 'mocha'
 
-import {integration} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 import {columns, heroes} from './data'
+import {integration} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 
 const test = integration('frost-table-row')
 describe(test.label, function () {
@@ -21,7 +21,8 @@ describe(test.label, function () {
     this.setProperties({
       columns,
       hero: heroes[2],
-      myHook: 'myTableRow'
+      myHook: 'myTableRow',
+      onCallback: () => {}
     })
   })
 
@@ -32,6 +33,7 @@ describe(test.label, function () {
           columns=columns
           hook=myHook
           item=hero
+          onCallback=onCallback
         }}
       `)
 

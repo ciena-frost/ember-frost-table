@@ -2,7 +2,7 @@
  * Unit test for the frost-fixed-table component
  *
  * NOTE: Since it is not easy to properly set up an integration test to confirm some of the DOM
- * caluclations happening in frost-fixed-table, I opted to unit test these calculations, making these
+ * calculations happening in frost-fixed-table, I opted to unit test these calculations, making these
  * tests a little more tied to the implementation than I'd like. However, given the hoops needed to jump through to
  * simulate external CSS as well as scroll and mouse events, this seemed the better option (ARM 2016-12-13)
  */
@@ -14,11 +14,15 @@ import sinon from 'sinon'
 import {unit} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 import {createSelectorStub} from 'dummy/tests/helpers/selector-stub'
 
+function _rewriteIndices (cols) {
+  return cols.map((column, index) => Object.assign({index}, column))
+}
+
 const test = unit('frost-fixed-table')
 describe(test.label, function () {
   test.setup()
 
-  let component, columns, sandbox
+  let component, columns, indexedColumns, sandbox
 
   beforeEach(function () {
     sandbox = sinon.sandbox.create()
@@ -50,6 +54,9 @@ describe(test.label, function () {
         propertyName: 'summary2'
       }
     ]
+
+    // The table component should add these for hooks.
+    indexedColumns = _rewriteIndices(columns)
   })
 
   afterEach(function () {
@@ -84,13 +91,23 @@ describe(test.label, function () {
         })
 
         it('should have the first frozen columns', function () {
-          expect(component.get('leftColumns')).to.eql(columns.slice(0, 2))
+          expect(component.get('leftColumns')).to.eql(indexedColumns.slice(0, 2))
         })
       })
 
       describe('with no leading frozen columns', function () {
         beforeEach(function () {
           component.set('columns', columns.slice(2))
+        })
+
+        it('should be empty', function () {
+          expect(component.get('leftColumns')).to.eql([])
+        })
+      })
+
+      describe('with no columns', function () {
+        beforeEach(function () {
+          component.set('columns', [])
         })
 
         it('should be empty', function () {
@@ -106,7 +123,7 @@ describe(test.label, function () {
         })
 
         it('should have the middle non-frozen columns', function () {
-          expect(component.get('middleColumns')).to.eql(columns.slice(2, 5))
+          expect(component.get('middleColumns')).to.eql(indexedColumns.slice(2, 5))
         })
       })
 
@@ -116,7 +133,7 @@ describe(test.label, function () {
         })
 
         it('should have the first non-frozen columns', function () {
-          expect(component.get('middleColumns')).to.eql(columns.slice(2, 5))
+          expect(component.get('middleColumns')).to.eql(_rewriteIndices(columns.slice(2, 5)))
         })
       })
 
@@ -126,7 +143,7 @@ describe(test.label, function () {
         })
 
         it('should have the last non-frozen columns', function () {
-          expect(component.get('middleColumns')).to.eql(columns.slice(2, 5))
+          expect(component.get('middleColumns')).to.eql(indexedColumns.slice(2, 5))
         })
       })
 
@@ -148,13 +165,23 @@ describe(test.label, function () {
         })
 
         it('should have the last frozen columns', function () {
-          expect(component.get('rightColumns')).to.eql(columns.slice(-2))
+          expect(component.get('rightColumns')).to.eql(indexedColumns.slice(-2))
         })
       })
 
       describe('with no trailing frozen columns', function () {
         beforeEach(function () {
           component.set('columns', columns.slice(0, 5))
+        })
+
+        it('should be empty', function () {
+          expect(component.get('rightColumns')).to.eql([])
+        })
+      })
+
+      describe('with no columns', function () {
+        beforeEach(function () {
+          component.set('columns', [])
         })
 
         it('should be empty', function () {
@@ -553,6 +580,18 @@ describe(test.label, function () {
       it('should set scrollTop on the third destination', function () {
         expect(dst3Stub.scrollTop).to.have.been.calledWith(123)
       })
+    })
+  })
+
+  describe('onCallback', function () {
+    let onCallback
+    beforeEach(function () {
+      onCallback = component.get('onCallback')
+    })
+
+    it('should default to a function', function () {
+      // Normally this would be overridden, but we execute it so that coverage hs satisfied.
+      expect(onCallback()).to.equal(undefined)
     })
   })
 })

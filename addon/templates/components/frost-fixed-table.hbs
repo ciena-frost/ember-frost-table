@@ -9,11 +9,13 @@
   --}}
   <div class={{concat css '-header-middle'}}>
     {{#frost-scroll}}
+      {{! We pass a row index of -1 since the row indices are zero-based }}
       {{frost-table-header
         cellTagName='div'
         columns=middleColumns
         hook=(concat hookPrefix '-header-middle')
         hookQualifiers=hookQualifiers
+        onCallback=(action 'handleCallback' -1)
         tagName='div'
       }}
     {{/frost-scroll}}
@@ -24,6 +26,7 @@
       columns=leftColumns
       hook=(concat hookPrefix '-header-left')
       hookQualifiers=hookQualifiers
+      onCallback=(action 'handleCallback' -1)
       tagName='div'
     }}
   </div>
@@ -33,6 +36,7 @@
       columns=rightColumns
       hook=(concat hookPrefix '-header-right')
       hookQualifiers=hookQualifiers
+      onCallback=(action 'handleCallback' -1)
       tagName='div'
     }}
   </div>
@@ -55,6 +59,7 @@
           hook=(concat hookPrefix '-middle')
           hookQualifiers=(extend hookQualifiers row=index)
           item=item
+          onCallback=(action 'handleCallback' index)
           tagName='div'
         }}
       {{/each}}
@@ -70,6 +75,7 @@
           hook=(concat hookPrefix '-left')
           hookQualifiers=(extend hookQualifiers row=index)
           item=item
+          onCallback=(action 'handleCallback' index)
           tagName='div'
         }}
       {{/each}}
@@ -85,6 +91,7 @@
           hook=(concat hookPrefix '-right')
           hookQualifiers=(extend hookQualifiers row=index)
           item=item
+          onCallback=(action 'handleCallback' index)
           tagName='div'
         }}
       {{/each}}

@@ -1,10 +1,11 @@
 {{! Template for the frost-table-header component }}
-{{#each columns as |column index|}}
+{{#each columns as |column|}}
   {{frost-table-cell
     cellRenderer=column.headerRenderer
     class=(concat cellCss '-cell' ' ' column.className)
     hook=(concat hookPrefix '-cell')
-    hookQualifiers=(extend hookQualifiers column=index)
+    hookQualifiers=(extend hookQualifiers column=column.index)
+    onCallback=(action onCallback column.index)
     tagName=cellTagName
     value=column.label
   }}
