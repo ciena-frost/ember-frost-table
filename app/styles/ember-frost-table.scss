@@ -2,8 +2,8 @@
 // Styles for a ember-frost-table addon
 //
 
-@import 'variables';
-@import 'mixins';
-@import 'frost-table';
-@import 'frost-fixed-table';
-@import 'perfect-scrollbar';
+@import './ember-frost-table/variables';
+@import './ember-frost-table/mixins';
+@import './ember-frost-table/frost-table';
+@import './ember-frost-table/frost-fixed-table';
+@import './ember-frost-table/perfect-scrollbar';
