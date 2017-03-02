@@ -27,7 +27,7 @@ install:
 - ./node_modules/.bin/bower install
 script:
 - npm run lint
-- npm run ci-test
+- npm run test
 after_success:
 - .travis/publish-coverage.sh
 env:
@@ -54,7 +54,7 @@ deploy:
     branch: master
     condition: "$EMBER_TRY_SCENARIO = 'default'"
     node: 'stable'
-    tags: false
+    tags: true
 after_deploy:
 - .travis/publish-gh-pages.sh
 notifications:
