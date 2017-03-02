@@ -1,3 +1,6 @@
+# 1.0.2
+* **Updated** to use latest pr-bumper which supports being able to set a PR to `none` when publishing a new version is not desired.
+
 # 1.0.1
 * **Fixed** issue with namespace of exported `.scss` files. We were putting all the `_foo.scss` files directly into
 `app/styles` instead of `app/styles/ember-frost-table` polluting the top-level styles directory for the consuming app.
