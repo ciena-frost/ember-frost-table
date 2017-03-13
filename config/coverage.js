@@ -4,7 +4,7 @@ module.exports = {
   useBabelInstrumenter: true,
   reporters: ['json'],
   excludes: [
-    '*/app/**/*',
-    '*/tests/**/*'
+    /app\/(.*)/,
+    /dummy\/(.*)/
   ]
 }
