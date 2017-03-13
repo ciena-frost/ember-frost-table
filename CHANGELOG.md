@@ -1,3 +1,7 @@
+# 1.0.3
+* **Added** a .gitkeep file to coverage directory for code coverage
+* **Updated** the code coverage excludes pattern
+
 # 1.0.2
 * **Updated** to use latest pr-bumper which supports being able to set a PR to `none` when publishing a new version is not desired.
 
