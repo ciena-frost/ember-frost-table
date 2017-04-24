@@ -20,9 +20,7 @@
         name='John Doe'
       )
     )
-    selectedItems=selectedItems
     onCallback= // a handler that handles an object with {action, row, col, args}
-    onSelectionChange=(action 'onSelectionChange')
   }}
 {{ END-SNIPPET --}}
 
@@ -49,7 +47,6 @@
     {{! BEGIN-SNIPPET table }}
     {{frost-table
       onCallback=(action 'dispatchNotifications')
-      onSelectionChange=(action 'onSelectionChange')
       columns=(array
         (hash
           headerRenderer=(component 'text-input-renderer')
@@ -68,8 +65,6 @@
       )
       hook='myTable'
       items=heroes
-      itemKey='name'
-      selectedItems=selectedItems
     }}
     {{! END-SNIPPET }}
   </div>

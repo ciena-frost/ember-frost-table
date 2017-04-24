@@ -5,8 +5,6 @@ import HeroesController from '../heroes-controller'
 export default HeroesController.extend({
   notifier: inject.service(),
 
-  selectedItems: A([]),
-
   actions: {
     dispatchNotifications ({action, row, col, args}) {
       Logger.log('Dispatching: ', action, row, col, args)
@@ -17,14 +15,6 @@ export default HeroesController.extend({
         type: 'success',
         autoClear: true
       })
-    },
-
-    onDeselectAll () {
-      this.get('selectedItems').clear()
-    },
-
-    onSelectionChange (selectedItems) {
-      this.get('selectedItems').setObjects(selectedItems)
     }
   }
 })
