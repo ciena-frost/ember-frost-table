@@ -1,0 +1,7 @@
+.frost-table-row {
+  &.is-selected {
+    position: relative;
+    outline: 1px solid $frost-color-blue-1;
+    z-index: 1;
+  }
+}

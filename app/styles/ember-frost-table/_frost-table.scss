@@ -5,6 +5,11 @@
 .frost-table {
   table-layout: fixed;
 
+  &.shift-down {
+    // Range select doesn't select text
+    user-select: none;
+  }
+
   &-cell {
     padding: $frost-table-cell-padding;
     border-right: solid 1px $frost-color-lgrey-1;

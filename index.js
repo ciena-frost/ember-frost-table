@@ -1,5 +1,7 @@
 'use strict'
 
+const path = require('path')
+
 function initOptions (options) {
   options.babel = options.babel || {}
   options.babel.optional = options.babel.optional || []
@@ -22,7 +24,16 @@ module.exports = {
   },
 
   // Needed for ember-cli-sass (https://github.com/aexmachina/ember-cli-sass#addon-usage)
-  included: function () {
-    this._super.included.apply(this, arguments)
-  }
+  included: function (app) {
+    // Addons - see: https://github.com/ember-cli/ember-cli/issues/3718
+    if (typeof app.import !== 'function' && app.app) {
+      this.app = app = app.app
+    }
+
+    this._super.included(app)
+
+    if (app) {
+      app.import(path.join('vendor', 'ua-parser.min.js'))
+    }
+  },
 }

@@ -7,8 +7,11 @@
     class=(concat cellCss '-cell' ' ' column.className)
     hook=(concat hookPrefix '-cell')
     hookQualifiers=(extend hookQualifiers column=column.index)
+    isItemSelected=isItemSelected
     item=item
+    itemKey=itemKey
     onCallback=(action onCallback column.index)
+    onSelect=onSelect
     tagName=cellTagName
     value=(get item column.propertyName)
   }}

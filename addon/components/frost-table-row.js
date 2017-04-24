@@ -2,6 +2,9 @@
  * Component definition for the frost-table-body-row component
  */
 
+import Ember from 'ember'
+const {isEmpty} = Ember
+import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
@@ -13,6 +16,7 @@ export default Component.extend({
 
   // == Keyword Properties ====================================================
 
+  classNameBindings: ['isItemSelected:is-selected'],
   layout,
   tagName: 'tr',
 
@@ -42,6 +46,18 @@ export default Component.extend({
   },
 
   // == Computed Properties ===================================================
+
+  @readOnly
+  @computed('selectedItems.[]')
+  isItemSelected (selectedItems) {
+    if (isEmpty(selectedItems)) {
+      return false
+    }
+
+    const item = this.get('item')
+    const itemComparator = this.get('itemComparator')
+    return selectedItems.some(selectedItem => itemComparator(item, selectedItem))
+  },
 
   // == Functions =============================================================
 

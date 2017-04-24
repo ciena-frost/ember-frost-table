@@ -1,0 +1,18 @@
+.frost-table-header {
+  &-selection {
+    position: relative;
+    cursor: pointer;
+
+    .frost-icon-frost-checkbox {
+      width: 20px;
+      height: 20px;
+    }
+
+    .frost-icon-frost-close {
+      position: absolute;
+      left: 0;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
