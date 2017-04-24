@@ -3,7 +3,9 @@
   columns=indexedColumns
   hook=(concat hook '-header')
   hookQualifiers=hookQualifiers
+  isSelectable=_isSelectable
   onCallback=(action 'handleCallback' -1)
+  onSelectionChange=onSelectionChange
 }}
 {{! Note row index of -1 to indicate header, since data rows are indexed from zero }}
 {{frost-table-body
@@ -12,6 +14,7 @@
   hookQualifiers=hookQualifiers
   onCallback=(action 'handleCallback')
   onSelect=(action '_select')
+  isSelectable=_isSelectable
   items=items
   itemComparator=_itemComparator
   itemKey=itemKey

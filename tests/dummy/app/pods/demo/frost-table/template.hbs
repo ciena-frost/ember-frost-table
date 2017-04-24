@@ -52,13 +52,6 @@
       onSelectionChange=(action 'onSelectionChange')
       columns=(array
         (hash
-          headerRenderer=(component 'frost-table-header-selection'
-            onDeselectAll=(action 'onDeselectAll')
-          )
-          renderer=(component 'frost-table-row-selection')
-          propertyName='selected'
-        )
-        (hash
           headerRenderer=(component 'text-input-renderer')
           label='Name'
           propertyName='name'

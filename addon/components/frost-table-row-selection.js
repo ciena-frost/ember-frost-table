@@ -24,15 +24,11 @@ export default Component.extend({
 
   propTypes: {
     // required
+    item: PropTypes.object.isRequired,
     itemKey: PropTypes.string.isRequired,
+    onSelect: PropTypes.func.isRequired
 
     // options
-    model: PropTypes.oneOfType([
-      PropTypes.EmberObject,
-      PropTypes.object
-    ]),
-
-    onSelect: PropTypes.func.isRequired
   },
 
   getDefaultProps () {

@@ -81,6 +81,12 @@ export default Component.extend({
     return columns.map((column, index) => Object.assign({index}, column))
   },
 
+  @readOnly
+  @computed()
+  _isSelectable () {
+    return !isNone(this.get('onSelectionChange'))
+  },
+
   // == Functions =============================================================
 
   setShift (event) {

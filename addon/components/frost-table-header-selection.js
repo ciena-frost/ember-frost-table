@@ -26,7 +26,7 @@ export default Component.extend({
   getDefaultProps () {
     return {
       // options
-      onDeselectAll: PropTypes.func.isRequired
+      onSelectionChange: PropTypes.func.isRequired
 
       // state
     }
@@ -39,7 +39,7 @@ export default Component.extend({
   // == DOM Events ============================================================
 
   click (event) {
-    this.onDeselectAll()
+    this.onSelectionChange([])
   }
 
   // == Lifecycle Hooks =======================================================
