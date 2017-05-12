@@ -21,7 +21,6 @@ export default Component.extend({
   propTypes: {
     // options
     onCallback: PropTypes.func.isRequired,
-    cellCss: PropTypes.string,
     cellTagName: PropTypes.string,
     columns: PropTypes.arrayOf(ColumnPropType)
 
@@ -31,7 +30,6 @@ export default Component.extend({
   getDefaultProps () {
     return {
       // options
-      cellCss: this.get('css'),
       cellTagName: 'th',
       columns: []
 
