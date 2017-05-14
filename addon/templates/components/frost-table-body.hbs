@@ -1,5 +1,5 @@
 {{! Template for the frost-table-body component }}
-{{#each items as |item index| }}
+{{#each items key=itemKey as |item index| }}
   {{frost-table-row
     cellCss=css
     columns=columns
