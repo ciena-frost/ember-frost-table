@@ -1,7 +1,8 @@
 /**
  * Component definition for the frost-table component
  */
-
+import Ember from 'ember'
+const {run} = Ember
 import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
@@ -59,6 +60,24 @@ export default Component.extend({
   // == DOM Events ============================================================
 
   // == Lifecycle Hooks =======================================================
+
+  didInsertElement () {
+    run.schedule('afterRender', this, function () {
+      const that = this
+      this.columns.forEach(function (column, index) {
+        const curBodyColumn = that.$().find('.frost-table-row .frost-table-body-cell:nth-child(' + (index + 1) + ')')
+        const curHeaderCell = that.$().find('.frost-table-header-cell:nth-child(' + (index + 1) + ')')
+
+        const bodyCellWidth = curBodyColumn.innerWidth()
+        const headerCellWidth = curHeaderCell.innerWidth()
+
+        let basis = bodyCellWidth > headerCellWidth ? bodyCellWidth : headerCellWidth
+
+        curHeaderCell.css('flex-basis', basis + 'px')
+        curBodyColumn.css('flex-basis', basis + 'px')
+      })
+    })
+  },
 
   // == Actions ===============================================================
 

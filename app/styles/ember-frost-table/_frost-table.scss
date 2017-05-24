@@ -3,12 +3,27 @@
 //
 
 .frost-table {
-  table-layout: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  &-body-scroll {
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
 
   &-cell {
+    display: flex;
+    flex: 1 1 0;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
     padding: $frost-table-cell-padding;
     border-right: solid 1px $frost-color-lgrey-1;
     text-align: left;
+    overflow: hidden;
 
     &:last-child {
       border-right: 0;
@@ -20,6 +35,10 @@
   }
 
   &-header {
+    display: flex;
+    flex: none;
+    flex-direction: row;
+    justify-content: flex-start;
     background-color: $frost-color-white;
     color: $frost-color-grey-4;
     font-weight: bold;
@@ -30,7 +49,19 @@
     }
   }
 
+  &-body {
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
   &-row {
+    display: flex;
+    flex: none;
+    flex-direction: row;
+    justify-content: flex-start;
+
     &:nth-child(even) {
       background-color: $frost-color-white;
     }
