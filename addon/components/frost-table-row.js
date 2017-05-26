@@ -16,7 +16,7 @@ export default Component.extend({
 
   // == Keyword Properties ====================================================
 
-  classNameBindings: ['isItemSelected:is-selected'],
+  classNameBindings: ['_isItemSelected:is-selected'],
   layout,
   tagName: 'tr',
 
@@ -49,7 +49,7 @@ export default Component.extend({
 
   @readOnly
   @computed('selectedItems.[]')
-  isItemSelected (selectedItems) {
+  _isItemSelected (selectedItems) {
     if (isEmpty(selectedItems)) {
       return false
     }
