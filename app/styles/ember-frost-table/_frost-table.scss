@@ -3,6 +3,7 @@
 //
 
 .frost-table {
+  border-collapse: collapse;
   table-layout: fixed;
 
   &.shift-down {

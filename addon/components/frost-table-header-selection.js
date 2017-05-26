@@ -13,6 +13,7 @@ export default Component.extend({
 
   // == Keyword Properties ====================================================
 
+  classNames: ['frost-button', 'small', 'tertiary'],
   layout,
 
   // == PropTypes =============================================================

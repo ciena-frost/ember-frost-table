@@ -5,7 +5,6 @@
 import Ember from 'ember'
 const {ViewUtils} = Ember
 const {isSimpleClick} = ViewUtils
-import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
