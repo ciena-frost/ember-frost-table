@@ -2,6 +2,7 @@
  * Component definition for the frost-table-body component
  */
 
+import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
@@ -40,6 +41,15 @@ export default Component.extend({
   },
 
   // == Computed Properties ===================================================
+
+  @readOnly
+  @computed('itemKey')
+  _eachItemKey (itemKey) {
+    if (itemKey) {
+      return itemKey
+    }
+    return '@index'
+  },
 
   // == Functions =============================================================
 

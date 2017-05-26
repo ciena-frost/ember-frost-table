@@ -2,7 +2,7 @@
 {{#if isSelectable}}
   <td class='frost-table-cell'>
     {{frost-table-header-selection
-      hook=(concat hookPrefix '-selection-cell')
+      hook=(concat hookPrefix '-selectionCell')
       hookQualifiers=(extend hookQualifiers column=column.index)
       onSelectionChange=onSelectionChange
     }}
