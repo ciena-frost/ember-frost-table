@@ -9,7 +9,7 @@ import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
 import layout from '../templates/components/frost-table'
-import {selection} from 'ember-frost-table'
+import selection from '../utils/selection'
 import {ColumnPropType} from 'ember-frost-table/typedefs'
 
 export default Component.extend({
@@ -30,7 +30,7 @@ export default Component.extend({
 
     // options
     itemKey: PropTypes.string,
-    selectedItems: PropTypes.array(PropTypes.oneOfType([
+    selectedItems: PropTypes.arrayOf(PropTypes.oneOfType([
       PropTypes.EmberObject,
       PropTypes.object
     ])),
