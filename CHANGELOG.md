@@ -1,3 +1,9 @@
+# 1.0.4 (2017-05-12)
+* **Updated** secure auth token
+* **Updated** frost-table-header to use `css` property to set class instead of `cellCss` which was undefined and causing a test to fail.
+* **Removed** `ember-cli-dependency-checker` as it was causing an `TypeError: Invalid Version *`
+
+
 # 1.0.3
 * **Added** a .gitkeep file to coverage directory for code coverage
 * **Updated** the code coverage excludes pattern
