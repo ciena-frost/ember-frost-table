@@ -16,7 +16,6 @@ export default Component.extend({
 
   // == Keyword Properties ====================================================
 
-  classNameBindings: ['isItemSelected:isSelected'],
   layout,
 
   // == PropTypes =============================================================
