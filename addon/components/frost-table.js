@@ -63,18 +63,17 @@ export default Component.extend({
 
   didInsertElement () {
     run.schedule('afterRender', this, function () {
-      const that = this
-      this.columns.forEach(function (column, index) {
-        const curBodyColumn = that.$().find('.frost-table-row .frost-table-body-cell:nth-child(' + (index + 1) + ')')
-        const curHeaderCell = that.$().find('.frost-table-header-cell:nth-child(' + (index + 1) + ')')
+      this.columns.forEach((column, index) => {
+        const curBodyColumn = this.$().find('.frost-table-row .frost-table-body-cell:nth-child(' + (index + 1) + ')')
+        const curHeaderCell = this.$().find('.frost-table-header-cell:nth-child(' + (index + 1) + ')')
 
-        const bodyCellWidth = curBodyColumn.innerWidth()
-        const headerCellWidth = curHeaderCell.innerWidth()
+        const bodyCellWidth = curBodyColumn.outerWidth(true)
+        const headerCellWidth = curHeaderCell.outerWidth(true)
 
-        let basis = bodyCellWidth > headerCellWidth ? bodyCellWidth : headerCellWidth
+        const width = bodyCellWidth > headerCellWidth ? bodyCellWidth : headerCellWidth
 
-        curHeaderCell.css('flex-basis', basis + 'px')
-        curBodyColumn.css('flex-basis', basis + 'px')
+        curHeaderCell.css('width', width + 'px')
+        curBodyColumn.css('width', width + 'px')
       })
     })
   },
