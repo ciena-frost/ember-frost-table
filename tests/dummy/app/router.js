@@ -14,6 +14,7 @@ DemoRouter.map(function () {
     this.route('frost-table-body')
     this.route('frost-table-header')
     this.route('frost-table-row')
+    this.route('selection')
   })
 })
 

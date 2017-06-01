@@ -1,31 +1,26 @@
 /**
- * Component definition for the frost-table-body component
+ * Component definition for the frost-table-header-selection component
  */
 
-import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
-import layout from '../templates/components/frost-table-body'
-import {ColumnPropType, ItemsPropType} from 'ember-frost-table/typedefs'
+import layout from '../templates/components/frost-table-header-selection'
 
 export default Component.extend({
+
   // == Dependencies ==========================================================
 
   // == Keyword Properties ====================================================
 
+  classNames: ['frost-button', 'small', 'tertiary'],
   layout,
-  tagName: 'tbody',
 
   // == PropTypes =============================================================
 
   propTypes: {
-    // required
-    onCallback: PropTypes.func.isRequired,
-
     // options
-    columns: PropTypes.arrayOf(ColumnPropType),
-    items: ItemsPropType
+    clear: PropTypes.string
 
     // state
   },
@@ -33,8 +28,8 @@ export default Component.extend({
   getDefaultProps () {
     return {
       // options
-      columns: [],
-      items: []
+      clear: 'Clear',
+      onSelectionChange: PropTypes.func.isRequired
 
       // state
     }
@@ -42,20 +37,16 @@ export default Component.extend({
 
   // == Computed Properties ===================================================
 
-  @readOnly
-  @computed('itemKey')
-  _eachItemKey (itemKey) {
-    return itemKey || '@index'
-  },
-
   // == Functions =============================================================
 
   // == DOM Events ============================================================
+
+  click (event) {
+    this.onSelectionChange([])
+  }
 
   // == Lifecycle Hooks =======================================================
 
   // == Actions ===============================================================
 
-  actions: {
-  }
 })

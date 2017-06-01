@@ -1,0 +1,20 @@
+$frost-table-row-border-transparent: rgba(0, 0, 0, 0);
+
+.frost-table-row {
+  td {
+    padding: calc(#{$frost-table-cell-padding} + 1px) $frost-table-cell-padding;
+  }
+
+  &.is-selected {
+    border: 1px solid $frost-color-blue-1;
+
+    td {
+      padding-top: $frost-table-cell-padding;
+    }
+  }
+}
+
+.frost-table-row-selection {
+  display: flex;
+  justify-content: center;
+}

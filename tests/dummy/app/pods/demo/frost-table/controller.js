@@ -4,6 +4,7 @@ import HeroesController from '../heroes-controller'
 
 export default HeroesController.extend({
   notifier: inject.service(),
+
   actions: {
     dispatchNotifications ({action, row, col, args}) {
       Logger.log('Dispatching: ', action, row, col, args)

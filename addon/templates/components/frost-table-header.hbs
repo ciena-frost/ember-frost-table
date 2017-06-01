@@ -1,4 +1,13 @@
 {{! Template for the frost-table-header component }}
+{{#if isSelectable}}
+  <td class='frost-table-cell'>
+    {{frost-table-header-selection
+      hook=(concat hookPrefix '-selectionCell')
+      hookQualifiers=(extend hookQualifiers column=column.index)
+      onSelectionChange=onSelectionChange
+    }}
+  </td>
+{{/if}}
 {{#each columns as |column|}}
   {{frost-table-cell
     cellRenderer=column.headerRenderer

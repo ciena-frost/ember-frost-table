@@ -1,0 +1,10 @@
+.frost-table-header-selection {
+  text-align: center;
+  vertical-align: middle;
+
+  &.frost-button {
+    &.small {
+      height: auto;
+    }
+  }
+}
