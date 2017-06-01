@@ -35,5 +35,5 @@ module.exports = {
     if (app) {
       app.import(path.join('vendor', 'ua-parser.min.js'))
     }
-  },
+  }
 }

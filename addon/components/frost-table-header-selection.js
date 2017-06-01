@@ -20,6 +20,7 @@ export default Component.extend({
 
   propTypes: {
     // options
+    clear: PropTypes.string
 
     // state
   },
@@ -27,6 +28,7 @@ export default Component.extend({
   getDefaultProps () {
     return {
       // options
+      clear: 'Clear',
       onSelectionChange: PropTypes.func.isRequired
 
       // state

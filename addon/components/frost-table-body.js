@@ -45,10 +45,7 @@ export default Component.extend({
   @readOnly
   @computed('itemKey')
   _eachItemKey (itemKey) {
-    if (itemKey) {
-      return itemKey
-    }
-    return '@index'
+    return itemKey || '@index'
   },
 
   // == Functions =============================================================
