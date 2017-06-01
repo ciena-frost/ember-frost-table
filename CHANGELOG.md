@@ -1,3 +1,7 @@
+# 1.1.0 (2017-06-01)
+- Added a selection cell with the ability to handle range selection
+
+
 # 1.0.4 (2017-05-12)
 * **Updated** secure auth token
 * **Updated** frost-table-header to use `css` property to set class instead of `cellCss` which was undefined and causing a test to fail.
