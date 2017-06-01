@@ -1,4 +1,16 @@
 {{! Template for the frost-table-row component }}
+{{#if isSelectable}}
+  <td class='frost-table-cell'>
+    {{frost-table-row-selection
+      hook=(concat hookPrefix '-selectionCell')
+      hookQualifiers=(extend hookQualifiers column=column.index)
+      isItemSelected=_isItemSelected
+      item=item
+      itemKey=itemKey
+      onSelect=onSelect
+    }}
+  </td>
+{{/if}}
 {{#each columns as |column|}}
   {{! frost-fixed-table's columns are broken in to several separate rows,
       so if we encounter that we want to use it instead of index. }}

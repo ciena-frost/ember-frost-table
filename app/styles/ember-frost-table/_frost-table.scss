@@ -3,7 +3,13 @@
 //
 
 .frost-table {
+  border-collapse: collapse;
   table-layout: fixed;
+
+  &.shift-down {
+    // Range select doesn't select text
+    user-select: none;
+  }
 
   &-cell {
     padding: $frost-table-cell-padding;

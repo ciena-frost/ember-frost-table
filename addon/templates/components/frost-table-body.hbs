@@ -1,11 +1,16 @@
 {{! Template for the frost-table-body component }}
-{{#each items as |item index| }}
+{{#each items key=_eachItemKey as |item index| }}
   {{frost-table-row
     cellCss=css
     columns=columns
     hook=(concat hookPrefix '-row')
     hookQualifiers=(extend hookQualifiers row=index)
+    isSelectable=isSelectable
     item=item
+    itemComparator=itemComparator
+    itemKey=itemKey
+    selectedItems=selectedItems
     onCallback=(action onCallback index)
+    onSelect=onSelect
   }}
 {{/each}}

@@ -1,16 +1,50 @@
 {{! Template for the frost-table component }}
-{{frost-table-header
-  columns=indexedColumns
-  hook=(concat hook '-header')
-  hookQualifiers=hookQualifiers
-  onCallback=(action 'handleCallback' -1)
-}}
-{{! Note row index of -1 to indicate header, since data rows are indexed from zero }}
 
-{{frost-table-body
-  columns=indexedColumns
-  hook=(concat hook '-body')
-  hookQualifiers=hookQualifiers
-  onCallback=(action 'handleCallback')
-  items=items
-}}
+{{#if hasBlock}}
+  {{yield
+    (hash
+      header=(component 'frost-table-header'
+        columns=indexedColumns
+        hook=(concat hook '-header')
+        hookQualifiers=hookQualifiers
+        isSelectable=_isSelectable
+        onCallback=(action 'handleCallback' -1)
+        onSelectionChange=onSelectionChange
+      )
+      body=(component 'frost-table-body'
+        columns=indexedColumns
+        hook=(concat hook '-body')
+        hookQualifiers=hookQualifiers
+        onCallback=(action 'handleCallback')
+        onSelect=(action '_select')
+        isSelectable=_isSelectable
+        items=items
+        itemComparator=_itemComparator
+        itemKey=itemKey
+        selectedItems=selectedItems
+      )
+    )
+  }}
+{{else}}
+  {{frost-table-header
+    columns=indexedColumns
+    hook=(concat hook '-header')
+    hookQualifiers=hookQualifiers
+    isSelectable=_isSelectable
+    onCallback=(action 'handleCallback' -1)
+    onSelectionChange=onSelectionChange
+  }}
+  {{! Note row index of -1 to indicate header, since data rows are indexed from zero }}
+  {{frost-table-body
+    columns=indexedColumns
+    hook=(concat hook '-body')
+    hookQualifiers=hookQualifiers
+    onCallback=(action 'handleCallback')
+    onSelect=(action '_select')
+    isSelectable=_isSelectable
+    items=items
+    itemComparator=_itemComparator
+    itemKey=itemKey
+    selectedItems=selectedItems
+  }}
+{{/if}}

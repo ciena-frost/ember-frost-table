@@ -1,0 +1,54 @@
+{{! template-lint-disable bare-strings }}
+{{!-- BEGIN-SNIPPET selection }}
+  {{frost-table
+    ...
+    itemKey='<key>'
+    selectedItems=<selectedItems>
+    onSelectionChange=(action '<onSelectionChange>')
+    ...
+  }}
+{{ END-SNIPPET --}}
+
+
+<div class='frost-demo-api'>
+  <div class='frost-demo-title'>
+    Selection API
+  </div>
+  <div class='frost-demo-snippet'>
+    {{code-snippet name='selection.hbs'}}
+    {{code-snippet name='selection.js'}}
+  </div>
+</div>
+<div class='frost-demo-live'>
+  <div class='frost-demo-title'>
+    Live demo
+  </div>
+  <div class='frost-demo-snippet'>
+    {{code-snippet name='selection-table.hbs'}}
+  </div>
+  <div class='frost-demo-launch'>
+    {{! BEGIN-SNIPPET selection-table }}
+    {{frost-table
+      columns=(array
+        (hash
+          label='Name'
+          propertyName='name'
+        )
+        (hash
+          label='Real Name'
+          propertyName='realName'
+        )
+        (hash
+          label='Universe'
+          propertyName='universe'
+        )
+      )
+      hook='myTable'
+      items=heroes
+      itemKey='name'
+      selectedItems=selectedItems
+      onSelectionChange=(action 'onSelectionChange')
+    }}
+    {{! END-SNIPPET }}
+  </div>
+</div>
