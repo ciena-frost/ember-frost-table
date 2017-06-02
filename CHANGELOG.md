@@ -1,3 +1,7 @@
+# 1.2.0 (2017-06-02)
+* **Updated** `frost-table` to use a flexbox layout instead of a fixed table layout and wrap the table body in a `frost-scroll`
+
+
 # 1.1.0 (2017-06-01)
 - Added a selection cell with the ability to handle range selection
 
