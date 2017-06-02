@@ -35,16 +35,23 @@
     onSelectionChange=onSelectionChange
   }}
   {{! Note row index of -1 to indicate header, since data rows are indexed from zero }}
-  {{frost-table-body
-    columns=indexedColumns
-    hook=(concat hook '-body')
+
+  {{#frost-scroll
+    class="frost-table-body-scroll"
+    hook=(concat hook '-scroll')
     hookQualifiers=hookQualifiers
-    onCallback=(action 'handleCallback')
-    onSelect=(action '_select')
-    isSelectable=_isSelectable
-    items=items
-    itemComparator=_itemComparator
-    itemKey=itemKey
-    selectedItems=selectedItems
   }}
+    {{frost-table-body
+      columns=indexedColumns
+      hook=(concat hook '-body')
+      hookQualifiers=hookQualifiers
+      onCallback=(action 'handleCallback')
+      onSelect=(action '_select')
+      isSelectable=_isSelectable
+      items=items
+      itemComparator=_itemComparator
+      itemKey=itemKey
+      selectedItems=selectedItems
+    }}
+  {{/frost-scroll}}
 {{/if}}

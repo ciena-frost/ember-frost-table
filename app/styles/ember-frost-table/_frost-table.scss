@@ -3,8 +3,15 @@
 //
 
 .frost-table {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   border-collapse: collapse;
   table-layout: fixed;
+
+  &-body-scroll {
+    flex: auto;
+  }
 
   &.shift-down {
     // Range select doesn't select text
@@ -15,6 +22,7 @@
     padding: $frost-table-cell-padding;
     border-right: solid 1px $frost-color-lgrey-1;
     text-align: left;
+    overflow: hidden;
 
     &:last-child {
       border-right: 0;
