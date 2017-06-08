@@ -18,7 +18,13 @@ describe(test.label, function () {
   let component
 
   beforeEach(function () {
-    component = this.subject({tagName: 'div'})
+    component = this.subject({
+      columns: [],
+      hook: 'table',
+      hookQualifiers: {foo: 'bar'},
+      items: [],
+      tagName: 'div'
+    })
   })
 
   describe('onCallback', function () {

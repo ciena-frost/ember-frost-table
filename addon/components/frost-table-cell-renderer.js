@@ -15,9 +15,10 @@ export default Component.extend({
 
   propTypes: {
     // required
-    item: PropTypes.object.isRequired,
-    onCallback: PropTypes.func.isRequired,
-    value: PropTypes.any.isRequired
+    item: PropTypes.object,
+    value: PropTypes.any,
+
+    onCallback: PropTypes.func.isRequired
   },
 
   // == Computed Properties ===================================================

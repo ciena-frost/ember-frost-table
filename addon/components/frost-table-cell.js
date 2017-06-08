@@ -18,10 +18,11 @@ export default Component.extend({
   // == PropTypes =============================================================
 
   propTypes: {
-    onCallback: PropTypes.func.isRequired,
     cellRenderer: PropTypes.any,
     item: PropTypes.object,
-    value: PropTypes.any
+    value: PropTypes.any,
+
+    onCallback: PropTypes.func.isRequired
   },
 
   // == Computed Properties ===================================================

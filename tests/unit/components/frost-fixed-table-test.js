@@ -26,7 +26,14 @@ describe(test.label, function () {
 
   beforeEach(function () {
     sandbox = sinon.sandbox.create()
-    component = this.subject({tagName: 'div'})
+    component = this.subject({
+      columns: [],
+      hook: 'table',
+      hookQualifiers: {foo: 'bar'},
+      items: [],
+      tagName: 'div'
+    })
+
     columns = [
       {
         frozen: true,

@@ -20,7 +20,8 @@ describe(test.label, function () {
     sandbox = sinon.sandbox.create()
     this.setProperties({
       myHook: 'myThing',
-      value: 'my value'
+      value: 'my value',
+      handleCallback () {}
     })
   })
 
@@ -34,6 +35,8 @@ describe(test.label, function () {
         {{frost-table-cell
           hook=myHook
           value=value
+
+          onCallback=handleCallback
         }}
       `)
 
@@ -60,6 +63,8 @@ describe(test.label, function () {
           cellRenderer=(component 'text-input-renderer')
           hook=myHook
           value=value
+
+          onCallback=handleCallback
         }}
       `)
 

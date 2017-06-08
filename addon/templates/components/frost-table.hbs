@@ -8,6 +8,7 @@
         hook=(concat hook '-header')
         hookQualifiers=hookQualifiers
         isSelectable=_isSelectable
+
         onCallback=(action 'handleCallback' -1)
         onSelectionChange=onSelectionChange
       )
@@ -15,13 +16,14 @@
         columns=indexedColumns
         hook=(concat hook '-body')
         hookQualifiers=hookQualifiers
-        onCallback=(action 'handleCallback')
-        onSelect=(action '_select')
         isSelectable=_isSelectable
         items=items
         itemComparator=_itemComparator
         itemKey=itemKey
         selectedItems=selectedItems
+
+        onCallback=(action 'handleCallback')
+        onSelect=(action '_select')
       )
     )
   }}
@@ -31,6 +33,7 @@
     hook=(concat hook '-header')
     hookQualifiers=hookQualifiers
     isSelectable=_isSelectable
+
     onCallback=(action 'handleCallback' -1)
     onSelectionChange=onSelectionChange
   }}
@@ -45,13 +48,14 @@
       columns=indexedColumns
       hook=(concat hook '-body')
       hookQualifiers=hookQualifiers
-      onCallback=(action 'handleCallback')
-      onSelect=(action '_select')
       isSelectable=_isSelectable
       items=items
       itemComparator=_itemComparator
       itemKey=itemKey
       selectedItems=selectedItems
+
+      onCallback=(action 'handleCallback')
+      onSelect=(action '_select')
     }}
   {{/frost-scroll}}
 {{/if}}

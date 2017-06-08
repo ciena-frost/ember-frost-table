@@ -8,15 +8,19 @@
     The left and right are positioned absolutely so that they stay where they should be
   --}}
   <div class={{concat css '-header-middle'}}>
-    {{#frost-scroll}}
+    {{#frost-scroll
+      hook=(concat hookPrefix '-middleHeaderScroll')
+      hookQualifiers=hookQualifiers
+    }}
       {{! We pass a row index of -1 since the row indices are zero-based }}
       {{frost-table-header
         cellTagName='div'
         columns=middleColumns
         hook=(concat hookPrefix '-header-middle')
         hookQualifiers=hookQualifiers
-        onCallback=(action 'handleCallback' -1)
         tagName='div'
+
+        onCallback=(action 'handleCallback' -1)
       }}
     {{/frost-scroll}}
   </div>
@@ -26,8 +30,9 @@
       columns=leftColumns
       hook=(concat hookPrefix '-header-left')
       hookQualifiers=hookQualifiers
-      onCallback=(action 'handleCallback' -1)
       tagName='div'
+
+      onCallback=(action 'handleCallback' -1)
     }}
   </div>
   <div class={{concat css '-header-right'}}>
@@ -36,8 +41,9 @@
       columns=rightColumns
       hook=(concat hookPrefix '-header-right')
       hookQualifiers=hookQualifiers
-      onCallback=(action 'handleCallback' -1)
       tagName='div'
+
+      onCallback=(action 'handleCallback' -1)
     }}
   </div>
 </div>
@@ -51,7 +57,10 @@
     The left and right are positioned absolutely so that they stay where they should be
   --}}
   <div class={{concat css '-middle'}}>
-    {{#frost-scroll}}
+    {{#frost-scroll
+      hook=(concat hookPrefix '-bodyMiddleScroll')
+      hookQualifiers=hookQualifiers
+    }}
       {{#each items as |item index|}}
         {{frost-table-row
           cellTagName='div'
@@ -59,15 +68,19 @@
           hook=(concat hookPrefix '-middle')
           hookQualifiers=(extend hookQualifiers row=index)
           item=item
-          onCallback=(action 'handleCallback' index)
           tagName='div'
+
+          onCallback=(action 'handleCallback' index)
         }}
       {{/each}}
     {{/frost-scroll}}
   </div>
 
   <div class={{concat css '-left'}}>
-    {{#frost-scroll}}
+    {{#frost-scroll
+      hook=(concat hookPrefix '-bodyLeftScroll')
+      hookQualifiers=hookQualifiers
+    }}
       {{#each items as |item index|}}
         {{frost-table-row
           cellTagName='div'
@@ -75,15 +88,19 @@
           hook=(concat hookPrefix '-left')
           hookQualifiers=(extend hookQualifiers row=index)
           item=item
-          onCallback=(action 'handleCallback' index)
           tagName='div'
+
+          onCallback=(action 'handleCallback' index)
         }}
       {{/each}}
     {{/frost-scroll}}
   </div>
 
   <div class={{concat css '-right'}}>
-    {{#frost-scroll}}
+    {{#frost-scroll
+      hook=(concat hookPrefix '-bodyRightScroll')
+      hookQualifiers=hookQualifiers
+    }}
       {{#each items as |item index|}}
         {{frost-table-row
           cellTagName='div'
@@ -91,8 +108,9 @@
           hook=(concat hookPrefix '-right')
           hookQualifiers=(extend hookQualifiers row=index)
           item=item
-          onCallback=(action 'handleCallback' index)
           tagName='div'
+
+          onCallback=(action 'handleCallback' index)
         }}
       {{/each}}
     {{/frost-scroll}}

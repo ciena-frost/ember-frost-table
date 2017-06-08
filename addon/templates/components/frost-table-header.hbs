@@ -4,6 +4,7 @@
     {{frost-table-header-selection
       hook=(concat hookPrefix '-selectionCell')
       hookQualifiers=(extend hookQualifiers column=column.index)
+
       onSelectionChange=onSelectionChange
     }}
   </td>
@@ -14,8 +15,9 @@
     class=(concat css '-cell' ' ' column.className)
     hook=(concat hookPrefix '-cell')
     hookQualifiers=(extend hookQualifiers column=column.index)
-    onCallback=(action onCallback column.index)
     tagName=cellTagName
     value=column.label
+
+    onCallback=(action onCallback column.index)
   }}
 {{/each}}
