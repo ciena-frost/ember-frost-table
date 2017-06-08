@@ -7,11 +7,11 @@ import Ember from 'ember'
 const {$, get} = Ember
 import {$hook} from 'ember-hook'
 import wait from 'ember-test-helpers/wait'
+import {integration} from 'ember-test-utils/test-support/setup-component-test'
 import hbs from 'htmlbars-inline-precompile'
 import {beforeEach, describe, it} from 'mocha'
 
 import {columns, heroes} from './data'
-import {integration} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 
 const test = integration('frost-table-body')
 describe(test.label, function () {

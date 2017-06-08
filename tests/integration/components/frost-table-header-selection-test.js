@@ -1,7 +1,7 @@
-import { expect } from 'chai'
-import { setupComponentTest } from 'ember-mocha'
+import {expect} from 'chai'
+import {setupComponentTest} from 'ember-mocha'
 import hbs from 'htmlbars-inline-precompile'
-import { describe, it } from 'mocha'
+import {describe, it} from 'mocha'
 
 describe('Integration | Component | frost table header selection', function () {
   setupComponentTest('frost-table-header-selection', {
