@@ -28,7 +28,7 @@ export default Component.extend({
     cellCss: PropTypes.string,
     cellTagName: PropTypes.string,
     columns: PropTypes.arrayOf(ColumnPropType),
-    item: PropTypes.object
+    item: PropTypes.oneOfType([PropTypes.EmberObject, PropTypes.object])
 
     // state
   },

@@ -1,6 +1,7 @@
 /**
  * Integration test for the frost-table component
  */
+/* global server */
 
 import {expect} from 'chai'
 import Ember from 'ember'
@@ -13,6 +14,7 @@ import {afterEach, beforeEach, describe, it} from 'mocha'
 import sinon from 'sinon'
 
 import {columns, columnsWithCustomRenderers, heroes} from './data'
+import {startMirage, stopMirage} from 'dummy/tests/helpers/mirage'
 
 const test = integration('frost-table')
 describe(test.label, function () {
@@ -20,26 +22,74 @@ describe(test.label, function () {
 
   let sandbox
 
-  beforeEach(function () {
+  beforeEach(function (done) {
     sandbox = sinon.sandbox.create()
-    this.setProperties({
-      columns,
-      heroes,
-      myHook: 'myTable'
+    startMirage(this.container)
+    heroes.forEach((hero) => {
+      server.create('character', hero)
+    })
+
+    this.store = this.container.lookup('service:store')
+    this.store.findAll('character').then((characters) => {
+      this.setProperties({
+        characters,
+        columns,
+        heroes,
+        myHook: 'myTable'
+      })
+
+      done()
     })
   })
 
   afterEach(function () {
     sandbox.restore()
+    stopMirage()
   })
 
-  describe('after render', function () {
+  describe('after rendering with raw objects', function () {
     beforeEach(function () {
       this.render(hbs`
         {{frost-table
           columns=columns
           hook=myHook
           items=heroes
+        }}
+      `)
+
+      return wait()
+    })
+
+    it('should have an element', function () {
+      expect(this.$()).to.have.length(1)
+    })
+
+    it('should render a header', function () {
+      expect($hook('myTable-header')).to.have.length(1)
+    })
+
+    it('should give the header the set of columns', function () {
+      const columnNames = $hook('myTable-header-cell').toArray().map((el) => $(el).text().trim())
+      expect(columnNames).to.eql(columns.map((col) => col.label))
+    })
+
+    it('should render a body', function () {
+      expect($hook('myTable-body')).to.have.length(1)
+    })
+
+    it('should be able to grab a cell via a hook', function () {
+      const expected = get(heroes[1], columns[1].propertyName)
+      expect($hook('myTable-body-row-cell', {row: 1, column: 1}).text().trim()).to.equal(expected)
+    })
+  })
+
+  describe('after rendering with ember data result array', function () {
+    beforeEach(function () {
+      this.render(hbs`
+        {{frost-table
+          columns=columns
+          hook=myHook
+          items=characters
         }}
       `)
 

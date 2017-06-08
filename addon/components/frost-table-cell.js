@@ -19,7 +19,7 @@ export default Component.extend({
 
   propTypes: {
     cellRenderer: PropTypes.any,
-    item: PropTypes.object,
+    item: PropTypes.oneOfType([PropTypes.EmberObject, PropTypes.object]),
     value: PropTypes.any,
 
     onCallback: PropTypes.func.isRequired
