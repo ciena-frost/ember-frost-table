@@ -20,12 +20,13 @@ export default Component.extend({
   // == PropTypes =============================================================
 
   propTypes: {
-    // required
-    onCallback: PropTypes.func.isRequired,
 
     // options
     columns: PropTypes.arrayOf(ColumnPropType),
-    items: ItemsPropType
+    items: ItemsPropType,
+
+    // callbacks
+    onCallback: PropTypes.func.isRequired
 
     // state
   },

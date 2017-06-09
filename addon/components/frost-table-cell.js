@@ -6,6 +6,7 @@ import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
 import layout from '../templates/components/frost-table-cell'
+import {ItemPropType} from 'ember-frost-table/typedefs'
 
 export default Component.extend({
   // == Dependencies ==========================================================
@@ -18,11 +19,15 @@ export default Component.extend({
   // == PropTypes =============================================================
 
   propTypes: {
+    // options
     cellRenderer: PropTypes.any,
-    item: PropTypes.oneOfType([PropTypes.EmberObject, PropTypes.object]),
+    item: ItemPropType,
     value: PropTypes.any,
 
+    // callbacks
     onCallback: PropTypes.func.isRequired
+
+    // state
   },
 
   // == Computed Properties ===================================================
