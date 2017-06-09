@@ -90,24 +90,31 @@ export default Component.extend({
       this.set('_isShiftDown', event.shiftKey)
     }
   },
+  setCellWidths (position) {
+    const curBodyColumn = this.$().find('.frost-table-row .frost-table-body-cell:nth-child(' + (position) + ')')
+    const curHeaderCell = this.$().find('.frost-table-header-cell:nth-child(' + (position) + ')')
 
+    const bodyCellWidth = curBodyColumn.outerWidth(true)
+    const headerCellWidth = curHeaderCell.outerWidth(true)
+
+    const width = bodyCellWidth > headerCellWidth ? bodyCellWidth : headerCellWidth
+
+    curHeaderCell.css('width', width + 'px')
+    curBodyColumn.css('width', width + 'px')
+  },
   // == DOM Events ============================================================
 
   // == Lifecycle Hooks =======================================================
 
   didInsertElement () {
     run.schedule('afterRender', this, function () {
+      const selectable = this.get('_isSelectable')
+      if (selectable) {
+        this.setCellWidths(1)
+      }
       this.columns.forEach((column, index) => {
-        const curBodyColumn = this.$().find('.frost-table-row .frost-table-body-cell:nth-child(' + (index + 1) + ')')
-        const curHeaderCell = this.$().find('.frost-table-header-cell:nth-child(' + (index + 1) + ')')
-
-        const bodyCellWidth = curBodyColumn.outerWidth(true)
-        const headerCellWidth = curHeaderCell.outerWidth(true)
-
-        const width = bodyCellWidth > headerCellWidth ? bodyCellWidth : headerCellWidth
-
-        curHeaderCell.css('width', width + 'px')
-        curBodyColumn.css('width', width + 'px')
+        let position = index + (selectable ? 2 : 1)
+        this.setCellWidths(position)
       })
     })
   },
