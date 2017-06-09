@@ -1,3 +1,9 @@
+# 1.2.1 (2017-06-09)
+* **Enabled** code coverage checks
+* **Enabled** throwing errors when proptypes finds problems (instead of warnings)
+* **Upgraded** `ember-test-utils` to `5.x`
+
+
 # 1.2.0 (2017-06-02)
 * **Updated** `frost-table` to use a flexbox layout instead of a fixed table layout and wrap the table body in a `frost-scroll`
 
