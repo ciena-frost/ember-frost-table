@@ -1,40 +1,53 @@
 /**
  * Integration test for the frost-fixed-table component
  */
+/* global server */
 
 import {expect} from 'chai'
 import Ember from 'ember'
 const {$} = Ember
 import {$hook} from 'ember-hook'
 import wait from 'ember-test-helpers/wait'
+import {integration} from 'ember-test-utils/test-support/setup-component-test'
 import hbs from 'htmlbars-inline-precompile'
 import {afterEach, beforeEach, describe, it} from 'mocha'
 import sinon from 'sinon'
 
 import {fixedColumns, fixedColumnsWithCustomRenderers, heroes} from './data'
-import {integration} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
+import {startMirage, stopMirage} from 'dummy/tests/helpers/mirage'
 
 const test = integration('frost-fixed-table')
-
 describe(test.label, function () {
   test.setup()
 
   let sandbox
 
-  beforeEach(function () {
+  beforeEach(function (done) {
     sandbox = sinon.sandbox.create()
-    this.setProperties({
-      fixedColumns,
-      heroes,
-      myHook: 'myTable'
+    startMirage(this.container)
+    heroes.forEach((hero) => {
+      server.create('character', hero)
+    })
+
+    this.store = this.container.lookup('service:store')
+    this.store.findAll('character').then((characters) => {
+      this.setProperties({
+        characters,
+        fixedColumns,
+        heroes,
+        myHook: 'myTable'
+      })
+
+      done()
     })
   })
 
   afterEach(function () {
     sandbox.restore()
+    stopMirage()
   })
 
-  describe('after render', function () {
+  describe('after render with normal objects', function () {
     beforeEach(function () {
       this.render(hbs`
         {{frost-fixed-table
@@ -346,6 +359,32 @@ describe(test.label, function () {
           expect($rightWrapper.find('td')).to.have.length(0)
         })
       })
+    })
+  })
+
+  describe('after render with ember data record array', function () {
+    beforeEach(function () {
+      this.render(hbs`
+        {{frost-fixed-table
+          columns=fixedColumns
+          hook=myHook
+          items=characters
+        }}
+      `)
+
+      return wait()
+    })
+
+    it('should create the header', function () {
+      expect(this.$('.frost-fixed-table-header')).to.have.length(1)
+    })
+
+    it('should create the body', function () {
+      expect(this.$('.frost-fixed-table-body')).to.have.length(1)
+    })
+
+    it('should set the hook of the body', function () {
+      expect($hook('myTable-body')).to.have.class('frost-fixed-table-body')
     })
   })
 

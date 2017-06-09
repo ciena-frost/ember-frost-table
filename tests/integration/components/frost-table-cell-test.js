@@ -5,11 +5,10 @@
 import {expect} from 'chai'
 import {$hook} from 'ember-hook'
 import wait from 'ember-test-helpers/wait'
+import {integration} from 'ember-test-utils/test-support/setup-component-test'
 import hbs from 'htmlbars-inline-precompile'
 import {afterEach, beforeEach, describe, it} from 'mocha'
 import sinon from 'sinon'
-
-import {integration} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 
 const test = integration('frost-table-cell')
 describe(test.label, function () {
@@ -21,7 +20,8 @@ describe(test.label, function () {
     sandbox = sinon.sandbox.create()
     this.setProperties({
       myHook: 'myThing',
-      value: 'my value'
+      value: 'my value',
+      handleCallback () {}
     })
   })
 
@@ -35,6 +35,8 @@ describe(test.label, function () {
         {{frost-table-cell
           hook=myHook
           value=value
+
+          onCallback=handleCallback
         }}
       `)
 
@@ -61,6 +63,8 @@ describe(test.label, function () {
           cellRenderer=(component 'text-input-renderer')
           hook=myHook
           value=value
+
+          onCallback=handleCallback
         }}
       `)
 

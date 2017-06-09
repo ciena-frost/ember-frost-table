@@ -13,6 +13,8 @@
     item=(hash
       name='Jane Doe'
     )
+
+    onCallback= // a handler that handles an object with {action, row, col, args}
   }}
 {{ END-SNIPPET --}}
 
@@ -54,6 +56,8 @@
           )
           hook='myTableRow'
           item=heroes.[3]
+
+          onCallback=(action 'dispatchNotification')
         }}
       </tbody>
     </table>

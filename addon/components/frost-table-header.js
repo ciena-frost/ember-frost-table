@@ -20,9 +20,11 @@ export default Component.extend({
 
   propTypes: {
     // options
-    onCallback: PropTypes.func.isRequired,
     cellTagName: PropTypes.string,
-    columns: PropTypes.arrayOf(ColumnPropType)
+    columns: PropTypes.arrayOf(ColumnPropType),
+
+    // callbacks
+    onCallback: PropTypes.func.isRequired
 
     // state
   },

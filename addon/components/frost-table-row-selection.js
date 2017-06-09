@@ -9,6 +9,7 @@ import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
 import layout from '../templates/components/frost-table-row-selection'
+import {ItemPropType} from 'ember-frost-table/typedefs'
 
 export default Component.extend({
 
@@ -21,12 +22,14 @@ export default Component.extend({
   // == PropTypes =============================================================
 
   propTypes: {
-    // required
-    item: PropTypes.object.isRequired,
+    // options
+    item: ItemPropType.isRequired,
     itemKey: PropTypes.string.isRequired,
+
+    // callbacks
     onSelect: PropTypes.func.isRequired
 
-    // options
+    // state
   },
 
   getDefaultProps () {

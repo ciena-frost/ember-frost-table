@@ -9,7 +9,7 @@ import {PropTypes} from 'ember-prop-types'
 
 import layout from '../templates/components/frost-table'
 import selection from '../utils/selection'
-import {ColumnPropType} from 'ember-frost-table/typedefs'
+import {ColumnPropType, ItemPropType, ItemsPropType} from 'ember-frost-table/typedefs'
 
 export default Component.extend({
   // == Dependencies ==========================================================
@@ -23,16 +23,13 @@ export default Component.extend({
   // == PropTypes =============================================================
 
   propTypes: {
-    // required
-    columns: PropTypes.arrayOf(ColumnPropType).isRequired,
-    items: PropTypes.array.isRequired,
-
     // options
+    columns: PropTypes.arrayOf(ColumnPropType).isRequired,
     itemKey: PropTypes.string,
-    selectedItems: PropTypes.arrayOf(PropTypes.oneOfType([
-      PropTypes.EmberObject,
-      PropTypes.object
-    ])),
+    items: ItemsPropType.isRequired,
+    selectedItems: PropTypes.arrayOf(ItemPropType),
+
+    // callbacks
     onCallback: PropTypes.func,
     onSelectionChange: PropTypes.func,
 

@@ -4,14 +4,14 @@
  * NOTE: Since it is not easy to properly set up an integration test to confirm some of the DOM
  * calculations happening in frost-fixed-table, I opted to unit test these calculations, making these
  * tests a little more tied to the implementation than I'd like. However, given the hoops needed to jump through to
- * simulate external CSS as well as scroll and mouse events, this seemed the better option (ARM 2016-12-13)
+ * simulate external CSS as well as scroll and mouse events, this seemed the better option (@job13er 2016-12-13)
  */
 
 import {expect} from 'chai'
+import {unit} from 'ember-test-utils/test-support/setup-component-test'
 import {afterEach, beforeEach, describe, it} from 'mocha'
 import sinon from 'sinon'
 
-import {unit} from 'dummy/tests/helpers/ember-test-utils/setup-component-test'
 import {createSelectorStub} from 'dummy/tests/helpers/selector-stub'
 
 function _rewriteIndices (cols) {
@@ -26,7 +26,14 @@ describe(test.label, function () {
 
   beforeEach(function () {
     sandbox = sinon.sandbox.create()
-    component = this.subject({tagName: 'div'})
+    component = this.subject({
+      columns: [],
+      hook: 'table',
+      hookQualifiers: {foo: 'bar'},
+      items: [],
+      tagName: 'div'
+    })
+
     columns = [
       {
         frozen: true,

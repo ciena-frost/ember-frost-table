@@ -17,6 +17,8 @@
         name='John Doe'
       )
     )
+
+    onCallback= // a handler that handles an object with {action, row, col, args}
   }}
 {{ END-SNIPPET --}}
 
@@ -56,6 +58,8 @@
         )
         hook='myTableBody'
         items=heroes
+
+        onCallback=(action 'dispatchNotification')
       }}
     </table>
     {{! END-SNIPPET }}

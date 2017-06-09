@@ -25,12 +25,12 @@ export const ColumnPropType = PropTypes.shape({
   renderer: PropTypes.any
 })
 
+export const ItemPropType = PropTypes.oneOfType([
+  PropTypes.object,
+  PropTypes.EmberObject
+])
+
 export const ItemsPropType = PropTypes.oneOfType([
   PropTypes.EmberObject, // DS.RecordArray
-  PropTypes.arrayOf(
-    PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.EmberObject
-    ])
-  )
+  PropTypes.arrayOf(ItemPropType)
 ])
