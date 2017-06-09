@@ -1,3 +1,9 @@
+# 1.2.2 (2017-06-09)
+ * Fix mirage for Demo page
+* Fix CSS for Table Selection. Fixes https://github.com/ciena-frost/ember-frost-table/issues/20
+
+
+
 # 1.2.1 (2017-06-09)
 * **Enabled** code coverage checks
 * **Enabled** throwing errors when proptypes finds problems (instead of warnings)
