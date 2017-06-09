@@ -44,6 +44,10 @@ module.exports = function (environment) {
   if (environment === 'production') {
     ENV.locationType = 'hash'
     ENV.rootURL = '/ember-frost-table'
+    ENV.mirageNamespace = 'https://ciena-frost.github.io'
+    ENV['ember-cli-mirage'] = {
+      enabled: true
+    }
   }
 
   return ENV
