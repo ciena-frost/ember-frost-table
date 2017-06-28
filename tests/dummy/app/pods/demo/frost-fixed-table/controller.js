@@ -1,8 +1,9 @@
 import Ember from 'ember'
-const {Logger, inject} = Ember
+const {A, Logger, inject} = Ember
 import HeroesController from '../heroes-controller'
 
 export default HeroesController.extend({
+  selectedItems: A([]),
   notifier: inject.service(),
   actions: {
     dispatchNotifications ({action, row, col, args}) {
@@ -14,6 +15,10 @@ export default HeroesController.extend({
         type: 'success',
         autoClear: true
       })
+    },
+
+    onSelectionChange (selectedItems) {
+      this.get('selectedItems').setObjects(selectedItems)
     }
   }
 })

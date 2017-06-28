@@ -202,6 +202,7 @@ describe(test.label, function () {
     beforeEach(function () {
       sandbox.stub(component, 'setupBodyHeights')
       sandbox.stub(component, 'setupHoverProxy')
+      sandbox.stub(component, 'setupLeftAndRightWidths')
       sandbox.stub(component, 'setupMiddleMargins')
       sandbox.stub(component, 'setupMiddleWidths')
       sandbox.stub(component, 'setupScrollSync')
@@ -215,6 +216,10 @@ describe(test.label, function () {
 
     it('should set up the hover proxy', function () {
       expect(component.setupHoverProxy).to.have.callCount(1)
+    })
+
+    it('should set up the left and right widths', function () {
+      expect(component.setupLeftAndRightWidths).to.have.callCount(1)
     })
 
     it('should set up the middle margins', function () {
@@ -416,6 +421,58 @@ describe(test.label, function () {
         'margin-left': '123px',
         'margin-right': '321px'
       })
+    })
+  })
+
+  describe('.setupLeftAndRightWidths()', function () {
+    let leftHeadersStub, leftHeaderStub, leftBodyStub, rightHeadersStub, rightHeaderStub,
+      rightBodyStub
+    beforeEach(function () {
+      leftHeadersStub = createSelectorStub('eq', 'length')
+      leftHeaderStub = createSelectorStub('css', 'outerWidth')
+      leftBodyStub = createSelectorStub('css', 'outerWidth')
+      rightHeadersStub = createSelectorStub('eq', 'length')
+      rightHeaderStub = createSelectorStub('css', 'outerWidth')
+      rightBodyStub = createSelectorStub('css', 'outerWidth')
+      sandbox.stub(component, '$')
+        .withArgs('.frost-fixed-table-header-left .frost-table-header-cell')
+          .returns(leftHeadersStub)
+        .withArgs('.frost-fixed-table-left .frost-scroll .frost-table-row .frost-table-body-cell:nth-child(1)')
+          .returns(leftBodyStub)
+        .withArgs('.frost-fixed-table-header-right .frost-table-header-cell')
+          .returns(rightHeadersStub)
+        .withArgs('.frost-fixed-table-right .frost-scroll .frost-table-row .frost-table-body-cell:nth-child(1)')
+          .returns(rightBodyStub)
+
+      leftHeadersStub.length = 1
+      leftHeadersStub.eq.withArgs(0).returns(leftHeaderStub)
+
+      rightHeadersStub.length = 1
+      rightHeadersStub.eq.withArgs(0).returns(rightHeaderStub)
+
+      rightHeaderStub.outerWidth.returns(100)
+      leftHeaderStub.outerWidth.returns(20)
+
+      rightBodyStub.outerWidth.returns(20)
+      leftBodyStub.outerWidth.returns(100)
+
+      component.setupLeftAndRightWidths()
+    })
+
+    it('should set width of left header', function () {
+      expect(leftHeaderStub.css).to.have.been.calledWith({width: '100px'})
+    })
+
+    it('should set width of left body', function () {
+      expect(leftBodyStub.css).to.have.been.calledWith({width: '100px'})
+    })
+
+    it('should set width of right header', function () {
+      expect(rightHeaderStub.css).to.have.been.calledWith({width: '100px'})
+    })
+
+    it('should set width of right body', function () {
+      expect(rightBodyStub.css).to.have.been.calledWith({width: '100px'})
     })
   })
 

@@ -16,7 +16,7 @@ export default Component.extend({
 
   // == Keyword Properties ====================================================
 
-  classNameBindings: ['_isItemSelected:is-selected'],
+  classNameBindings: ['_isItemSelected:is-selected', 'isSelectable:selectable'],
   layout,
   tagName: 'tr',
 
@@ -64,6 +64,11 @@ export default Component.extend({
   // == Functions =============================================================
 
   // == DOM Events ============================================================
+
+  click (event) {
+    event.stopPropagation()
+    this.$().find('.frost-table-row-selection').trigger('click')
+  },
 
   // == Lifecycle Hooks =======================================================
 

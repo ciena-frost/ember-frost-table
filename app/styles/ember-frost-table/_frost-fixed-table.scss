@@ -48,6 +48,22 @@
     .ps-container > .ps-scrollbar-y-rail {
       display: none;
     }
+
+    // sass-lint:disable nesting-depth
+    .frost-table-row {
+      &.is-selected {
+        border-right: 0;
+
+        .frost-table-cell {
+          &:first-of-type {
+            // Keep column borders aligned
+            margin-left: -1px;
+            padding-left: calc(#{$frost-table-cell-padding} + 1px);
+          }
+        }
+      }
+    }
+    // sass-lint:enable nesting-depth
   }
 
   &-middle {
@@ -57,16 +73,40 @@
     .ps-container > .ps-scrollbar-y-rail {
       display: none;
     }
+
+    .frost-table-row {
+      &.is-selected {
+        border-right: 0;
+        border-left: 0;
+      }
+    }
   }
 
   &-right {
     position: absolute;
     right: 0;
     box-shadow: -23px 0 15px -4px $frost-table-box-shadow-color;
+
+    // sass-lint:disable nesting-depth
+    .frost-table-row {
+      &.is-selected {
+        border-left: 0;
+
+        .frost-table-cell {
+          &:last-of-type {
+            // Keep column borders aligned
+            margin-right: -1px;
+            padding-right: calc(#{$frost-table-cell-padding} + 1px);
+          }
+        }
+      }
+    }
+    // sass-lint:enable nesting-depth
   }
 
   .frost-table-cell {
     @include frost-table-truncate-text;
     display: inline-block;
+    vertical-align: middle;
   }
 }

@@ -2,13 +2,14 @@
  * Component definition for the frost-fixed-table component
  */
 import Ember from 'ember'
-const {$} = Ember
+const {$, A, isNone} = Ember
 import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
 import layout from '../templates/components/frost-fixed-table'
-import {ColumnPropType, ItemsPropType} from 'ember-frost-table/typedefs'
+import selection from '../utils/selection'
+import {ColumnPropType, ItemPropType, ItemsPropType} from 'ember-frost-table/typedefs'
 
 export default Component.extend({
   // == Dependencies ==========================================================
@@ -20,12 +21,29 @@ export default Component.extend({
   // == PropTypes =============================================================
 
   propTypes: {
-    // required:
+    // options:
     columns: PropTypes.arrayOf(ColumnPropType).isRequired,
     items: ItemsPropType.isRequired,
+    itemKey: PropTypes.string,
+    selectedItems: PropTypes.arrayOf(ItemPropType),
 
-    // options
-    onCallback: PropTypes.func
+    // callbacks
+    onCallback: PropTypes.func,
+    onSelectionChange: PropTypes.func,
+
+    // state
+    _itemComparator: PropTypes.func,
+
+    _rangeState: PropTypes.shape({
+      anchor: PropTypes.oneOfType([
+        PropTypes.EmberObject,
+        PropTypes.object
+      ]),
+      endpoint: PropTypes.oneOfType([
+        PropTypes.EmberObject,
+        PropTypes.object
+      ])
+    })
   },
 
   getDefaultProps () {
@@ -34,7 +52,12 @@ export default Component.extend({
       columns: [],
       items: [],
       // do nothing by default, as the grid may not have any custom renderers that would need to emit events
-      onCallback () {}
+      onCallback () {},
+      // state
+      _rangeState: {
+        anchor: null,
+        endpoint: null
+      }
     }
   },
 
@@ -76,12 +99,34 @@ export default Component.extend({
   @readOnly
   @computed('css')
   /**
+   * The selector for the left header DOM element
+   * @param {String} css - the base css class name for the component
+   * @returns {String} a sutiable jQuery selector for the left section of the table header
+   */
+  headerLeftSelector (css) {
+    return `.${css}-header-left`
+  },
+
+  @readOnly
+  @computed('css')
+  /**
    * The selector for the middle header DOM element (specifically the scroll wrapper)
    * @param {String} css - the base css class name for the component
    * @returns {String} a sutiable jQuery selector for the middle section of the table header
    */
   headerMiddleSelector (css) {
     return `.${css}-header-middle .frost-scroll`
+  },
+
+  @readOnly
+  @computed('css')
+  /**
+   * The selector for the right header DOM element
+   * @param {String} css - the base css class name for the component
+   * @returns {String} a sutiable jQuery selector for the right section of the table header
+   */
+  headerRightSelector (css) {
+    return `.${css}-header-right`
   },
 
   @readOnly
@@ -172,6 +217,12 @@ export default Component.extend({
     }
 
     return frozenColumns.reverse()
+  },
+
+  @readOnly
+  @computed()
+  _isSelectable () {
+    return !isNone(this.get('onSelectionChange'))
   },
 
   // == Functions =============================================================
@@ -278,6 +329,32 @@ export default Component.extend({
     this.$(`${bodyMiddleSelector} .frost-table-row`).css({width: `${width}px`})
   },
 
+  setupLeftAndRightWidths () {
+    const sides = [
+      {
+        header: this.get('headerLeftSelector'),
+        body: this.get('bodyLeftSelector')
+      }, {
+        header: this.get('headerRightSelector'),
+        body: this.get('bodyRightSelector')
+      }
+    ]
+    for (let side of sides) {
+      const headerCells = this.$(`${side.header} .frost-table-header-cell`)
+      for (let pos = 0; pos < headerCells.length; ++pos) {
+        const curBodyColumn = this.$(`${side.body} .frost-table-row .frost-table-body-cell:nth-child(${pos + 1})`)
+        const curHeaderCell = headerCells.eq(pos)
+        const bodyCellWidth = curBodyColumn.outerWidth(true)
+        const headerCellWidth = curHeaderCell.outerWidth(true)
+
+        const width = bodyCellWidth > headerCellWidth ? bodyCellWidth : headerCellWidth
+
+        curHeaderCell.css({width: width + 'px'})
+        curBodyColumn.css({width: width + 'px'})
+      }
+    }
+  },
+
   /**
    * Set up the scroll synchronization between the different components within the table that should scroll together
    */
@@ -335,6 +412,20 @@ export default Component.extend({
 
   // == Lifecycle Hooks =======================================================
 
+  init () {
+    this._super(...arguments)
+    const itemKey = this.get('itemKey')
+    if (itemKey) {
+      this.set('_itemComparator', function (lhs, rhs) {
+        const keys = itemKey.split(',')
+        return isNone(lhs) || isNone(rhs) ? false : keys.reduce((val, key) => {
+          key = key.trim()
+          return val && (lhs[key] === rhs[key])
+        }, true)
+      })
+    }
+  },
+
   /**
    * Set up synced scrolling as well as calculating padding for middle sections
    */
@@ -342,6 +433,7 @@ export default Component.extend({
     this._super(...arguments)
     this.setupBodyHeights()
     this.setupHoverProxy()
+    this.setupLeftAndRightWidths() // Needs to happen before setting up middle section
     this.setupMiddleWidths()
     this.setupMiddleMargins()
     this.setupScrollSync()
@@ -361,6 +453,28 @@ export default Component.extend({
      */
     handleCallback (row, col, action, args) {
       this.onCallback({action, args, col, row})
+    },
+
+    _clickRow (row) {
+      this.$(`${this.get('bodyLeftSelector')} .frost-table-row`).eq(row).trigger('click')
+    },
+
+    _select ({isRangeSelect, isSpecificSelect, item}) {
+      const items = this.get('items')
+      const itemKey = this.get('itemKey')
+      const _itemComparator = this.get('_itemComparator')
+      const clonedSelectedItems = A(this.get('selectedItems').slice())
+      const _rangeState = this.get('_rangeState')
+
+      // Selects are proccessed in order of precedence: specific, range, basic
+      if (isSpecificSelect) {
+        selection.specific(clonedSelectedItems, item, _rangeState, _itemComparator)
+      } else if (isRangeSelect) {
+        selection.range(items, clonedSelectedItems, item, _rangeState, _itemComparator, itemKey)
+      } else {
+        selection.basic(clonedSelectedItems, item, _rangeState, _itemComparator)
+      }
+      this.onSelectionChange(clonedSelectedItems)
     }
   }
 })
