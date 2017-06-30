@@ -17,6 +17,7 @@ addons:
 
 cache:
   directories:
+  - node_modules
 
 env:
   matrix:

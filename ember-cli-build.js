@@ -24,8 +24,6 @@ module.exports = function (defaults) {
 
   if (app.env === 'test') {
     ;[
-      'bower_components/chai-jquery/chai-jquery.js',
-      'bower_components/sinon-chai/lib/sinon-chai.js'
     ].forEach((path) => {
       app.import(path, {type: 'test'})
     })
