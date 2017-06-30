@@ -55,10 +55,7 @@ export default Component.extend({
     if (isEmpty(selectedItems)) {
       return false
     }
-
-    const item = this.get('item')
-    const itemComparator = this.get('itemComparator')
-    return selectedItems.some(selectedItem => itemComparator(item, selectedItem))
+    return selectedItems.includes(this.get('item'))
   },
 
   // == Functions =============================================================

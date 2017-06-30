@@ -8,7 +8,7 @@ import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
 import layout from '../templates/components/frost-fixed-table'
-import selection from '../utils/selection'
+import select from '../utils/selection'
 import {ColumnPropType, ItemPropType, ItemsPropType} from 'ember-frost-table/typedefs'
 
 export default Component.extend({
@@ -68,9 +68,9 @@ export default Component.extend({
   /**
    * The selector for the left body DOM element (specifically the scroll wrapper)
    * @param {String} css - the base css class name for the component
-   * @returns {String} a sutiable jQuery selector for the left section of the table body
+   * @returns {String} a suitable jQuery selector for the left section of the table body
    */
-  bodyLeftSelector (css) {
+  _bodyLeftSelector (css) {
     return `.${css}-left .frost-scroll`
   },
 
@@ -79,9 +79,9 @@ export default Component.extend({
   /**
    * The selector for the middle body DOM element (specifically the scroll wrapper)
    * @param {String} css - the base css class name for the component
-   * @returns {String} a sutiable jQuery selector for the middle section of the table body
+   * @returns {String} a suitable jQuery selector for the middle section of the table body
    */
-  bodyMiddleSelector (css) {
+  _bodyMiddleSelector (css) {
     return `.${css}-middle .frost-scroll`
   },
 
@@ -90,9 +90,9 @@ export default Component.extend({
   /**
    * The selector for the right body DOM element (specifically the scroll wrapper)
    * @param {String} css - the base css class name for the component
-   * @returns {String} a sutiable jQuery selector for the right section of the table body
+   * @returns {String} a suitable jQuery selector for the right section of the table body
    */
-  bodyRightSelector (css) {
+  _bodyRightSelector (css) {
     return `.${css}-right .frost-scroll`
   },
 
@@ -101,9 +101,9 @@ export default Component.extend({
   /**
    * The selector for the left header DOM element
    * @param {String} css - the base css class name for the component
-   * @returns {String} a sutiable jQuery selector for the left section of the table header
+   * @returns {String} a suitable jQuery selector for the left section of the table header
    */
-  headerLeftSelector (css) {
+  _headerLeftSelector (css) {
     return `.${css}-header-left`
   },
 
@@ -112,9 +112,9 @@ export default Component.extend({
   /**
    * The selector for the middle header DOM element (specifically the scroll wrapper)
    * @param {String} css - the base css class name for the component
-   * @returns {String} a sutiable jQuery selector for the middle section of the table header
+   * @returns {String} a suitable jQuery selector for the middle section of the table header
    */
-  headerMiddleSelector (css) {
+  _headerMiddleSelector (css) {
     return `.${css}-header-middle .frost-scroll`
   },
 
@@ -123,9 +123,9 @@ export default Component.extend({
   /**
    * The selector for the right header DOM element
    * @param {String} css - the base css class name for the component
-   * @returns {String} a sutiable jQuery selector for the right section of the table header
+   * @returns {String} a suitable jQuery selector for the right section of the table header
    */
-  headerRightSelector (css) {
+  _headerRightSelector (css) {
     return `.${css}-header-right`
   },
 
@@ -251,14 +251,14 @@ export default Component.extend({
    * table itself
    */
   setupBodyHeights () {
-    const headerMiddleSelector = this.get('headerMiddleSelector')
+    const headerMiddleSelector = this.get('_headerMiddleSelector')
     const headerHeight = this.$(headerMiddleSelector).outerHeight()
     const tableHeight = this.$().outerHeight()
     const bodyHeight = tableHeight - headerHeight
 
-    const bodyLeftSelector = this.get('bodyLeftSelector')
-    const bodyMiddleSelector = this.get('bodyMiddleSelector')
-    const bodyRightSelector = this.get('bodyRightSelector')
+    const bodyLeftSelector = this.get('_bodyLeftSelector')
+    const bodyMiddleSelector = this.get('_bodyMiddleSelector')
+    const bodyRightSelector = this.get('_bodyRightSelector')
 
     ;[bodyLeftSelector, bodyMiddleSelector, bodyRightSelector].forEach((selector) => {
       this.$(selector).css({height: `${bodyHeight}px`})
@@ -272,9 +272,9 @@ export default Component.extend({
    */
   setupHoverProxy () {
     const hoverClass = 'ps-container-hover'
-    const bodyLeftSelector = this.get('bodyLeftSelector')
-    const bodyMiddleSelector = this.get('bodyMiddleSelector')
-    const bodyRightSelector = this.get('bodyRightSelector')
+    const bodyLeftSelector = this.get('_bodyLeftSelector')
+    const bodyMiddleSelector = this.get('_bodyMiddleSelector')
+    const bodyRightSelector = this.get('_bodyRightSelector')
 
     ;[bodyLeftSelector, bodyMiddleSelector].forEach((selector) => {
       const $element = this.$(selector)
@@ -286,7 +286,7 @@ export default Component.extend({
       })
     })
 
-    const headerMiddleSelector = this.get('headerMiddleSelector')
+    const headerMiddleSelector = this.get('_headerMiddleSelector')
     const $headerMiddle = this.$(headerMiddleSelector)
     $headerMiddle.on('mouseenter', () => {
       this.$(bodyMiddleSelector).addClass(hoverClass)
@@ -301,14 +301,14 @@ export default Component.extend({
    * Calculate the widths of the left and right side and set the marings of the middle accordingly.
    */
   setupMiddleMargins () {
-    const bodyLeftSelector = this.get('bodyLeftSelector')
-    const bodyRightSelector = this.get('bodyRightSelector')
+    const bodyLeftSelector = this.get('_bodyLeftSelector')
+    const bodyRightSelector = this.get('_bodyRightSelector')
 
     const leftWidth = this.$(bodyLeftSelector).outerWidth()
     const rightWidth = this.$(bodyRightSelector).outerWidth()
 
-    const headerMiddleSelector = this.get('headerMiddleSelector')
-    const bodyMiddleSelector = this.get('bodyMiddleSelector')
+    const headerMiddleSelector = this.get('_headerMiddleSelector')
+    const bodyMiddleSelector = this.get('_bodyMiddleSelector')
     ;[headerMiddleSelector, bodyMiddleSelector].forEach((selector) => {
       this.$(selector).css({
         'margin-left': `${leftWidth}px`,
@@ -321,8 +321,8 @@ export default Component.extend({
    * Calculate how wide the middle sections should be by adding the sum of all the inner cells, then set that width
    */
   setupMiddleWidths () {
-    const headerMiddleSelector = this.get('headerMiddleSelector')
-    const bodyMiddleSelector = this.get('bodyMiddleSelector')
+    const headerMiddleSelector = this.get('_headerMiddleSelector')
+    const bodyMiddleSelector = this.get('_bodyMiddleSelector')
 
     const width = this._calculateWidth(`${headerMiddleSelector} .frost-table-cell`)
     this.$(`${headerMiddleSelector} .frost-table-header`).css({width: `${width}px`})
@@ -332,14 +332,14 @@ export default Component.extend({
   setupLeftAndRightWidths () {
     const sides = [
       {
-        header: this.get('headerLeftSelector'),
-        body: this.get('bodyLeftSelector')
+        header: this.get('_headerLeftSelector'),
+        body: this.get('_bodyLeftSelector')
       }, {
-        header: this.get('headerRightSelector'),
-        body: this.get('bodyRightSelector')
+        header: this.get('_headerRightSelector'),
+        body: this.get('_bodyRightSelector')
       }
     ]
-    for (let side of sides) {
+    sides.forEach((side) => {
       const headerCells = this.$(`${side.header} .frost-table-header-cell`)
       for (let pos = 0; pos < headerCells.length; ++pos) {
         const curBodyColumn = this.$(`${side.body} .frost-table-row .frost-table-body-cell:nth-child(${pos + 1})`)
@@ -352,17 +352,17 @@ export default Component.extend({
         curHeaderCell.css({width: width + 'px'})
         curBodyColumn.css({width: width + 'px'})
       }
-    }
+    })
   },
 
   /**
    * Set up the scroll synchronization between the different components within the table that should scroll together
    */
   setupScrollSync () {
-    const headerMiddleSelector = this.get('headerMiddleSelector')
-    const bodyLeftSelector = this.get('bodyLeftSelector')
-    const bodyMiddleSelector = this.get('bodyMiddleSelector')
-    const bodyRightSelector = this.get('bodyRightSelector')
+    const headerMiddleSelector = this.get('_headerMiddleSelector')
+    const bodyLeftSelector = this.get('_bodyLeftSelector')
+    const bodyMiddleSelector = this.get('_bodyMiddleSelector')
+    const bodyRightSelector = this.get('_bodyRightSelector')
 
     this.syncScrollLeft(headerMiddleSelector, bodyMiddleSelector)
     this.syncScrollLeft(bodyMiddleSelector, headerMiddleSelector)
@@ -412,20 +412,6 @@ export default Component.extend({
 
   // == Lifecycle Hooks =======================================================
 
-  init () {
-    this._super(...arguments)
-    const itemKey = this.get('itemKey')
-    if (itemKey) {
-      this.set('_itemComparator', function (lhs, rhs) {
-        const keys = itemKey.split(',')
-        return isNone(lhs) || isNone(rhs) ? false : keys.reduce((val, key) => {
-          key = key.trim()
-          return val && (lhs[key] === rhs[key])
-        }, true)
-      })
-    }
-  },
-
   /**
    * Set up synced scrolling as well as calculating padding for middle sections
    */
@@ -456,24 +442,17 @@ export default Component.extend({
     },
 
     _clickRow (row) {
-      this.$(`${this.get('bodyLeftSelector')} .frost-table-row`).eq(row).trigger('click')
+      this.$(`${this.get('_bodyLeftSelector')} .frost-table-row`).eq(row).trigger('click')
     },
 
     _select ({isRangeSelect, isSpecificSelect, item}) {
       const items = this.get('items')
       const itemKey = this.get('itemKey')
-      const _itemComparator = this.get('_itemComparator')
       const clonedSelectedItems = A(this.get('selectedItems').slice())
       const _rangeState = this.get('_rangeState')
 
-      // Selects are proccessed in order of precedence: specific, range, basic
-      if (isSpecificSelect) {
-        selection.specific(clonedSelectedItems, item, _rangeState, _itemComparator)
-      } else if (isRangeSelect) {
-        selection.range(items, clonedSelectedItems, item, _rangeState, _itemComparator, itemKey)
-      } else {
-        selection.basic(clonedSelectedItems, item, _rangeState, _itemComparator)
-      }
+      select(isRangeSelect, isSpecificSelect, item, itemKey, items, clonedSelectedItems, _rangeState)
+
       this.onSelectionChange(clonedSelectedItems)
     }
   }

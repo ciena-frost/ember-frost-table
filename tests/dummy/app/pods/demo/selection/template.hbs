@@ -2,7 +2,7 @@
 {{!-- BEGIN-SNIPPET selection }}
   {{frost-table
     ...
-    itemKey='<key>'
+    itemKey='<property>,..,<property>' // properties to compare between rows
     selectedItems=<selectedItems>
     onSelectionChange=(action '<onSelectionChange>')
     ...
@@ -13,6 +13,10 @@
 <div class='frost-demo-api'>
   <div class='frost-demo-title'>
     Selection API
+  </div>
+  <br/>
+  <div class='frost-demo-notes'>
+    Can be applied to the frost-table or frost-fixed-table components
   </div>
   <div class='frost-demo-snippet'>
     {{code-snippet name='selection.hbs'}}

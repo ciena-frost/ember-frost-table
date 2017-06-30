@@ -2,13 +2,13 @@
  * Component definition for the frost-table component
  */
 import Ember from 'ember'
-const {A, get, isNone, run} = Ember
+const {A, isNone, run} = Ember
 import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
 import layout from '../templates/components/frost-table'
-import selection from '../utils/selection'
+import select from '../utils/selection'
 import {ColumnPropType, ItemPropType, ItemsPropType} from 'ember-frost-table/typedefs'
 
 export default Component.extend({
@@ -119,16 +119,6 @@ export default Component.extend({
     })
   },
 
-  init () {
-    this._super(...arguments)
-    const itemKey = this.get('itemKey')
-    if (itemKey) {
-      this.set('_itemComparator', function (lhs, rhs) {
-        return isNone(lhs) || isNone(rhs) ? false : get(lhs, itemKey) === get(rhs, itemKey)
-      })
-    }
-  },
-
   // == Actions ===============================================================
 
   actions: {
@@ -151,18 +141,11 @@ export default Component.extend({
     _select ({isRangeSelect, isSpecificSelect, item}) {
       const items = this.get('items')
       const itemKey = this.get('itemKey')
-      const _itemComparator = this.get('_itemComparator')
       const clonedSelectedItems = A(this.get('selectedItems').slice())
       const _rangeState = this.get('_rangeState')
 
-      // Selects are proccessed in order of precedence: specific, range, basic
-      if (isSpecificSelect) {
-        selection.specific(clonedSelectedItems, item, _rangeState, _itemComparator)
-      } else if (isRangeSelect) {
-        selection.range(items, clonedSelectedItems, item, _rangeState, _itemComparator, itemKey)
-      } else {
-        selection.basic(clonedSelectedItems, item, _rangeState, _itemComparator)
-      }
+      select(isRangeSelect, isSpecificSelect, item, itemKey, items, clonedSelectedItems, _rangeState)
+
       this.onSelectionChange(clonedSelectedItems)
     }
   }

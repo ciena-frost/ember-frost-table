@@ -72,10 +72,12 @@ describe(test.label, function () {
 
   describe('Computed Properties', function () {
     const cpExpectedValues = {
-      bodyLeftSelector: '.frost-fixed-table-left .frost-scroll',
-      bodyMiddleSelector: '.frost-fixed-table-middle .frost-scroll',
-      bodyRightSelector: '.frost-fixed-table-right .frost-scroll',
-      headerMiddleSelector: '.frost-fixed-table-header-middle .frost-scroll'
+      _bodyLeftSelector: '.frost-fixed-table-left .frost-scroll',
+      _bodyMiddleSelector: '.frost-fixed-table-middle .frost-scroll',
+      _bodyRightSelector: '.frost-fixed-table-right .frost-scroll',
+      _headerMiddleSelector: '.frost-fixed-table-header-middle .frost-scroll',
+      _headerLeftSelector: '.frost-fixed-table-header-left',
+      _headerRightSelector: '.frost-fixed-table-header-right'
     }
 
     for (let key in cpExpectedValues) {
