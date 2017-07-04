@@ -1,3 +1,7 @@
+# 1.3.0 (2017-07-04)
+ * **Added** functionality for selecting table rows in **frost-fixed-table**
+
+
 # 1.2.2 (2017-06-09)
  * Fix mirage for Demo page
 * Fix CSS for Table Selection. Fixes https://github.com/ciena-frost/ember-frost-table/issues/20
