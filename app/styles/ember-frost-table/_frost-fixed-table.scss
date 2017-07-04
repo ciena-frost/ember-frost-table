@@ -2,6 +2,9 @@
 // Styles specific for the frost-fixed-table component (and its pieces)
 //
 
+$frost-fixed-table-selected-cell-padding: calc(#{$frost-table-cell-padding} + 1px);
+$frost-fixed-table-selected-cell-margin: -1px;
+
 .frost-fixed-table {
   position: relative;
 
@@ -48,6 +51,22 @@
     .ps-container > .ps-scrollbar-y-rail {
       display: none;
     }
+
+    // sass-lint:disable nesting-depth
+    .frost-table-row {
+      &.is-selected {
+        border-right: 0;
+
+        .frost-table-cell {
+          &:first-of-type {
+            // Keep column borders aligned
+            margin-left: $frost-fixed-table-selected-cell-margin;
+            padding-left: $frost-fixed-table-selected-cell-padding;
+          }
+        }
+      }
+    }
+    // sass-lint:enable nesting-depth
   }
 
   &-middle {
@@ -57,16 +76,52 @@
     .ps-container > .ps-scrollbar-y-rail {
       display: none;
     }
+
+    .frost-table-row {
+      &.is-selected {
+        border-right: 0;
+        border-left: 0;
+      }
+    }
   }
 
   &-right {
     position: absolute;
     right: 0;
     box-shadow: -23px 0 15px -4px $frost-table-box-shadow-color;
+
+    // sass-lint:disable nesting-depth
+    .frost-table-row {
+      &.is-selected {
+        border-left: 0;
+
+        .frost-table-cell {
+          &:last-of-type {
+            // Keep column borders aligned
+            margin-right: $frost-fixed-table-selected-cell-margin;
+            padding-right: $frost-fixed-table-selected-cell-padding;
+          }
+        }
+      }
+    }
+    // sass-lint:enable nesting-depth
   }
+
+  .frost-table-row {
+    &.is-selected {
+      .frost-table-cell {
+        margin-top: $frost-fixed-table-selected-cell-margin;
+        margin-bottom: $frost-fixed-table-selected-cell-margin;
+        padding-top: $frost-fixed-table-selected-cell-padding;
+        padding-bottom: $frost-fixed-table-selected-cell-padding;
+      }
+    }
+  }
+
 
   .frost-table-cell {
     @include frost-table-truncate-text;
     display: inline-block;
+    vertical-align: middle;
   }
 }

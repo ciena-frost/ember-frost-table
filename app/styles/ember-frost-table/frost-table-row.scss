@@ -12,6 +12,10 @@ $frost-table-row-border-transparent: rgba(0, 0, 0, 0);
       padding-top: $frost-table-cell-padding;
     }
   }
+
+  &.selectable {
+    cursor: pointer;
+  }
 }
 
 .frost-table-row-selection {
