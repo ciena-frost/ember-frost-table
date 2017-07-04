@@ -3,9 +3,30 @@
  */
 
 import Ember from 'ember'
-const {isNone} = Ember
+const {ViewUtils, isNone} = Ember
+const {isSimpleClick} = ViewUtils
 
-export default function select (isRangeSelect, isSpecificSelect, item, itemKey, allItems, selectedItems, rangeState) {
+export function click (event, onSelect, item) {
+  // Acceptable event modifiers
+  // When the checkbox is the target a simple click is equivalent to a specific select
+  const isSpecificSelect = isSimpleClick(event) ||
+    ((new window.UAParser()).getOS() === 'Mac OS' ? event.ctrlKey : event.metaKey) // TODO Move instance to a service
+  const isRangeSelect = event.shiftKey
+
+  // Only process simple clicks or clicks with the acceptable modifiers
+  if (isSpecificSelect || isRangeSelect) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    onSelect({
+      isRangeSelect,
+      isSpecificSelect,
+      item: item
+    })
+  }
+}
+
+export function select (isRangeSelect, isSpecificSelect, item, itemKey, allItems, selectedItems, rangeState) {
   // Selects are proccessed in order of precedence: specific, range, basic
   if (isSpecificSelect) {
     specific(selectedItems, item, rangeState, itemKey)

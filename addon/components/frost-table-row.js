@@ -9,6 +9,7 @@ import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
 import layout from '../templates/components/frost-table-row'
+import {click} from '../utils/selection'
 import {ColumnPropType, ItemPropType} from 'ember-frost-table/typedefs'
 
 export default Component.extend({
@@ -63,8 +64,7 @@ export default Component.extend({
   // == DOM Events ============================================================
 
   click (event) {
-    event.stopPropagation()
-    this.$().find('.frost-table-row-selection').trigger('click')
+    click(event, this.onSelect, this.get('item'))
   },
 
   // == Lifecycle Hooks =======================================================
