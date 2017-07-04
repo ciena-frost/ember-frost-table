@@ -2,6 +2,9 @@
 // Styles specific for the frost-fixed-table component (and its pieces)
 //
 
+$frost-fixed-table-selected-cell-padding: calc(#{$frost-table-cell-padding} + 1px);
+$frost-fixed-table-selected-cell-margin: -1px;
+
 .frost-fixed-table {
   position: relative;
 
@@ -57,8 +60,8 @@
         .frost-table-cell {
           &:first-of-type {
             // Keep column borders aligned
-            margin-left: -1px;
-            padding-left: calc(#{$frost-table-cell-padding} + 1px);
+            margin-left: $frost-fixed-table-selected-cell-margin;
+            padding-left: $frost-fixed-table-selected-cell-padding;
           }
         }
       }
@@ -95,14 +98,26 @@
         .frost-table-cell {
           &:last-of-type {
             // Keep column borders aligned
-            margin-right: -1px;
-            padding-right: calc(#{$frost-table-cell-padding} + 1px);
+            margin-right: $frost-fixed-table-selected-cell-margin;
+            padding-right: $frost-fixed-table-selected-cell-padding;
           }
         }
       }
     }
     // sass-lint:enable nesting-depth
   }
+
+  .frost-table-row {
+    &.is-selected {
+      .frost-table-cell {
+        margin-top: $frost-fixed-table-selected-cell-margin;
+        margin-bottom: $frost-fixed-table-selected-cell-margin;
+        padding-top: $frost-fixed-table-selected-cell-padding;
+        padding-bottom: $frost-fixed-table-selected-cell-padding;
+      }
+    }
+  }
+
 
   .frost-table-cell {
     @include frost-table-truncate-text;

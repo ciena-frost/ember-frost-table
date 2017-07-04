@@ -243,12 +243,14 @@ describe(test.label, function () {
   })
 
   describe('.setupBodyHeights()', function () {
-    let leftBodyStub, middleHeaderStub, middleBodyStub, rightBodyStub, tableStub
+    let leftBodyStub, middleHeaderStub, middleBodyStub, rightBodyStub, tableStub, nonEmptyCellStub, emptyRowStub
     beforeEach(function () {
       leftBodyStub = createSelectorStub('css')
       middleBodyStub = createSelectorStub('css')
       middleHeaderStub = createSelectorStub('outerHeight')
       rightBodyStub = createSelectorStub('css')
+      nonEmptyCellStub = createSelectorStub('outerHeight')
+      emptyRowStub = createSelectorStub('css')
       tableStub = createSelectorStub('outerHeight')
 
       sandbox.stub(component, '$')
@@ -256,10 +258,13 @@ describe(test.label, function () {
         .withArgs('.frost-fixed-table-middle .frost-scroll').returns(middleBodyStub)
         .withArgs('.frost-fixed-table-header-middle .frost-scroll').returns(middleHeaderStub)
         .withArgs('.frost-fixed-table-right .frost-scroll').returns(rightBodyStub)
+        .withArgs('.frost-table-row:not(:empty) .frost-table-cell').returns(nonEmptyCellStub)
+        .withArgs('.frost-table-row:empty').returns(emptyRowStub)
         .withArgs().returns(tableStub)
 
       tableStub.outerHeight.returns(100)
       middleHeaderStub.outerHeight.returns(20)
+      nonEmptyCellStub.outerHeight.returns(50)
 
       component.setupBodyHeights()
     })
@@ -274,6 +279,10 @@ describe(test.label, function () {
 
     it('should set the height of the right body', function () {
       expect(rightBodyStub.css).to.have.been.calledWith({height: '80px'})
+    })
+
+    it('should set the height of empty rows', function () {
+      expect(emptyRowStub.css).to.have.been.calledWith({height: '50px'})
     })
   })
 

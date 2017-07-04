@@ -263,6 +263,10 @@ export default Component.extend({
     ;[bodyLeftSelector, bodyMiddleSelector, bodyRightSelector].forEach((selector) => {
       this.$(selector).css({height: `${bodyHeight}px`})
     })
+
+    // Empty rows still need height set so border shows when row is selected
+    const rowHeight = this.$('.frost-table-row:not(:empty) .frost-table-cell').outerHeight()
+    this.$('.frost-table-row:empty').css({height: `${rowHeight}px`})
   },
 
   /**
