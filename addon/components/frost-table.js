@@ -118,7 +118,7 @@ export default Component.extend({
       totalWidth += this.setCellWidths(1)
     }
     this.columns.forEach((column, index) => {
-      let position = index + (selectable ? 2 : 1)
+      const position = index + (selectable ? 2 : 1)
       totalWidth += this.setCellWidths(position)
     })
     this.$('.frost-table-header').css('width', `${totalWidth}px`)

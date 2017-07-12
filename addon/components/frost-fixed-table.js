@@ -242,6 +242,11 @@ export default Component.extend({
     return width
   },
 
+  _categoryRowSelector (sectionSelector) {
+    return this.$(`${sectionSelector} .frost-table-header-columns`).length === 1
+      ? '.frost-table-header-columns' : ''
+  },
+
   /**
    * Make the three body sections (left, middle, right) the correct height to stay within the bounds of the
    * table itself
@@ -323,19 +328,16 @@ export default Component.extend({
   setupMiddleWidths () {
     const headerMiddleSelector = this.get('_headerMiddleSelector')
     const bodyMiddleSelector = this.get('_bodyMiddleSelector')
-    const cellRowSelector = this.$(`${headerMiddleSelector} .frost-table-header-columns`).length === 1
-      ? '.frost-table-header-columns' : ''
+    const cellRowSelector = this._categoryRowSelector(headerMiddleSelector)
 
     const width = this._calculateWidth(`${headerMiddleSelector} ${cellRowSelector} .frost-table-cell`)
     const cssWidth = `${width}px`
-    this.$(`${headerMiddleSelector} .frost-table-header`).css({
+    const cssProperties = {
       'width': cssWidth,
       'flex-basis': cssWidth
-    })
-    this.$(`${bodyMiddleSelector} .frost-table-row`).css({
-      'width': cssWidth,
-      'flex-basis': cssWidth
-    })
+    }
+    this.$(`${headerMiddleSelector} .frost-table-header`).css(cssProperties)
+    this.$(`${bodyMiddleSelector} .frost-table-row`).css(cssProperties)
 
     this.alignColumns(headerMiddleSelector, bodyMiddleSelector)
   },
@@ -399,8 +401,7 @@ export default Component.extend({
   },
 
   alignColumns (headerSelecter, bodySelector) {
-    const cellRowSelector = this.$(`${headerSelecter} .frost-table-header-columns`).length === 1
-      ? '.frost-table-header-columns' : ''
+    const cellRowSelector = this._categoryRowSelector(headerSelecter)
     const headerCells = this.$(`${headerSelecter} ${cellRowSelector} .frost-table-header-cell`)
     for (let pos = 0; pos < headerCells.length; ++pos) {
       const curBodyColumn = this.$(`${bodySelector} .frost-table-row .frost-table-row-cell:nth-child(${pos + 1})`)
@@ -411,14 +412,12 @@ export default Component.extend({
       const width = bodyCellWidth > headerCellWidth ? bodyCellWidth : headerCellWidth
 
       const cssWidth = `${width}px`
-      curHeaderCell.css({
+      const cssProperties = {
         'width': cssWidth,
         'flex-basis': cssWidth
-      })
-      curBodyColumn.css({
-        'width': cssWidth,
-        'flex-basis': cssWidth
-      })
+      }
+      curHeaderCell.css(cssProperties)
+      curBodyColumn.css(cssProperties)
     }
   },
 

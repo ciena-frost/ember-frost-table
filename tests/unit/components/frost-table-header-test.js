@@ -9,15 +9,11 @@ import sinon from 'sinon'
 
 import {createSelectorStub} from 'dummy/tests/helpers/selector-stub'
 
-function _rewriteIndices (cols) {
-  return cols.map((column, index) => Object.assign({index}, column))
-}
-
 const test = unit('frost-table-header')
 describe(test.label, function () {
   test.setup()
 
-  let component, columns, columnsWithCategories, indexedColumns, sandbox
+  let component, columns, columnsWithCategories, sandbox
 
   beforeEach(function () {
     sandbox = sinon.sandbox.create()
@@ -98,9 +94,6 @@ describe(test.label, function () {
         categoryClassName: 'info-category'
       }
     ]
-
-    // The table component should add these for hooks.
-    indexedColumns = _rewriteIndices(columns)
   })
 
   afterEach(function () {

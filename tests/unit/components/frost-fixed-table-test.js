@@ -264,7 +264,7 @@ describe(test.label, function () {
         .withArgs('.frost-fixed-table-middle .frost-scroll').returns(middleBodyStub)
         .withArgs('.frost-fixed-table-header-middle .frost-scroll').returns(middleHeaderStub)
         .withArgs('.frost-fixed-table-right .frost-scroll').returns(rightBodyStub)
-        .withArgs('.frost-table-row:not(:empty) .frost-table-cell').returns(nonEmptyCellStub)
+        .withArgs('.frost-table-row:not(:empty) .frost-table-row-cell').returns(nonEmptyCellStub)
         .withArgs('.frost-table-row:empty').returns(emptyRowStub)
         .withArgs().returns(tableStub)
 
@@ -464,6 +464,7 @@ describe(test.label, function () {
     let headerStub, middleHeaderStub, middleBodyStub
     beforeEach(function () {
       sandbox.stub(component, '_calculateWidth').returns(12345)
+      sandbox.stub(component, '_categoryRowSelector').returns('')
       headerStub = createSelectorStub()
       middleHeaderStub = createSelectorStub('css')
       middleBodyStub = createSelectorStub('css')
@@ -653,6 +654,7 @@ describe(test.label, function () {
       headerColumn2Stub = createSelectorStub('css', 'outerWidth')
       bodyColumn1Stub = createSelectorStub('css', 'outerWidth')
       bodyColumn2Stub = createSelectorStub('css', 'outerWidth')
+      sandbox.stub(component, '_categoryRowSelector').returns('.frost-table-header-columns')
       sandbox.stub(component, '$')
         .withArgs('.header-class .frost-table-header-columns .frost-table-header-cell')
           .returns(headerColumnsStub)

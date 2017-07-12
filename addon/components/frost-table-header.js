@@ -2,7 +2,7 @@
  * Component definition for the frost-table-header component
  */
 import Ember from 'ember'
-const {A} = Ember
+const {A, isEmpty} = Ember
 import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
@@ -61,24 +61,18 @@ export default Component.extend({
   @readOnly
   @computed('columns')
   _hasCategories (columns) {
-    let hasCategories = false
-    columns.forEach((column) => {
-      if (column.category) {
-        hasCategories = true
-        return
-      }
+    return columns.some(function (column) {
+      return !isEmpty(column.category)
     })
-    return hasCategories
   },
 
   @readOnly
   @computed('columns')
   _categoryColumns (columns) {
-    let categoryColumns = A([])
     let index = 0
-    columns.forEach((column) => {
-      let lastCategoryColumn = categoryColumns.get('lastObject')
-      const categoryLabel = column.category ? column.category : ''
+    return columns.reduce((categoryColumns, column) => {
+      const lastCategoryColumn = categoryColumns.get('lastObject')
+      const categoryLabel = column.category || ''
       if (lastCategoryColumn && lastCategoryColumn.label === categoryLabel) {
         lastCategoryColumn.span += 1
       } else {
@@ -90,25 +84,22 @@ export default Component.extend({
           renderer: column.headerCategoryRenderer
         })
       }
-    })
-    return categoryColumns
+      return categoryColumns
+    }, A())
   },
 
   // == Functions =============================================================
 
   setupRows () {
-    const rowTag = this.get('rowTagName')
-    const selectable = this.get('isSelectable')
-    const categoryColumns = this.get('_categoryColumns')
-    const categoryRowClass = this.get('_categoryRowClass')
-    const columnRowClass = this.get('_columnRowClass')
+    const {_categoryColumns, _categoryRowClass, _columnRowClass, isSelectable, rowTagName} =
+      this.getProperties('rowTagName', 'isSelectable', '_categoryColumns', '_categoryRowClass', '_columnRowClass')
 
     // Wrap category and regular header columns into separate rows
-    const lastCategoryIndex = categoryColumns.length + (selectable ? 1 : 0)
+    const lastCategoryIndex = _categoryColumns.length + (isSelectable ? 1 : 0)
     this.$('.frost-table-header-cell').slice(0, lastCategoryIndex)
-      .wrapAll(`<${rowTag} class='${categoryRowClass} frost-table-row frost-table-header-row'></${rowTag}>`)
+      .wrapAll(`<${rowTagName} class='${_categoryRowClass} frost-table-row frost-table-header-row'></${rowTagName}>`)
     this.$('.frost-table-header-cell').slice(lastCategoryIndex)
-      .wrapAll(`<${rowTag} class='${columnRowClass} frost-table-row frost-table-header-row'></${rowTag}>`)
+      .wrapAll(`<${rowTagName} class='${_columnRowClass} frost-table-row frost-table-header-row'></${rowTagName}>`)
   },
 
   alignCategories () {

@@ -14,7 +14,7 @@ import {PropTypes} from 'ember-prop-types'
  * @property {Boolean} [frozen=false] - true if this column should be frozen (on either the left or right side of the table)
  * @property {Component} [renderer] - the cell renderer to use for all data cells in this column
  * @property {String} [category] - the category the column belongs to
- * @property {String} [category] - the css class name of the category the column belongs to
+ * @property {String} [categoryClassName] - the css class name of the category the column belongs to
  * @property {Component} [headerCategoryRenderer] - the cell renderer to use to the category column in the header
  */
 
