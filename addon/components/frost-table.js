@@ -108,7 +108,7 @@ export default Component.extend({
   },
 
   accountForSelectionColumn (num) {
-    if (this.get('isSelectable')) {
+    if (this.get('_isSelectable')) {
       return num + 1
     }
     return num
