@@ -1,3 +1,6 @@
+# 1.3.1 (2017-07-12)
+* Upgrade `ember-cli` to `2.12.3`
+
 # 1.3.0 (2017-07-04)
  * **Added** functionality for selecting table rows in **frost-fixed-table**
 
