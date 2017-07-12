@@ -4,9 +4,8 @@
  */
 
 import {Component} from 'ember-frost-core'
-import {PropTypes} from 'ember-prop-types'
-
 import {ItemPropType} from 'ember-frost-table/typedefs'
+import {PropTypes} from 'ember-prop-types'
 
 export default Component.extend({
   // == Dependencies ==========================================================

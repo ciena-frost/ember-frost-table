@@ -5,10 +5,10 @@ import Ember from 'ember'
 const {A, isEmpty} = Ember
 import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
+import {ColumnPropType} from 'ember-frost-table/typedefs'
 import {PropTypes} from 'ember-prop-types'
 
 import layout from '../templates/components/frost-table-header'
-import {ColumnPropType} from 'ember-frost-table/typedefs'
 
 export default Component.extend({
   // == Dependencies ==========================================================
