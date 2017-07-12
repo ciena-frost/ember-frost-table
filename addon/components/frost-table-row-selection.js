@@ -6,10 +6,10 @@ import Ember from 'ember'
 const {ViewUtils} = Ember
 const {isSimpleClick} = ViewUtils
 import {Component} from 'ember-frost-core'
+import {ItemPropType} from 'ember-frost-table/typedefs'
 import {PropTypes} from 'ember-prop-types'
 
 import layout from '../templates/components/frost-table-row-selection'
-import {ItemPropType} from 'ember-frost-table/typedefs'
 
 export default Component.extend({
 
