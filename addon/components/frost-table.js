@@ -107,6 +107,13 @@ export default Component.extend({
     return width
   },
 
+  accountForSelectionColumn (num) {
+    if (this.get('isSelectable')) {
+      return num + 1
+    }
+    return num
+  },
+
   // == DOM Events ============================================================
 
   // == Lifecycle Hooks =======================================================
@@ -118,7 +125,7 @@ export default Component.extend({
       totalWidth += this.setCellWidths(1)
     }
     this.columns.forEach((column, index) => {
-      const position = index + (selectable ? 2 : 1)
+      const position = index + this.accountForSelectionColumn(1)
       totalWidth += this.setCellWidths(position)
     })
     this.$('.frost-table-header').css('width', `${totalWidth}px`)

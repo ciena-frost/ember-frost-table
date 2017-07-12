@@ -91,11 +91,11 @@ export default Component.extend({
   // == Functions =============================================================
 
   setupRows () {
-    const {_categoryColumns, _categoryRowClass, _columnRowClass, isSelectable, rowTagName} =
-      this.getProperties('rowTagName', 'isSelectable', '_categoryColumns', '_categoryRowClass', '_columnRowClass')
+    const {_categoryColumns, _categoryRowClass, _columnRowClass, rowTagName} =
+      this.getProperties('rowTagName', '_categoryColumns', '_categoryRowClass', '_columnRowClass')
 
     // Wrap category and regular header columns into separate rows
-    const lastCategoryIndex = _categoryColumns.length + (isSelectable ? 1 : 0)
+    const lastCategoryIndex = this.accountForSelectionColumn(_categoryColumns.length)
     this.$('.frost-table-header-cell').slice(0, lastCategoryIndex)
       .wrapAll(`<${rowTagName} class='${_categoryRowClass} frost-table-row frost-table-header-row'></${rowTagName}>`)
     this.$('.frost-table-header-cell').slice(lastCategoryIndex)
@@ -103,26 +103,21 @@ export default Component.extend({
   },
 
   alignCategories () {
-    const cellTag = this.get('cellTagName')
-    const selectable = this.get('isSelectable')
-    const categoryColumns = this.get('_categoryColumns')
-    const categoryRowClass = this.get('_categoryRowClass')
-    const columnRowClass = this.get('_columnRowClass')
-    const categorySelector = `.${categoryRowClass} .frost-table-cell`
-    const columnSelector = `.${columnRowClass} .frost-table-cell`
+    const {_categoryColumns, _categoryRowClass, _columnRowClass, cellTagName} =
+      this.getProperties('cellTagName', '_categoryColumns', '_categoryRowClass', '_columnRowClass')
+    const categorySelector = `.${_categoryRowClass} .frost-table-cell`
+    const columnSelector = `.${_columnRowClass} .frost-table-cell`
 
-    if (cellTag === 'th' || cellTag === 'td') {
+    if (cellTagName === 'th' || cellTagName === 'td') {
       // Make use of colspan property
-      categoryColumns.forEach((category, index) => {
-        if (selectable) {
-          ++index
-        }
+      _categoryColumns.forEach((category, index) => {
+        index = this.accountForSelectionColumn(index)
         this.$(categorySelector).eq(index).attr('colspan', category.span)
       })
     } else {
       // Need to determine and set width
-      let startColumn = selectable ? 1 : 0
-      categoryColumns.forEach((category, index) => {
+      let startColumn = this.accountForSelectionColumn(0)
+      _categoryColumns.forEach((category, index) => {
         let totalWidth = 0
         this.$(columnSelector).slice(startColumn, startColumn + category.span).toArray().forEach((el) => {
           totalWidth += this.$(el).outerWidth()
@@ -133,6 +128,13 @@ export default Component.extend({
         startColumn += category.span
       })
     }
+  },
+
+  accountForSelectionColumn (num) {
+    if (this.get('isSelectable')) {
+      return num + 1
+    }
+    return num
   },
 
   // == DOM Events ============================================================
