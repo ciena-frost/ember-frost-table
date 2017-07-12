@@ -41,24 +41,30 @@ describe(test.label, function () {
       },
       {
         frozen: true,
-        propertyName: 'description'
+        propertyName: 'description',
+        category: 'Infomation'
       },
       {
-        propertyName: 'info1'
+        propertyName: 'info1',
+        category: 'Infomation'
       },
       {
-        propertyName: 'info2'
+        propertyName: 'info2',
+        category: 'Infomation'
       },
       {
-        propertyName: 'info3'
+        propertyName: 'info3',
+        category: 'Infomation'
       },
       {
         frozen: true,
-        propertyName: 'summary1'
+        propertyName: 'summary1',
+        category: 'Summary'
       },
       {
         frozen: true,
-        propertyName: 'summary2'
+        propertyName: 'summary2',
+        category: 'Summary'
       }
     ]
 
@@ -436,76 +442,56 @@ describe(test.label, function () {
   })
 
   describe('.setupLeftAndRightWidths()', function () {
-    let leftHeadersStub, leftHeaderStub, leftBodyStub, rightHeadersStub, rightHeaderStub,
-      rightBodyStub
     beforeEach(function () {
-      leftHeadersStub = createSelectorStub('eq', 'length')
-      leftHeaderStub = createSelectorStub('css', 'outerWidth')
-      leftBodyStub = createSelectorStub('css', 'outerWidth')
-      rightHeadersStub = createSelectorStub('eq', 'length')
-      rightHeaderStub = createSelectorStub('css', 'outerWidth')
-      rightBodyStub = createSelectorStub('css', 'outerWidth')
-      sandbox.stub(component, '$')
-        .withArgs('.frost-fixed-table-header-left .frost-table-header-cell')
-          .returns(leftHeadersStub)
-        .withArgs('.frost-fixed-table-left .frost-scroll .frost-table-row .frost-table-body-cell:nth-child(1)')
-          .returns(leftBodyStub)
-        .withArgs('.frost-fixed-table-header-right .frost-table-header-cell')
-          .returns(rightHeadersStub)
-        .withArgs('.frost-fixed-table-right .frost-scroll .frost-table-row .frost-table-body-cell:nth-child(1)')
-          .returns(rightBodyStub)
-
-      leftHeadersStub.length = 1
-      leftHeadersStub.eq.withArgs(0).returns(leftHeaderStub)
-
-      rightHeadersStub.length = 1
-      rightHeadersStub.eq.withArgs(0).returns(rightHeaderStub)
-
-      rightHeaderStub.outerWidth.returns(100)
-      leftHeaderStub.outerWidth.returns(20)
-
-      rightBodyStub.outerWidth.returns(20)
-      leftBodyStub.outerWidth.returns(100)
-
+      sandbox.stub(component, 'alignColumns')
       component.setupLeftAndRightWidths()
     })
 
-    it('should set width of left header', function () {
-      expect(leftHeaderStub.css).to.have.been.calledWith({width: '100px'})
-    })
-
-    it('should set width of left body', function () {
-      expect(leftBodyStub.css).to.have.been.calledWith({width: '100px'})
-    })
-
-    it('should set width of right header', function () {
-      expect(rightHeaderStub.css).to.have.been.calledWith({width: '100px'})
-    })
-
-    it('should set width of right body', function () {
-      expect(rightBodyStub.css).to.have.been.calledWith({width: '100px'})
+    it('should have called .alignedColumns() for left and right sections', function () {
+      expect(component.alignColumns).to.have.callCount(2)
+      expect(component.alignColumns).to.have.been.calledWithExactly(
+        '.frost-fixed-table-header-left',
+        '.frost-fixed-table-left .frost-scroll'
+      )
+      expect(component.alignColumns).to.have.been.calledWithExactly(
+        '.frost-fixed-table-header-right',
+        '.frost-fixed-table-right .frost-scroll'
+      )
     })
   })
 
   describe('.setupMiddleWidths()', function () {
-    let middleHeaderStub, middleBodyStub
+    let headerStub, middleHeaderStub, middleBodyStub
     beforeEach(function () {
       sandbox.stub(component, '_calculateWidth').returns(12345)
+      headerStub = createSelectorStub()
       middleHeaderStub = createSelectorStub('css')
       middleBodyStub = createSelectorStub('css')
       sandbox.stub(component, '$')
         .withArgs('.frost-fixed-table-header-middle .frost-scroll .frost-table-header').returns(middleHeaderStub)
         .withArgs('.frost-fixed-table-middle .frost-scroll .frost-table-row').returns(middleBodyStub)
+        .withArgs('.has-categories')
+          .returns(headerStub)
+
+      headerStub.length = 1
+      sandbox.stub(component, 'alignColumns')
 
       component.setupMiddleWidths()
     })
 
     it('should set width of middle header', function () {
-      expect(middleHeaderStub.css).to.have.been.calledWith({width: '12345px'})
+      expect(middleHeaderStub.css).to.have.been.calledWith({'width': '12345px', 'flex-basis': '12345px'})
     })
 
     it('should set width of middle body', function () {
-      expect(middleBodyStub.css).to.have.been.calledWith({width: '12345px'})
+      expect(middleBodyStub.css).to.have.been.calledWith({'width': '12345px', 'flex-basis': '12345px'})
+    })
+
+    it('should align header and body columns', function () {
+      expect(component.alignColumns).to.have.been.calledWithExactly(
+        '.frost-fixed-table-header-middle .frost-scroll',
+        '.frost-fixed-table-middle .frost-scroll'
+      )
     })
   })
 
@@ -655,6 +641,50 @@ describe(test.label, function () {
       it('should set scrollTop on the third destination', function () {
         expect(dst3Stub.scrollTop).to.have.been.calledWith(123)
       })
+    })
+  })
+
+  describe('.alignColumns()', function () {
+    let headerStub, headerColumnsStub, headerColumn1Stub, headerColumn2Stub, bodyColumn1Stub, bodyColumn2Stub
+    beforeEach(function () {
+      headerStub = createSelectorStub()
+      headerColumnsStub = createSelectorStub('eq', 'length')
+      headerColumn1Stub = createSelectorStub('css', 'outerWidth')
+      headerColumn2Stub = createSelectorStub('css', 'outerWidth')
+      bodyColumn1Stub = createSelectorStub('css', 'outerWidth')
+      bodyColumn2Stub = createSelectorStub('css', 'outerWidth')
+      sandbox.stub(component, '$')
+        .withArgs('.header-class .frost-table-header-columns .frost-table-header-cell')
+          .returns(headerColumnsStub)
+        .withArgs('.body-class .frost-table-row .frost-table-row-cell:nth-child(1)')
+          .returns(bodyColumn1Stub)
+        .withArgs('.body-class .frost-table-row .frost-table-row-cell:nth-child(2)')
+          .returns(bodyColumn2Stub)
+        .withArgs('.has-categories')
+          .returns(headerStub)
+
+      headerStub.length = 1
+      headerColumnsStub.length = 2
+      headerColumnsStub.eq.withArgs(0).returns(headerColumn1Stub)
+      headerColumnsStub.eq.withArgs(1).returns(headerColumn2Stub)
+
+      headerColumn1Stub.outerWidth.returns(100)
+      headerColumn2Stub.outerWidth.returns(20)
+
+      bodyColumn1Stub.outerWidth.returns(20)
+      bodyColumn2Stub.outerWidth.returns(100)
+
+      component.alignColumns('.header-class', '.body-class')
+    })
+
+    it('should set width and flex-basis of body columns', function () {
+      expect(bodyColumn1Stub.css).to.have.been.calledWith({'flex-basis': '100px', 'width': '100px'})
+      expect(bodyColumn2Stub.css).to.have.been.calledWith({'flex-basis': '100px', 'width': '100px'})
+    })
+
+    it('should set width and flex-basis of header columns', function () {
+      expect(headerColumn1Stub.css).to.have.been.calledWith({'flex-basis': '100px', 'width': '100px'})
+      expect(headerColumn2Stub.css).to.have.been.calledWith({'flex-basis': '100px', 'width': '100px'})
     })
   })
 

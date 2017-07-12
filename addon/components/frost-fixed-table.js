@@ -235,12 +235,8 @@ export default Component.extend({
   _calculateWidth (cellSelector) {
     let width = 0
 
-    // It appears that there needs to be an additional 3 pixels for each cell in order for it to render correctly now
-    // I'm not actually sure why that might be, something to do with margins/border/padding of the cells perhaps?
-    const FUDGE_FACTOR = 3
-
     this.$(cellSelector).toArray().forEach((el) => {
-      width += $(el).outerWidth() + FUDGE_FACTOR
+      width += $(el).outerWidth()
     })
 
     return width
@@ -265,7 +261,7 @@ export default Component.extend({
     })
 
     // Empty rows still need height set so border shows when row is selected
-    const rowHeight = this.$('.frost-table-row:not(:empty) .frost-table-cell').outerHeight()
+    const rowHeight = this.$('.frost-table-row:not(:empty) .frost-table-row-cell').outerHeight()
     this.$('.frost-table-row:empty').css({height: `${rowHeight}px`})
   },
 
@@ -327,36 +323,26 @@ export default Component.extend({
   setupMiddleWidths () {
     const headerMiddleSelector = this.get('_headerMiddleSelector')
     const bodyMiddleSelector = this.get('_bodyMiddleSelector')
+    const cellRowSelector = this.$(`${headerMiddleSelector} .frost-table-header-columns`).length === 1
+      ? '.frost-table-header-columns' : ''
 
-    const width = this._calculateWidth(`${headerMiddleSelector} .frost-table-cell`)
-    this.$(`${headerMiddleSelector} .frost-table-header`).css({width: `${width}px`})
-    this.$(`${bodyMiddleSelector} .frost-table-row`).css({width: `${width}px`})
+    const width = this._calculateWidth(`${headerMiddleSelector} ${cellRowSelector} .frost-table-cell`)
+    const cssWidth = `${width}px`
+    this.$(`${headerMiddleSelector} .frost-table-header`).css({
+      'width': cssWidth,
+      'flex-basis': cssWidth
+    })
+    this.$(`${bodyMiddleSelector} .frost-table-row`).css({
+      'width': cssWidth,
+      'flex-basis': cssWidth
+    })
+
+    this.alignColumns(headerMiddleSelector, bodyMiddleSelector)
   },
 
   setupLeftAndRightWidths () {
-    const sides = [
-      {
-        header: this.get('_headerLeftSelector'),
-        body: this.get('_bodyLeftSelector')
-      }, {
-        header: this.get('_headerRightSelector'),
-        body: this.get('_bodyRightSelector')
-      }
-    ]
-    sides.forEach((side) => {
-      const headerCells = this.$(`${side.header} .frost-table-header-cell`)
-      for (let pos = 0; pos < headerCells.length; ++pos) {
-        const curBodyColumn = this.$(`${side.body} .frost-table-row .frost-table-body-cell:nth-child(${pos + 1})`)
-        const curHeaderCell = headerCells.eq(pos)
-        const bodyCellWidth = curBodyColumn.outerWidth(true)
-        const headerCellWidth = curHeaderCell.outerWidth(true)
-
-        const width = bodyCellWidth > headerCellWidth ? bodyCellWidth : headerCellWidth
-
-        curHeaderCell.css({width: width + 'px'})
-        curBodyColumn.css({width: width + 'px'})
-      }
-    })
+    this.alignColumns(this.get('_headerLeftSelector'), this.get('_bodyLeftSelector'))
+    this.alignColumns(this.get('_headerRightSelector'), this.get('_bodyRightSelector'))
   },
 
   /**
@@ -412,6 +398,30 @@ export default Component.extend({
     })
   },
 
+  alignColumns (headerSelecter, bodySelector) {
+    const cellRowSelector = this.$(`${headerSelecter} .frost-table-header-columns`).length === 1
+      ? '.frost-table-header-columns' : ''
+    const headerCells = this.$(`${headerSelecter} ${cellRowSelector} .frost-table-header-cell`)
+    for (let pos = 0; pos < headerCells.length; ++pos) {
+      const curBodyColumn = this.$(`${bodySelector} .frost-table-row .frost-table-row-cell:nth-child(${pos + 1})`)
+      const curHeaderCell = headerCells.eq(pos)
+      const bodyCellWidth = curBodyColumn.outerWidth(true)
+      const headerCellWidth = curHeaderCell.outerWidth(true)
+
+      const width = bodyCellWidth > headerCellWidth ? bodyCellWidth : headerCellWidth
+
+      const cssWidth = `${width}px`
+      curHeaderCell.css({
+        'width': cssWidth,
+        'flex-basis': cssWidth
+      })
+      curBodyColumn.css({
+        'width': cssWidth,
+        'flex-basis': cssWidth
+      })
+    }
+  },
+
   // == DOM Events ============================================================
 
   // == Lifecycle Hooks =======================================================
@@ -450,14 +460,16 @@ export default Component.extend({
     },
 
     _select ({isRangeSelect, isSpecificSelect, item}) {
-      const items = this.get('items')
-      const itemKey = this.get('itemKey')
-      const clonedSelectedItems = A(this.get('selectedItems').slice())
-      const _rangeState = this.get('_rangeState')
+      if (this.get('_isSelectable')) {
+        const items = this.get('items')
+        const itemKey = this.get('itemKey')
+        const clonedSelectedItems = A(this.get('selectedItems').slice())
+        const _rangeState = this.get('_rangeState')
 
-      select(isRangeSelect, isSpecificSelect, item, itemKey, items, clonedSelectedItems, _rangeState)
+        select(isRangeSelect, isSpecificSelect, item, itemKey, items, clonedSelectedItems, _rangeState)
 
-      this.onSelectionChange(clonedSelectedItems)
+        this.onSelectionChange(clonedSelectedItems)
+      }
     }
   }
 })

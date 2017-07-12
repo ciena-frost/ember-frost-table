@@ -61,5 +61,9 @@
     &.odd {
       background-color: $frost-color-lgrey-3;
     }
+
+    &.frost-table-header-row {
+      background-color: $frost-color-white;
+    }
   }
 }

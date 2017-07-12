@@ -2,7 +2,7 @@
  * Component definition for the frost-table component
  */
 import Ember from 'ember'
-const {A, isNone, run} = Ember
+const {A, isNone} = Ember
 import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
@@ -90,33 +90,39 @@ export default Component.extend({
       this.set('_isShiftDown', event.shiftKey)
     }
   },
+
   setCellWidths (position) {
-    const curBodyColumn = this.$().find('.frost-table-row .frost-table-body-cell:nth-child(' + (position) + ')')
-    const curHeaderCell = this.$().find('.frost-table-header-cell:nth-child(' + (position) + ')')
+    const cellRowSelector = this.$('.has-categories').length === 1 ? '.frost-table-header-columns' : ''
+    const curBodyColumn = this.$(`.frost-table-row .frost-table-body-cell:nth-child(${position})`)
+    const curHeaderCell = this.$(`.frost-table-header ${cellRowSelector} .frost-table-cell:nth-child(${position})`)
 
     const bodyCellWidth = curBodyColumn.outerWidth(true)
     const headerCellWidth = curHeaderCell.outerWidth(true)
 
     const width = bodyCellWidth > headerCellWidth ? bodyCellWidth : headerCellWidth
 
-    curHeaderCell.css('width', width + 'px')
-    curBodyColumn.css('width', width + 'px')
+    curHeaderCell.css('width', `${width}px`)
+    curBodyColumn.css('width', `${width}px`)
+
+    return width
   },
+
   // == DOM Events ============================================================
 
   // == Lifecycle Hooks =======================================================
 
-  didInsertElement () {
-    run.schedule('afterRender', this, function () {
-      const selectable = this.get('_isSelectable')
-      if (selectable) {
-        this.setCellWidths(1)
-      }
-      this.columns.forEach((column, index) => {
-        let position = index + (selectable ? 2 : 1)
-        this.setCellWidths(position)
-      })
+  didRender () {
+    const selectable = this.get('_isSelectable')
+    let totalWidth = 0
+    if (selectable) {
+      totalWidth += this.setCellWidths(1)
+    }
+    this.columns.forEach((column, index) => {
+      let position = index + (selectable ? 2 : 1)
+      totalWidth += this.setCellWidths(position)
     })
+    this.$('.frost-table-header').css('width', `${totalWidth}px`)
+    this.$('.frost-table-body').css('width', `${totalWidth}px`)
   },
 
   // == Actions ===============================================================

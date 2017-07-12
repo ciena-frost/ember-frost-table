@@ -18,11 +18,13 @@ export function click (event, onSelect, item) {
     event.preventDefault()
     event.stopPropagation()
 
-    onSelect({
-      isRangeSelect,
-      isSpecificSelect,
-      item: item
-    })
+    if (onSelect) {
+      onSelect({
+        isRangeSelect,
+        isSpecificSelect,
+        item: item
+      })
+    }
   }
 }
 
