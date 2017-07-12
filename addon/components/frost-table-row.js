@@ -6,17 +6,18 @@ import Ember from 'ember'
 const {isEmpty} = Ember
 import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
-import {ColumnPropType, ItemPropType} from 'ember-frost-table/typedefs'
 import {PropTypes} from 'ember-prop-types'
 
 import layout from '../templates/components/frost-table-row'
+import {click} from '../utils/selection'
+import {ColumnPropType, ItemPropType} from 'ember-frost-table/typedefs'
 
 export default Component.extend({
   // == Dependencies ==========================================================
 
   // == Keyword Properties ====================================================
 
-  classNameBindings: ['_isItemSelected:is-selected'],
+  classNameBindings: ['_isItemSelected:is-selected', 'isSelectable:selectable'],
   layout,
   tagName: 'tr',
 
@@ -55,15 +56,16 @@ export default Component.extend({
     if (isEmpty(selectedItems)) {
       return false
     }
-
-    const item = this.get('item')
-    const itemComparator = this.get('itemComparator')
-    return selectedItems.some(selectedItem => itemComparator(item, selectedItem))
+    return selectedItems.includes(this.get('item'))
   },
 
   // == Functions =============================================================
 
   // == DOM Events ============================================================
+
+  click (event) {
+    click(event, this.onSelect, this.get('item'))
+  },
 
   // == Lifecycle Hooks =======================================================
 

@@ -2,8 +2,6 @@
   "name": "ember-frost-table",
   "dependencies": {
     "ember-mocha-adapter": "~0.3.1",
-    "perfect-scrollbar": ">=0.6.7 <2.0.0",
-    "chai-jquery": "^2.0.1",
-    "sinon-chai": "^2.8.0"
+    "perfect-scrollbar": ">=0.6.7 <2.0.0"
   }
 }

@@ -31,8 +31,10 @@
       hook=(concat hookPrefix '-header-left')
       hookQualifiers=hookQualifiers
       tagName='div'
+      isSelectable=_isSelectable
 
       onCallback=(action 'handleCallback' -1)
+      onSelectionChange=onSelectionChange
     }}
   </div>
   <div class={{concat css '-header-right'}}>
@@ -63,14 +65,17 @@
     }}
       {{#each items as |item index|}}
         {{frost-table-row
+          class=(if _isSelectable 'selectable')
           cellTagName='div'
           columns=middleColumns
           hook=(concat hookPrefix '-middle')
           hookQualifiers=(extend hookQualifiers row=index)
           item=item
           tagName='div'
+          selectedItems=selectedItems
 
           onCallback=(action 'handleCallback' index)
+          click=(action '_clickRow' index)
         }}
       {{/each}}
     {{/frost-scroll}}
@@ -88,9 +93,13 @@
           hook=(concat hookPrefix '-left')
           hookQualifiers=(extend hookQualifiers row=index)
           item=item
+          itemKey=itemKey
           tagName='div'
+          isSelectable=_isSelectable
+          selectedItems=selectedItems
 
           onCallback=(action 'handleCallback' index)
+          onSelect=(action '_select')
         }}
       {{/each}}
     {{/frost-scroll}}
@@ -103,14 +112,17 @@
     }}
       {{#each items as |item index|}}
         {{frost-table-row
+          class=(if _isSelectable 'selectable')
           cellTagName='div'
           columns=rightColumns
           hook=(concat hookPrefix '-right')
           hookQualifiers=(extend hookQualifiers row=index)
           item=item
           tagName='div'
+          selectedItems=selectedItems
 
           onCallback=(action 'handleCallback' index)
+          click=(action '_clickRow' index)
         }}
       {{/each}}
     {{/frost-scroll}}
