@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 const Reporter = require('ember-test-utils/reporter')
 
 module.exports = {

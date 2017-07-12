@@ -3,11 +3,11 @@
  */
 
 import {Component} from 'ember-frost-core'
+import {ItemPropType} from 'ember-frost-table/typedefs'
 import {PropTypes} from 'ember-prop-types'
 
 import layout from '../templates/components/frost-table-row-selection'
 import {click} from '../utils/selection'
-import {ItemPropType} from 'ember-frost-table/typedefs'
 
 export default Component.extend({
 
