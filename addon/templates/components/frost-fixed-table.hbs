@@ -15,6 +15,7 @@
       {{! We pass a row index of -1 since the row indices are zero-based }}
       {{frost-table-header
         cellTagName='div'
+        rowTagName='div'
         columns=middleColumns
         hook=(concat hookPrefix '-header-middle')
         hookQualifiers=hookQualifiers
@@ -27,6 +28,7 @@
   <div class={{concat css '-header-left'}}>
     {{frost-table-header
       cellTagName='div'
+      rowTagName='div'
       columns=leftColumns
       hook=(concat hookPrefix '-header-left')
       hookQualifiers=hookQualifiers
@@ -40,6 +42,7 @@
   <div class={{concat css '-header-right'}}>
     {{frost-table-header
       cellTagName='div'
+      rowTagName='div'
       columns=rightColumns
       hook=(concat hookPrefix '-header-right')
       hookQualifiers=hookQualifiers

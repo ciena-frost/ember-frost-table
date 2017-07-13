@@ -1,4 +1,31 @@
 {{! Template for the frost-table-header component }}
+
+{{#if _hasCategories}}
+  {{#if isSelectable}}
+    {{! blank cell}}
+    {{frost-table-cell
+      hook=(concat hookPrefix '-cell')
+      class=(concat css '-cell')
+      tagName=cellTagName
+      value=''
+
+      onCallback=(action onCallback -1)
+    }}
+  {{/if}}
+  {{#each _categoryColumns as |column|}}
+    {{frost-table-cell
+      cellRenderer=column.renderer
+      class=(concat css '-cell' ' ' column.className)
+      hook=(concat hookPrefix '-category-cell')
+      hookQualifiers=(extend hookQualifiers category=column.index)
+      tagName=cellTagName
+      value=column.label
+
+      onCallback=(action onCallback column.index)
+    }}
+  {{/each}}
+{{/if}}
+
 {{#if isSelectable}}
   <th class='frost-table-header-cell frost-table-cell'>
     {{frost-table-header-selection

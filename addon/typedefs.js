@@ -13,6 +13,9 @@ import {PropTypes} from 'ember-prop-types'
  * @property {String} propertyName - the name of the property in the data record to display in this column
  * @property {Boolean} [frozen=false] - true if this column should be frozen (on either the left or right side of the table)
  * @property {Component} [renderer] - the cell renderer to use for all data cells in this column
+ * @property {String} [category] - the category the column belongs to
+ * @property {String} [categoryClassName] - the css class name of the category the column belongs to
+ * @property {Component} [headerCategoryRenderer] - the cell renderer to use to the category column in the header
  */
 
 export const ColumnPropType = PropTypes.shape({
@@ -22,7 +25,10 @@ export const ColumnPropType = PropTypes.shape({
   index: PropTypes.number,
   label: PropTypes.string,
   propertyName: PropTypes.string.isRequired,
-  renderer: PropTypes.any
+  renderer: PropTypes.any,
+  category: PropTypes.any,
+  categoryClassName: PropTypes.string,
+  headerCategoryRenderer: PropTypes.any
 })
 
 export const ItemPropType = PropTypes.oneOfType([

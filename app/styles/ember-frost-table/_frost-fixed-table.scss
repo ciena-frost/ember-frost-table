@@ -14,9 +14,21 @@ $frost-fixed-table-selected-cell-margin: -1px;
     flex-direction: row;
   }
 
+  .frost-table-row,
+  .frost-table-header {
+    display: flex;
+  }
+
+  .has-categories {
+    flex-direction: column;
+  }
+
   &-header {
+    position: relative;
+
     &-left {
       position: absolute;
+      bottom: 0;
       left: 0;
     }
 
@@ -33,6 +45,7 @@ $frost-fixed-table-selected-cell-margin: -1px;
     &-right {
       position: absolute;
       right: 0;
+      bottom: 0;
     }
   }
 
@@ -122,6 +135,7 @@ $frost-fixed-table-selected-cell-margin: -1px;
   .frost-table-cell {
     @include frost-table-truncate-text;
     display: inline-block;
+    flex: 1 0 auto;
     vertical-align: middle;
   }
 }
