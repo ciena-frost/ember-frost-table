@@ -1,3 +1,7 @@
+# 1.4.0 (2017-07-13)
+ * **Added** functionality for grouping columns
+
+
 # 1.3.1 (2017-07-12)
 * Upgrade `ember-cli` to `2.12.3`
 
