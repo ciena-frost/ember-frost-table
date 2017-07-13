@@ -5,7 +5,7 @@
 
 import {expect} from 'chai'
 import Ember from 'ember'
-const {$, get} = Ember
+const {$, A, get} = Ember
 import {$hook} from 'ember-hook'
 import wait from 'ember-test-helpers/wait'
 import {integration} from 'ember-test-utils/test-support/setup-component-test'
@@ -116,6 +116,73 @@ describe(test.label, function () {
     it('should be able to grab a cell via a hook', function () {
       const expected = get(heroes[1], columns[1].propertyName)
       expect($hook('myTable-body-row-cell', {row: 1, column: 1}).text().trim()).to.equal(expected)
+    })
+  })
+
+  describe('after render with selection functionality', function () {
+    beforeEach(function () {
+      this.setProperties({
+        selectedItems: A([]),
+        actions: {
+          onSelectionChange (selectedItems) {
+            this.get('selectedItems').setObjects(selectedItems)
+          }
+        }
+      })
+      this.render(hbs`
+        {{frost-table
+          columns=columns
+          hook='myTable'
+          items=heroes
+          itemKey='name'
+          selectedItems=selectedItems
+          onSelectionChange=(action 'onSelectionChange')
+        }}
+      `)
+
+      return wait()
+    })
+
+    it('rows should have "selectable" class', function () {
+      expect(this.$('.frost-table-row')).to.have.class('selectable')
+    })
+
+    it('no row has "is-selected" class', function () {
+      expect(this.$('.frost-table-row')).to.not.have.class('is-selected')
+    })
+
+    it('first column has selection checkboxes', function () {
+      expect($hook('myTable-header-selectionCell')).to.have.length(1)
+      expect($hook('myTable-body-row-selectionCell')).to.have.length(heroes.length)
+    })
+
+    let assertFirstRowSelected = () => {
+      const rows = $hook('myTable-body-row')
+      expect(rows.slice(0, 1)).to.have.class('is-selected')
+      expect(rows.slice(1)).to.not.have.class('is-selected')
+    }
+
+    describe('selecting table row checkbox', function () {
+      beforeEach(function () {
+        $hook('myTable-body-row-selectionCell-checkbox-checkbox-input').eq(0).click()
+        return wait()
+      })
+
+      it('first row is in selected state', function () {
+        assertFirstRowSelected()
+      })
+    })
+
+    describe('selecting the table row', function () {
+      beforeEach(function () {
+        // debugger
+        $hook('myTable-body-row').eq(0).click()
+        return wait()
+      })
+
+      it('first row is in selected state', function () {
+        assertFirstRowSelected()
+      })
     })
   })
 

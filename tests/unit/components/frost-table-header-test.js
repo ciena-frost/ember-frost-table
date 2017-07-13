@@ -141,8 +141,27 @@ describe(test.label, function () {
           component.setProperties({columns: columnsWithCategories})
         })
 
-        it('should have created category columns', function () {
+        let assertCorrectValuesSet = (index, label, span, className, renderer) => {
+          const column = component.get('_categoryColumns')[index]
+          expect(column).to.eql({
+            index,
+            label,
+            span,
+            className,
+            renderer
+          })
+        }
+
+        it('should have created the correct number of category columns', function () {
           expect(component.get('_categoryColumns').length).to.equal(5)
+        })
+
+        it('should have set the correct values in the category column objects', function () {
+          assertCorrectValuesSet(0, '', 1, undefined, undefined)
+          assertCorrectValuesSet(1, 'Infomation', 4, 'info-category', undefined)
+          assertCorrectValuesSet(2, 'Summary', 2, 'sum-category', undefined)
+          assertCorrectValuesSet(3, '', 1, undefined, undefined)
+          assertCorrectValuesSet(4, 'Infomation', 1, 'info-category', undefined)
         })
       })
 
