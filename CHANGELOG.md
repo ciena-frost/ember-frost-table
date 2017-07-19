@@ -1,3 +1,7 @@
+# 1.4.1 (2017-07-19)
+ * **Fixed** issue #22
+
+
 # 1.4.0 (2017-07-13)
  * **Added** functionality for grouping columns
 
