@@ -1,3 +1,4 @@
+/* global $ */
 /**
  * Component definition for the frost-table component
  */
@@ -117,6 +118,16 @@ export default Component.extend({
   // == DOM Events ============================================================
 
   // == Lifecycle Hooks =======================================================
+
+  init () {
+    this._super(...arguments)
+    this._keyHandler = this.setShift.bind(this)
+    $(document).on(`keyup.${this.elementId} keydown.${this.elementId}`, this._keyHandler)
+  },
+
+  willDestroy () {
+    $(document).off(`keyup.${this.elementId} keydown.${this.elementId}`, this._keyHandler)
+  },
 
   didRender () {
     const selectable = this.get('_isSelectable')
