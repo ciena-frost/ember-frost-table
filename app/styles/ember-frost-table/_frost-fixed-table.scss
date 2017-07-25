@@ -2,8 +2,7 @@
 // Styles specific for the frost-fixed-table component (and its pieces)
 //
 
-$frost-fixed-table-selected-cell-padding: calc(#{$frost-table-cell-padding} + 1px);
-$frost-fixed-table-selected-cell-margin: -1px;
+$frost-fixed-table-selected-cell-border-width: 1px;
 
 .frost-fixed-table {
   position: relative;
@@ -70,13 +69,16 @@ $frost-fixed-table-selected-cell-margin: -1px;
       &.is-selected {
         border-right: 0;
 
-        .frost-table-cell {
-          &:first-of-type {
+        .frost-table-row-cell {
+          &:nth-child(1) {
             // Keep column borders aligned
-            margin-left: $frost-fixed-table-selected-cell-margin;
-            padding-left: $frost-fixed-table-selected-cell-padding;
+            margin-left: -$frost-fixed-table-selected-cell-border-width;
           }
         }
+      }
+
+      td { // Checkbox cell when selection is enabled
+        padding: $frost-table-cell-padding;
       }
     }
     // sass-lint:enable nesting-depth
@@ -109,10 +111,9 @@ $frost-fixed-table-selected-cell-margin: -1px;
         border-left: 0;
 
         .frost-table-cell {
-          &:last-of-type {
+          &:nth-last-child(1) {
             // Keep column borders aligned
-            margin-right: $frost-fixed-table-selected-cell-margin;
-            padding-right: $frost-fixed-table-selected-cell-padding;
+            margin-right: -$frost-fixed-table-selected-cell-border-width;
           }
         }
       }
@@ -122,11 +123,14 @@ $frost-fixed-table-selected-cell-margin: -1px;
 
   .frost-table-row {
     &.is-selected {
+      &:not(:nth-child(1)) {
+        margin-top: -$frost-fixed-table-selected-cell-border-width;
+        padding-top: $frost-fixed-table-selected-cell-border-width;
+      }
+
       .frost-table-cell {
-        margin-top: $frost-fixed-table-selected-cell-margin;
-        margin-bottom: $frost-fixed-table-selected-cell-margin;
-        padding-top: $frost-fixed-table-selected-cell-padding;
-        padding-bottom: $frost-fixed-table-selected-cell-padding;
+        margin-top: -$frost-fixed-table-selected-cell-border-width;
+        margin-bottom: -$frost-fixed-table-selected-cell-border-width;
       }
     }
   }
