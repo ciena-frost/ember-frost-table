@@ -125,7 +125,8 @@ export default Component.extend({
     $(document).on(`keyup.${this.elementId} keydown.${this.elementId}`, this._keyHandler)
   },
 
-  willDestroy () {
+  willDestroyElement () {
+    this._super(...arguments)
     $(document).off(`keyup.${this.elementId} keydown.${this.elementId}`, this._keyHandler)
   },
 
