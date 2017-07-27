@@ -1,3 +1,11 @@
+# 1.4.2 (2017-07-26)
+ * **Fixed** the shifting of table cell values when a row is selected
+
+
+# 1.4.1 (2017-07-19)
+ * **Fixed** issue #22
+
+
 # 1.4.0 (2017-07-13)
  * **Added** functionality for grouping columns
 
