@@ -472,8 +472,10 @@ export default Component.extend({
       this.onCallback({action, args, col, row})
     },
 
-    _clickRow (row) {
-      this.$(`${this.get('_bodyLeftSelector')} .frost-table-row`).eq(row).trigger('click')
+    _clickRow (row, event) {
+      const leftSectionRow = this.$(`${this.get('_bodyLeftSelector')} .frost-table-row`).eq(row)
+      event.target = leftSectionRow[0]
+      leftSectionRow.trigger(event)
     },
 
     _select ({isRangeSelect, isSpecificSelect, item}) {
