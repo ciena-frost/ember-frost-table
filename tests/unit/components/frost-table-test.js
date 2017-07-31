@@ -69,7 +69,7 @@ describe(test.label, function () {
       })
 
       describe('selection is not enabled', function () {
-        it('_isSelectable should be true', function () {
+        it('_isSelectable should be false', function () {
           expect(component.get('_isSelectable')).to.equal(false)
         })
       })

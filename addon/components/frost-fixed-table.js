@@ -16,6 +16,7 @@ export default Component.extend({
 
   // == Keyword Properties ====================================================
 
+  classNameBindings: ['_isShiftDown:shift-down'],
   layout,
 
   // == PropTypes =============================================================
@@ -32,6 +33,7 @@ export default Component.extend({
     onSelectionChange: PropTypes.func,
 
     // state
+    _isShiftDown: PropTypes.bool,
     _itemComparator: PropTypes.func,
 
     _rangeState: PropTypes.shape({
@@ -421,9 +423,25 @@ export default Component.extend({
     }
   },
 
+  setShift (event) {
+    if (!this.isDestroyed) {
+      this.set('_isShiftDown', event.shiftKey)
+    }
+  },
+
   // == DOM Events ============================================================
 
   // == Lifecycle Hooks =======================================================
+
+  init () {
+    this._super(...arguments)
+    this._keyHandler = this.setShift.bind(this)
+    $(document).on(`keyup.${this.elementId} keydown.${this.elementId}`, this._keyHandler)
+  },
+
+  willDestroy () {
+    $(document).off(`keyup.${this.elementId} keydown.${this.elementId}`, this._keyHandler)
+  },
 
   /**
    * Set up synced scrolling as well as calculating padding for middle sections
@@ -454,8 +472,10 @@ export default Component.extend({
       this.onCallback({action, args, col, row})
     },
 
-    _clickRow (row) {
-      this.$(`${this.get('_bodyLeftSelector')} .frost-table-row`).eq(row).trigger('click')
+    _clickRow (row, event) {
+      const leftSectionRow = this.$(`${this.get('_bodyLeftSelector')} .frost-table-row`).eq(row)
+      event.target = leftSectionRow[0]
+      leftSectionRow.trigger(event)
     },
 
     _select ({isRangeSelect, isSpecificSelect, item}) {

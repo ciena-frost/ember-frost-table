@@ -142,4 +142,9 @@ $frost-fixed-table-selected-cell-border-width: 1px;
     flex: 1 0 auto;
     vertical-align: middle;
   }
+
+  &.shift-down {
+    // Range select doesn't select text
+    user-select: none;
+  }
 }

@@ -5,7 +5,7 @@
 
 import {expect} from 'chai'
 import Ember from 'ember'
-const {$, A} = Ember
+const {$, A, copy} = Ember
 import {$hook} from 'ember-hook'
 import wait from 'ember-test-helpers/wait'
 import {integration} from 'ember-test-utils/test-support/setup-component-test'
@@ -15,6 +15,8 @@ import sinon from 'sinon'
 
 import {fixedColumns, fixedColumnsWithCustomRenderers, heroes} from './data'
 import {startMirage, stopMirage} from 'dummy/tests/helpers/mirage'
+import {assertRowsSelected, rowBodyRangeSelect, rowBodySingleSelect, rowCheckboxRangeSelect,
+        rowCheckboxSingleSelect} from 'dummy/tests/helpers/selection'
 
 const test = integration('frost-fixed-table')
 describe(test.label, function () {
@@ -388,6 +390,124 @@ describe(test.label, function () {
     })
   })
 
+  describe('after rendering with selection functionality', function () {
+    beforeEach(function () {
+      this.setProperties({
+        selectedItems: A([]),
+        actions: {
+          onSelectionChange (selectedItems) {
+            this.get('selectedItems').setObjects(selectedItems)
+          }
+        }
+      })
+      this.render(hbs`
+        {{frost-fixed-table
+          columns=fixedColumns
+          hook=myHook
+          items=heroes
+          itemKey='name'
+          selectedItems=selectedItems
+          onSelectionChange=(action 'onSelectionChange')
+        }}
+      `)
+
+      return wait()
+    })
+
+    it('rows should have "selectable" class', function () {
+      expect(this.$('.frost-table-row')).to.have.class('selectable')
+    })
+
+    it('no row has "is-selected" class', function () {
+      expect(this.$('.frost-table-row')).to.not.have.class('is-selected')
+    })
+
+    it('first column has selection checkboxes', function () {
+      expect($hook('myTable-header-left-selectionCell')).to.have.length(1)
+      expect($hook('myTable-left-selectionCell')).to.have.length(heroes.length)
+    })
+
+    let _assertRowsSelected = (...rows) => {
+      assertRowsSelected('myTable-left', ...rows)
+      assertRowsSelected('myTable-middle', ...rows)
+      assertRowsSelected('myTable-right', ...rows)
+    }
+
+    describe('selecting table row checkbox', function () {
+      beforeEach(function () {
+        rowCheckboxSingleSelect('myTable-left', 0)
+        return wait()
+      })
+
+      it('first row is in selected state for all sections', function () {
+        _assertRowsSelected(0)
+      })
+    })
+
+    ;['left', 'middle', 'right'].forEach((section) => {
+      describe(`selecting ${section} section row body`, function () {
+        beforeEach(function () {
+          rowBodySingleSelect(`myTable-${section}`, 0)
+          return wait()
+        })
+
+        it('first row is in selected state for all sections', function () {
+          _assertRowsSelected(0)
+        })
+      })
+    })
+
+    describe('selecting a range of checkboxes', function () {
+      beforeEach(function () {
+        rowCheckboxRangeSelect('myTable-left', 0, 4)
+        return wait()
+      })
+
+      it('first 5 rows are in selected for all sections', function () {
+        _assertRowsSelected(0, 1, 2, 3, 4)
+      })
+    })
+
+    ;['left', 'middle', 'right'].forEach((section) => {
+      describe(`selecting a range of ${section} section table row bodies`, function () {
+        beforeEach(function () {
+          rowBodyRangeSelect(`myTable-${section}`, 0, 4)
+          return wait()
+        })
+
+        it('first 5 rows are in selected state', function () {
+          _assertRowsSelected(0, 1, 2, 3, 4)
+        })
+      })
+    })
+
+    describe('selecting multiple row checkboxes', function () {
+      beforeEach(function () {
+        rowCheckboxSingleSelect('myTable-left', 0)
+        rowCheckboxSingleSelect('myTable-left', 1)
+        return wait()
+      })
+
+      it('both rows should be in selected state', function () {
+        _assertRowsSelected(0, 1)
+      })
+    })
+
+    ;['left', 'middle', 'right'].forEach((section) => {
+      describe(`selecting multiple ${section} section row bodies`, function () {
+        beforeEach(function () {
+          rowBodySingleSelect(`myTable-${section}`, 0)
+          rowBodySingleSelect(`myTable-${section}`, 1)
+          return wait()
+        })
+
+        it('only the second row selected should be in selected state', function () {
+          _assertRowsSelected(1)
+        })
+      })
+    })
+  })
+
   describe('events', function () {
     let onCallback
 
@@ -400,7 +520,9 @@ describe(test.label, function () {
       onCallback = sandbox.stub()
       this.setProperties({
         onCallback,
-        fixedColumns: fixedColumnsWithCustomRenderers
+        fixedColumns: fixedColumnsWithCustomRenderers,
+        // deep copy the array as to not overwrite the heroes data for other tests
+        heroes: heroes.map(function (item) { return copy(item, true) })
       })
 
       this.render(hbs`
@@ -536,100 +658,6 @@ describe(test.label, function () {
             })
           })
         })
-      })
-    })
-  })
-
-  describe('after render with selection functionality', function () {
-    beforeEach(function () {
-      this.setProperties({
-        selectedItems: A([]),
-        actions: {
-          onSelectionChange (selectedItems) {
-            this.get('selectedItems').setObjects(selectedItems)
-          }
-        }
-      })
-      this.render(hbs`
-        {{frost-fixed-table
-          columns=fixedColumns
-          hook=myHook
-          items=heroes
-          itemKey='name'
-          selectedItems=selectedItems
-          onSelectionChange=(action 'onSelectionChange')
-        }}
-      `)
-
-      return wait()
-    })
-
-    it('rows should have "selectable" class', function () {
-      expect(this.$('.frost-table-row')).to.have.class('selectable')
-    })
-
-    it('no row has "is-selected" class', function () {
-      expect(this.$('.frost-table-row')).to.not.have.class('is-selected')
-    })
-
-    it('first column has selection checkboxes', function () {
-      expect($hook('myTable-header-left-selectionCell')).to.have.length(1)
-      expect($hook('myTable-left-selectionCell')).to.have.length(heroes.length)
-    })
-
-    let assertFirstRowSelected = () => {
-      for (let section of ['myTable-left', 'myTable-middle', 'myTable-right']) {
-        const rows = $hook(section)
-        expect(rows.slice(0, 1)).to.have.class('is-selected')
-        expect(rows.slice(1)).to.not.have.class('is-selected')
-      }
-    }
-
-    describe('selecting table row checkbox', function () {
-      beforeEach(function () {
-        // debugger
-        $hook('myTable-left-selectionCell-checkbox-checkbox-input').eq(0).click()
-        return wait()
-      })
-
-      it('first row is in selected state', function () {
-        assertFirstRowSelected()
-      })
-    })
-
-    describe('selecting left section row', function () {
-      beforeEach(function () {
-        // debugger
-        $hook('myTable-left').eq(0).click()
-        return wait()
-      })
-
-      it('first row is in selected state', function () {
-        assertFirstRowSelected()
-      })
-    })
-
-    describe('selecting middle section row', function () {
-      beforeEach(function () {
-        // debugger
-        $hook('myTable-middle').eq(0).click()
-        return wait()
-      })
-
-      it('first row is in selected state', function () {
-        assertFirstRowSelected()
-      })
-    })
-
-    describe('selecting right section row', function () {
-      beforeEach(function () {
-        // debugger
-        $hook('myTable-right').eq(0).click()
-        return wait()
-      })
-
-      it('first row is in selected state', function () {
-        assertFirstRowSelected()
       })
     })
   })

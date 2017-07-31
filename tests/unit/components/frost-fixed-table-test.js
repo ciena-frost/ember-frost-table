@@ -204,6 +204,26 @@ describe(test.label, function () {
         })
       })
     })
+
+    describe('_isSelectable', function () {
+      describe('selection is enabled', function () {
+        beforeEach(function () {
+          component.setProperties({
+            onSelectionChange: function () {}
+          })
+        })
+
+        it('_isSelectable should be true', function () {
+          expect(component.get('_isSelectable')).to.equal(true)
+        })
+      })
+
+      describe('selection is not enabled', function () {
+        it('_isSelectable should be false', function () {
+          expect(component.get('_isSelectable')).to.equal(false)
+        })
+      })
+    })
   })
 
   describe('.didRender()', function () {

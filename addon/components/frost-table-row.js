@@ -3,14 +3,14 @@
  */
 
 import Ember from 'ember'
-const {isEmpty} = Ember
+const {ViewUtils, isEmpty} = Ember
+const {isSimpleClick} = ViewUtils
 import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
 import {ColumnPropType, ItemPropType} from 'ember-frost-table/typedefs'
 import {PropTypes} from 'ember-prop-types'
 
 import layout from '../templates/components/frost-table-row'
-import {click} from '../utils/selection'
 
 export default Component.extend({
   // == Dependencies ==========================================================
@@ -64,7 +64,20 @@ export default Component.extend({
   // == DOM Events ============================================================
 
   click (event) {
-    click(event, this.onSelect, this.get('item'))
+    const isRangeSelect = event.shiftKey
+    const isSpecificSelect = false
+
+    // Only process simple clicks or clicks with the acceptable modifiers
+    if (isSimpleClick(event) || isRangeSelect) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      this.onSelect({
+        isRangeSelect,
+        isSpecificSelect,
+        item: this.get('item')
+      })
+    }
   },
 
   // == Lifecycle Hooks =======================================================

@@ -5,7 +5,7 @@
 
 import {expect} from 'chai'
 import Ember from 'ember'
-const {$, A, get} = Ember
+const {$, A, copy, get} = Ember
 import {$hook} from 'ember-hook'
 import wait from 'ember-test-helpers/wait'
 import {integration} from 'ember-test-utils/test-support/setup-component-test'
@@ -15,6 +15,8 @@ import sinon from 'sinon'
 
 import {columns, columnsWithCustomRenderers, heroes} from './data'
 import {startMirage, stopMirage} from 'dummy/tests/helpers/mirage'
+import {assertRowsSelected, rowBodyRangeSelect, rowBodySingleSelect, rowCheckboxRangeSelect,
+        rowCheckboxSingleSelect} from 'dummy/tests/helpers/selection'
 
 const test = integration('frost-table')
 describe(test.label, function () {
@@ -119,7 +121,7 @@ describe(test.label, function () {
     })
   })
 
-  describe('after render with selection functionality', function () {
+  describe('after rendering with selection functionality', function () {
     beforeEach(function () {
       this.setProperties({
         selectedItems: A([]),
@@ -156,32 +158,71 @@ describe(test.label, function () {
       expect($hook('myTable-body-row-selectionCell')).to.have.length(heroes.length)
     })
 
-    let assertFirstRowSelected = () => {
-      const rows = $hook('myTable-body-row')
-      expect(rows.slice(0, 1)).to.have.class('is-selected')
-      expect(rows.slice(1)).to.not.have.class('is-selected')
-    }
-
-    describe('selecting table row checkbox', function () {
+    describe('selecting single checkbox', function () {
       beforeEach(function () {
-        $hook('myTable-body-row-selectionCell-checkbox-checkbox-input').eq(0).click()
+        rowCheckboxSingleSelect('myTable-body-row', 0)
         return wait()
       })
 
       it('first row is in selected state', function () {
-        assertFirstRowSelected()
+        assertRowsSelected('myTable-body-row', 0)
       })
     })
 
-    describe('selecting the table row', function () {
+    describe('selecting single table row body', function () {
       beforeEach(function () {
-        // debugger
-        $hook('myTable-body-row').eq(0).click()
+        rowBodySingleSelect('myTable-body-row', 0)
         return wait()
       })
 
       it('first row is in selected state', function () {
-        assertFirstRowSelected()
+        assertRowsSelected('myTable-body-row', 0)
+      })
+    })
+
+    describe('selecting a range of checkboxes', function () {
+      beforeEach(function () {
+        rowCheckboxRangeSelect('myTable-body-row', 0, 4)
+        return wait()
+      })
+
+      it('first 5 rows are in selected state', function () {
+        assertRowsSelected('myTable-body-row', 0, 1, 2, 3, 4)
+      })
+    })
+
+    describe('selecting a range of table row bodies', function () {
+      beforeEach(function () {
+        rowBodyRangeSelect('myTable-body-row', 0, 4)
+        return wait()
+      })
+
+      it('first 5 rows are in selected state', function () {
+        assertRowsSelected('myTable-body-row', 0, 1, 2, 3, 4)
+      })
+    })
+
+    describe('selecting multiple row checkboxes', function () {
+      beforeEach(function () {
+        rowCheckboxSingleSelect('myTable-body-row', 0)
+        rowCheckboxSingleSelect('myTable-body-row', 1)
+        return wait()
+      })
+
+      it('both rows should be in selected state', function () {
+        assertRowsSelected('myTable-body-row', 0, 1)
+      })
+    })
+
+    describe('selecting multiple row bodies', function () {
+      beforeEach(function () {
+        rowBodySingleSelect('myTable-body-row', 0)
+        rowBodySingleSelect('myTable-body-row', 1)
+        return wait()
+      })
+
+      it('only the second row selected should be in selected state', function () {
+        assertRowsSelected('myTable-body-row', 1)
       })
     })
   })
@@ -198,7 +239,9 @@ describe(test.label, function () {
       onCallback = sandbox.stub()
       this.setProperties({
         columns: columnsWithCustomRenderers,
-        onCallback
+        onCallback,
+        // deep copy the array as to not overwrite the heroes data for other tests
+        heroes: heroes.map(function (item) { return copy(item, true) })
       })
 
       this.render(hbs`
