@@ -1,3 +1,7 @@
+# 1.4.3 (2017-07-31)
+ * **Fixed** selection functionality to match `ember-frost-list`
+
+
 # 1.4.2 (2017-07-26)
  * **Fixed** the shifting of table cell values when a row is selected
 
