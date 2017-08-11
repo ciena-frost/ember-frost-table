@@ -1,3 +1,6 @@
+# 1.4.4 (2017-08-11)
+* Upgrade ember-cli 2.12.3 inter-dependencies
+
 # 1.4.3 (2017-07-31)
  * **Fixed** selection functionality to match `ember-frost-list`
 
