@@ -98,14 +98,14 @@ describe(test.label, function () {
   describe('.setCellWidths()', function () {
     let bodyColumn1Stub, bodyColumn2Stub, headerColumn1Stub, headerColumn2Stub, categoriesStub
     beforeEach(function () {
-      bodyColumn1Stub = createSelectorStub('css', 'outerWidth')
-      bodyColumn2Stub = createSelectorStub('css', 'outerWidth')
+      bodyColumn1Stub = createSelectorStub('css')
+      bodyColumn2Stub = createSelectorStub('css')
       headerColumn1Stub = createSelectorStub('css', 'outerWidth')
       headerColumn2Stub = createSelectorStub('css', 'outerWidth')
       categoriesStub = createSelectorStub()
 
-      bodyColumn1Stub.outerWidth.returns(50)
-      bodyColumn2Stub.outerWidth.returns(100)
+      bodyColumn1Stub.css.withArgs('flex-basis').returns(50)
+      bodyColumn2Stub.css.withArgs('flex-basis').returns(100)
       headerColumn1Stub.outerWidth.returns(100)
       headerColumn2Stub.outerWidth.returns(50)
       categoriesStub.length = 0
@@ -129,11 +129,11 @@ describe(test.label, function () {
       })
 
       it('should have set header column width', function () {
-        expect(headerColumn1Stub.css).to.have.been.calledWithExactly('width', '100px')
+        expect(headerColumn1Stub.css).to.have.been.calledWithExactly('flex-basis', '100px')
       })
 
       it('should have set body column width', function () {
-        expect(bodyColumn1Stub.css).to.have.been.calledWithExactly('width', '100px')
+        expect(bodyColumn1Stub.css).to.have.been.calledWithExactly('flex-basis', '100px')
       })
     })
 
@@ -148,17 +148,17 @@ describe(test.label, function () {
       })
 
       it('should have set header column width', function () {
-        expect(headerColumn2Stub.css).to.have.been.calledWithExactly('width', '100px')
+        expect(headerColumn2Stub.css).to.have.been.calledWithExactly('flex-basis', '100px')
       })
 
       it('should have set body column width', function () {
-        expect(bodyColumn2Stub.css).to.have.been.calledWithExactly('width', '100px')
+        expect(bodyColumn2Stub.css).to.have.been.calledWithExactly('flex-basis', '100px')
       })
     })
   })
 
-  describe('.didRender()', function () {
-    let column1, column2, column3, headerStub, bodyStub
+  describe('.didInsertElement()', function () {
+    let column1, column2, column3, tableStub, selectionCell, headerSelectionCell
     beforeEach(function () {
       column1 = {}
       column2 = {}
@@ -166,29 +166,76 @@ describe(test.label, function () {
       component.setProperties({
         columns: [column1, column2, column3]
       })
-      headerStub = createSelectorStub('css')
-      bodyStub = createSelectorStub('css')
-      sandbox.stub(component, 'setCellWidths')
-        .withArgs(1).returns(100)
-        .withArgs(2).returns(50)
-        .withArgs(3).returns(25)
+      tableStub = createSelectorStub('css')
+      selectionCell = createSelectorStub('css')
+      headerSelectionCell = createSelectorStub('css')
       sandbox.stub(component, '$')
-        .withArgs('.frost-table-header').returns(headerStub)
-        .withArgs('.frost-table-body').returns(bodyStub)
-
-      component.didRender()
+        .withArgs('.frost-table-row-selection').returns(selectionCell)
+        .withArgs('.frost-table-header-selection-cell').returns(headerSelectionCell)
+        .withArgs().returns(tableStub)
     })
 
-    it('should have aligned each column', function () {
-      expect(component.setCellWidths).to.have.callCount(3)
+    describe('with selection enabled', function () {
+      beforeEach(function () {
+        component.setProperties({
+          onSelectionChange: () => {}
+        })
+        sandbox.stub(component, 'setCellWidths')
+          .withArgs(1).returns(100)
+          .withArgs(2).returns(50)
+          .withArgs(3).returns(25)
+          .withArgs(4).returns(25)
+
+        component.didInsertElement()
+      })
+
+      it('should have aligned each column', function () {
+        expect(component.setCellWidths).to.have.callCount(4)
+      })
+
+      it('should have set table minimum width', function () {
+        expect(tableStub.css).to.have.been.calledWithExactly('min-width', '200px')
+      })
+
+      it('should ensure selection column stays same size', function () {
+        expect(selectionCell.css).to.have.been.calledWithExactly({
+          'flex-grow': 0,
+          'flex-shrink': 0
+        })
+      })
+
+      it('should ensure selection header column stays same size', function () {
+        expect(headerSelectionCell.css).to.have.been.calledWithExactly({
+          'flex-grow': 0,
+          'flex-shrink': 0
+        })
+      })
     })
 
-    it('should have set header width', function () {
-      expect(headerStub.css).to.have.been.calledWithExactly('width', '175px')
-    })
+    describe('with selection not enabled', function () {
+      beforeEach(function () {
+        sandbox.stub(component, 'setCellWidths')
+          .withArgs(1).returns(100)
+          .withArgs(2).returns(50)
+          .withArgs(3).returns(25)
+        component.didInsertElement()
+      })
 
-    it('should have set body width', function () {
-      expect(bodyStub.css).to.have.been.calledWithExactly('width', '175px')
+      it('should have aligned each column', function () {
+        expect(component.setCellWidths).to.have.callCount(3)
+      })
+
+      it('should have set table minimum width', function () {
+        expect(tableStub.css).to.have.been.calledWithExactly('min-width', '175px')
+      })
+
+      it('should not have touch selection column', function () {
+        expect(selectionCell.css).to.have.callCount(0)
+      })
+
+      it('should not have touch selection header column', function () {
+        expect(headerSelectionCell.css).to.have.callCount(0)
+      })
     })
   })
 

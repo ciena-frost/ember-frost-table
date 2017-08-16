@@ -2,7 +2,7 @@
  * Component definition for the frost-table-header component
  */
 import Ember from 'ember'
-const {A, isEmpty} = Ember
+const {A, isNone, run} = Ember
 import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
 import {ColumnPropType} from 'ember-frost-table/typedefs'
@@ -62,7 +62,7 @@ export default Component.extend({
   @computed('columns')
   _hasCategories (columns) {
     return columns.some(function (column) {
-      return !isEmpty(column.category)
+      return !isNone(column.category)
     })
   },
 
@@ -85,7 +85,11 @@ export default Component.extend({
         })
       }
       return categoryColumns
-    }, A())
+    }, A(this.get('isSelectable') ? [{
+      index: index++,
+      label: '',
+      span: 1
+    }] : []))
   },
 
   // == Functions =============================================================
@@ -95,57 +99,71 @@ export default Component.extend({
       this.getProperties('rowTagName', '_categoryColumns', '_categoryRowClass', '_columnRowClass')
 
     // Wrap category and regular header columns into separate rows
-    const lastCategoryIndex = this.accountForSelectionColumn(_categoryColumns.length)
+    const lastCategoryIndex = _categoryColumns.length
     this.$('.frost-table-header-cell').slice(0, lastCategoryIndex)
       .wrapAll(`<${rowTagName} class='${_categoryRowClass} frost-table-row frost-table-header-row'></${rowTagName}>`)
     this.$('.frost-table-header-cell').slice(lastCategoryIndex)
       .wrapAll(`<${rowTagName} class='${_columnRowClass} frost-table-row frost-table-header-row'></${rowTagName}>`)
   },
 
+  alignColumns () {
+    const rowClass = this.get('_hasCategories') ? `.${this.get('_columnRowClass')}` : ''
+    const columnSelector = `${rowClass} .frost-table-cell`
+
+    this.$(columnSelector).toArray().forEach((el) => {
+      const flexBasis = this.parseFloatOrDefault(this.$(el).css('flex-basis'), this.$(el).outerWidth(true))
+      this.$(el).css('flex', `1 0 ${flexBasis}px`)
+    })
+  },
+
   alignCategories () {
-    const {_categoryColumns, _categoryRowClass, _columnRowClass, cellTagName} =
-      this.getProperties('cellTagName', '_categoryColumns', '_categoryRowClass', '_columnRowClass')
+    const {_categoryColumns, _categoryRowClass, _columnRowClass} =
+      this.getProperties('_categoryColumns', '_categoryRowClass', '_columnRowClass')
     const categorySelector = `.${_categoryRowClass} .frost-table-cell`
     const columnSelector = `.${_columnRowClass} .frost-table-cell`
 
-    if (cellTagName === 'th' || cellTagName === 'td') {
-      // Make use of colspan property
-      _categoryColumns.forEach((category, index) => {
-        index = this.accountForSelectionColumn(index)
-        this.$(categorySelector).eq(index).attr('colspan', category.span)
+    let startColumn = 0
+    _categoryColumns.forEach((category, index) => {
+      let categoryFlexBasis = 0
+      let categoryFlexGrow = 0
+      let categoryFlexShrink = 0
+      this.$(columnSelector).slice(startColumn, startColumn + category.span).toArray().forEach((el) => {
+        const flexBasis = parseFloat(this.$(el).css('flex-basis'))
+        const flexGrow = parseFloat(this.$(el).css('flex-grow'))
+        const flexShrink = parseFloat(this.$(el).css('flex-shrink'))
+
+        categoryFlexBasis += flexBasis
+        categoryFlexGrow += flexGrow
+        categoryFlexShrink += flexShrink
       })
-    } else {
-      // Need to determine and set width
-      let startColumn = this.accountForSelectionColumn(0)
-      _categoryColumns.forEach((category, index) => {
-        let totalWidth = 0
-        this.$(columnSelector).slice(startColumn, startColumn + category.span).toArray().forEach((el) => {
-          totalWidth += this.$(el).outerWidth()
-        })
-        this.$(categorySelector).eq(index).css({
-          'width': `${totalWidth}px`
-        })
-        startColumn += category.span
+      this.$(categorySelector).eq(index).css({
+        'flex': `${categoryFlexGrow} ${categoryFlexShrink} ${categoryFlexBasis}px`
       })
-    }
+      startColumn += category.span
+    })
   },
 
-  accountForSelectionColumn (num) {
-    if (this.get('isSelectable')) {
-      return num + 1
+  parseFloatOrDefault (string, defaultVal) {
+    const float = parseFloat(string)
+    if (!isNaN(float)) {
+      return float
     }
-    return num
+    return defaultVal
   },
 
   // == DOM Events ============================================================
 
   // == Lifecycle Hooks =======================================================
 
-  didRender () {
+  didInsertElement () {
+    this._super(...arguments)
     if (this.get('_hasCategories')) {
       this.setupRows()
-      this.alignCategories()
+      run.next(this, () => {
+        this.alignCategories()
+      })
     }
+    this.alignColumns()
   },
 
   // == Actions ===============================================================

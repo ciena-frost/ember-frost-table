@@ -5,7 +5,9 @@
 $frost-fixed-table-selected-cell-border-width: 1px;
 
 .frost-fixed-table {
+  display: flex;
   position: relative;
+  flex-direction: column;
 
   &-header,
   &-body {
@@ -18,18 +20,8 @@ $frost-fixed-table-selected-cell-border-width: 1px;
     display: flex;
   }
 
-  .has-categories {
-    flex-direction: column;
-  }
-
   &-header {
     position: relative;
-
-    &-left {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-    }
 
     &-middle {
       position: relative;
@@ -40,24 +32,22 @@ $frost-fixed-table-selected-cell-border-width: 1px;
         display: none;
       }
     }
-
-    &-right {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-    }
   }
 
   &-left,
   &-middle,
   &-right {
+    display: flex;
     overflow: hidden;
+
+    .frost-scroll {
+      flex: auto;
+    }
   }
 
   &-left {
-    position: absolute;
-    left: 0;
     box-shadow: 23px 0 15px -4px $frost-table-box-shadow-color;
+    z-index: 1;
 
     // NOTE this level of specificity is required to override perfect-scroll default styles
     .ps-container > .ps-scrollbar-y-rail {
@@ -69,16 +59,11 @@ $frost-fixed-table-selected-cell-border-width: 1px;
       &.is-selected {
         border-right: 0;
 
-        .frost-table-row-cell {
-          &:nth-child(1) {
-            // Keep column borders aligned
-            margin-left: -$frost-fixed-table-selected-cell-border-width;
+        .frost-table-cell {
+          &:nth-last-child(1) {
+            margin-right: 0;
           }
         }
-      }
-
-      td { // Checkbox cell when selection is enabled
-        padding: $frost-table-cell-padding;
       }
     }
     // sass-lint:enable nesting-depth
@@ -92,28 +77,19 @@ $frost-fixed-table-selected-cell-border-width: 1px;
       display: none;
     }
 
+    // sass-lint:disable nesting-depth
     .frost-table-row {
       &.is-selected {
         border-right: 0;
         border-left: 0;
-      }
-    }
-  }
-
-  &-right {
-    position: absolute;
-    right: 0;
-    box-shadow: -23px 0 15px -4px $frost-table-box-shadow-color;
-
-    // sass-lint:disable nesting-depth
-    .frost-table-row {
-      &.is-selected {
-        border-left: 0;
 
         .frost-table-cell {
+          &:nth-child(1) {
+            margin-left: 0;
+          }
+
           &:nth-last-child(1) {
-            // Keep column borders aligned
-            margin-right: -$frost-fixed-table-selected-cell-border-width;
+            margin-right: 0;
           }
         }
       }
@@ -121,26 +97,29 @@ $frost-fixed-table-selected-cell-border-width: 1px;
     // sass-lint:enable nesting-depth
   }
 
-  .frost-table-row {
-    &.is-selected {
-      &:not(:nth-child(1)) {
-        margin-top: -$frost-fixed-table-selected-cell-border-width;
-        padding-top: $frost-fixed-table-selected-cell-border-width;
-      }
+  &-right {
+    box-shadow: -23px 0 15px -4px $frost-table-box-shadow-color;
+    z-index: 1;
 
-      .frost-table-cell {
-        margin-top: -$frost-fixed-table-selected-cell-border-width;
-        margin-bottom: -$frost-fixed-table-selected-cell-border-width;
+    // sass-lint:disable nesting-depth
+    .frost-table-row {
+      &.is-selected {
+        border-left: 0;
+
+        .frost-table-cell {
+          &:nth-child(1) {
+            margin-left: 0;
+          }
+        }
       }
     }
+    // sass-lint:enable nesting-depth
   }
-
 
   .frost-table-cell {
     @include frost-table-truncate-text;
-    display: inline-block;
-    flex: 1 0 auto;
-    vertical-align: middle;
+    flex: 0 0 auto;
+    align-items: center;
   }
 
   &.shift-down {

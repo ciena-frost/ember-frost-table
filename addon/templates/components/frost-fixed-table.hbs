@@ -3,10 +3,20 @@
   class={{concat css '-header'}}
   data-test={{hook (concat hookPrefix '-header') hookQualifiers}}
 >
-  {{!--
-    Strange as it seems, we want middle above left/right so that left/right are on top of middle.
-    The left and right are positioned absolutely so that they stay where they should be
-  --}}
+  <div class={{concat css '-header-left'}}>
+    {{frost-table-header
+      cellTagName='div'
+      rowTagName='div'
+      columns=leftColumns
+      hook=(concat hookPrefix '-header-left')
+      hookQualifiers=hookQualifiers
+      tagName='div'
+      isSelectable=_isSelectable
+
+      onCallback=(action 'handleCallback' -1)
+      onSelectionChange=onSelectionChange
+    }}
+  </div>
   <div class={{concat css '-header-middle'}}>
     {{#frost-scroll
       hook=(concat hookPrefix '-middleHeaderScroll')
@@ -24,20 +34,6 @@
         onCallback=(action 'handleCallback' -1)
       }}
     {{/frost-scroll}}
-  </div>
-  <div class={{concat css '-header-left'}}>
-    {{frost-table-header
-      cellTagName='div'
-      rowTagName='div'
-      columns=leftColumns
-      hook=(concat hookPrefix '-header-left')
-      hookQualifiers=hookQualifiers
-      tagName='div'
-      isSelectable=_isSelectable
-
-      onCallback=(action 'handleCallback' -1)
-      onSelectionChange=onSelectionChange
-    }}
   </div>
   <div class={{concat css '-header-right'}}>
     {{frost-table-header
@@ -57,33 +53,6 @@
   class={{concat css '-body'}}
   data-test={{hook (concat hookPrefix '-body') hookQualifiers}}
 >
-  {{!--
-    Strange as it seems, we want middle above left/right so that left/right are on top of middle.
-    The left and right are positioned absolutely so that they stay where they should be
-  --}}
-  <div class={{concat css '-middle'}}>
-    {{#frost-scroll
-      hook=(concat hookPrefix '-bodyMiddleScroll')
-      hookQualifiers=hookQualifiers
-    }}
-      {{#each items as |item index|}}
-        {{frost-table-row
-          class=(if _isSelectable 'selectable')
-          cellTagName='div'
-          columns=middleColumns
-          hook=(concat hookPrefix '-middle')
-          hookQualifiers=(extend hookQualifiers row=index)
-          item=item
-          tagName='div'
-          selectedItems=selectedItems
-
-          onCallback=(action 'handleCallback' index)
-          click=(action '_clickRow' index)
-        }}
-      {{/each}}
-    {{/frost-scroll}}
-  </div>
-
   <div class={{concat css '-left'}}>
     {{#frost-scroll
       hook=(concat hookPrefix '-bodyLeftScroll')
@@ -103,6 +72,29 @@
 
           onCallback=(action 'handleCallback' index)
           onSelect=(action '_select')
+        }}
+      {{/each}}
+    {{/frost-scroll}}
+  </div>
+
+  <div class={{concat css '-middle'}}>
+    {{#frost-scroll
+      hook=(concat hookPrefix '-bodyMiddleScroll')
+      hookQualifiers=hookQualifiers
+    }}
+      {{#each items as |item index|}}
+        {{frost-table-row
+          class=(if _isSelectable 'selectable')
+          cellTagName='div'
+          columns=middleColumns
+          hook=(concat hookPrefix '-middle')
+          hookQualifiers=(extend hookQualifiers row=index)
+          item=item
+          tagName='div'
+          selectedItems=selectedItems
+
+          onCallback=(action 'handleCallback' index)
+          click=(action '_clickRow' index)
         }}
       {{/each}}
     {{/frost-scroll}}

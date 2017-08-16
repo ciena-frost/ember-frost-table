@@ -3,6 +3,7 @@
  */
 
 import {expect} from 'chai'
+import wait from 'ember-test-helpers/wait'
 import {unit} from 'ember-test-utils/test-support/setup-component-test'
 import {afterEach, beforeEach, describe, it} from 'mocha'
 import sinon from 'sinon'
@@ -178,17 +179,20 @@ describe(test.label, function () {
     })
   })
 
-  describe('.didRender()', function () {
+  describe('.didInsertElement()', function () {
     beforeEach(function () {
       sandbox.stub(component, 'setupRows')
       sandbox.stub(component, 'alignCategories')
+      sandbox.stub(component, 'alignColumns')
     })
 
     describe('with categories', function () {
       beforeEach(function () {
         sandbox.stub(component, 'get').withArgs('_hasCategories').returns(true)
 
-        component.didRender()
+        component.didInsertElement()
+
+        return wait()
       })
 
       it('should havewrapped header cells in row tags', function () {
@@ -198,11 +202,15 @@ describe(test.label, function () {
       it('should have aligned the category cells', function () {
         expect(component.alignCategories).to.have.callCount(1)
       })
+
+      it('should not have aligned the column cells', function () {
+        expect(component.alignColumns).to.have.callCount(1)
+      })
     })
 
     describe('without categories', function () {
       beforeEach(function () {
-        component.didRender()
+        component.didInsertElement()
       })
 
       it('should not have wrapped header cells in row tags', function () {
@@ -211,6 +219,10 @@ describe(test.label, function () {
 
       it('should not have aligned the category cells', function () {
         expect(component.alignCategories).to.have.callCount(0)
+      })
+
+      it('should not have aligned the column cells', function () {
+        expect(component.alignColumns).to.have.callCount(1)
       })
     })
   })

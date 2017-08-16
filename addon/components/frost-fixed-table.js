@@ -143,7 +143,18 @@ export default Component.extend({
   },
 
   @readOnly
-  @computed('indexedColumns')
+  @computed('columns')
+  /**
+   * Pre-computed indices
+   * @param {Column[]} columns - the column data we want to present
+   * @returns {Boolean} true if the table will have categories, false otherwise
+   */
+  haveCategories (columns) {
+    return columns.reduce((cur, column) => { return cur || !isNone(column.category) }, false)
+  },
+
+  @readOnly
+  @computed('indexedColumns', 'haveCategories')
   /**
    * Get the set of columns that are supposed to be frozen on the left
    *
@@ -151,13 +162,17 @@ export default Component.extend({
    * starting with the first column until we reach one w/o `frozen` === `true`
    *
    * @param {Column[]} columns - all the columns
+   * @param {Boolean} haveCategories - if the header has categories
    * @returns {Column[]} just the left-most frozen columns
    */
-  leftColumns (columns) {
+  leftColumns (columns, haveCategories) {
     const frozenColumns = []
     for (let i = 0; i < columns.length; i++) {
       const column = columns[i]
       if (column.frozen) {
+        if (haveCategories && isNone(column.category)) {
+          column.category = ''
+        }
         frozenColumns.push(column)
       } else {
         return frozenColumns
@@ -168,7 +183,7 @@ export default Component.extend({
   },
 
   @readOnly
-  @computed('indexedColumns')
+  @computed('indexedColumns', 'haveCategories')
   /**
    * Get the set of columns that are supposed to be in the middle (between the frozen left and frozen right columns)
    *
@@ -176,9 +191,10 @@ export default Component.extend({
    * starting with whatever the first column is with `frozen` === `false` until we reach one with `frozen` === `true`
    *
    * @param {Column[]} columns - all the columns
+   * @param {Boolean} haveCategories - if the header has categories
    * @returns {Column[]} just the middle columns
    */
-  middleColumns (columns) {
+  middleColumns (columns, haveCategories) {
     const unFrozenColumns = []
     let foundUnFrozen = false
     for (let i = 0; i < columns.length; i++) {
@@ -188,6 +204,9 @@ export default Component.extend({
           return unFrozenColumns
         }
       } else {
+        if (haveCategories && isNone(column.category)) {
+          column.category = ''
+        }
         foundUnFrozen = true
         unFrozenColumns.push(column)
       }
@@ -197,7 +216,7 @@ export default Component.extend({
   },
 
   @readOnly
-  @computed('indexedColumns')
+  @computed('indexedColumns', 'haveCategories')
   /**
    * Get the set of columns that are supposed to be frozen on the right
    *
@@ -205,13 +224,17 @@ export default Component.extend({
    * starting with the first `frozen` === `true` column after we've seen at least one `frozen` === `false` column.
    *
    * @param {Column[]} columns - all the columns
+   * @param {Boolean} haveCategories - if the header has categories
    * @returns {Column[]} just the middle columns
    */
-  rightColumns (columns) {
+  rightColumns (columns, haveCategories) {
     const frozenColumns = []
     for (let i = columns.length - 1; i > 0; i--) {
       const column = columns[i]
       if (column.frozen) {
+        if (haveCategories && isNone(column.category)) {
+          column.category = ''
+        }
         frozenColumns.push(column)
       } else {
         return frozenColumns.reverse()
@@ -304,49 +327,26 @@ export default Component.extend({
     })
   },
 
-  /**
-   * Calculate the widths of the left and right side and set the marings of the middle accordingly.
-   */
-  setupMiddleMargins () {
-    const bodyLeftSelector = this.get('_bodyLeftSelector')
-    const bodyRightSelector = this.get('_bodyRightSelector')
-
-    const leftWidth = this.$(bodyLeftSelector).outerWidth()
-    const rightWidth = this.$(bodyRightSelector).outerWidth()
-
-    const headerMiddleSelector = this.get('_headerMiddleSelector')
-    const bodyMiddleSelector = this.get('_bodyMiddleSelector')
-    ;[headerMiddleSelector, bodyMiddleSelector].forEach((selector) => {
-      this.$(selector).css({
-        'margin-left': `${leftWidth}px`,
-        'margin-right': `${rightWidth}px`
-      })
-    })
+  setupLeftWidths () {
+    this.setMinimumCellWidths(this.get('_bodyLeftSelector'), this.get('leftColumns').length, true)
+    const leftWidth = this.alignColumns(this.get('_headerLeftSelector'), this.get('_bodyLeftSelector'))
+    this.$(`${this.get('_headerLeftSelector')}`).css('flex', `1 0 ${leftWidth}px`)
+    this.$(`${this.get('_bodyLeftSelector')}`).parent().css('flex', `1 0 ${leftWidth}px`)
   },
 
-  /**
-   * Calculate how wide the middle sections should be by adding the sum of all the inner cells, then set that width
-   */
   setupMiddleWidths () {
-    const headerMiddleSelector = this.get('_headerMiddleSelector')
-    const bodyMiddleSelector = this.get('_bodyMiddleSelector')
-    const cellRowSelector = this._categoryRowSelector(headerMiddleSelector)
-
-    const width = this._calculateWidth(`${headerMiddleSelector} ${cellRowSelector} .frost-table-cell`)
-    const cssWidth = `${width}px`
-    const cssProperties = {
-      'width': cssWidth,
-      'flex-basis': cssWidth
-    }
-    this.$(`${headerMiddleSelector} .frost-table-header`).css(cssProperties)
-    this.$(`${bodyMiddleSelector} .frost-table-row`).css(cssProperties)
-
-    this.alignColumns(headerMiddleSelector, bodyMiddleSelector)
+    this.setMinimumCellWidths(this.get('_bodyMiddleSelector'), this.get('middleColumns').length, false)
+    const middleWidth = this.alignColumns(this.get('_headerMiddleSelector'), this.get('_bodyMiddleSelector'))
+    this.$(`${this.get('_headerMiddleSelector')}`).parent().css('flex', `1 1 ${middleWidth}px`)
+    this.$(`${this.get('_bodyMiddleSelector')}`).parent().css('flex', `1 1 ${middleWidth}px`)
+    this.$(`${this.get('_bodyMiddleSelector')} .frost-table-row`).css('min-width', `${middleWidth}px`)
   },
 
-  setupLeftAndRightWidths () {
-    this.alignColumns(this.get('_headerLeftSelector'), this.get('_bodyLeftSelector'))
-    this.alignColumns(this.get('_headerRightSelector'), this.get('_bodyRightSelector'))
+  setupRightWidths () {
+    this.setMinimumCellWidths(this.get('_bodyRightSelector'), this.get('rightColumns').length, false)
+    const rightWidth = this.alignColumns(this.get('_headerRightSelector'), this.get('_bodyRightSelector'))
+    this.$(`${this.get('_headerRightSelector')}`).css('flex', `1 0 ${rightWidth}px`)
+    this.$(`${this.get('_bodyRightSelector')}`).parent().css('flex', `1 0 ${rightWidth}px`)
   },
 
   /**
@@ -405,28 +405,53 @@ export default Component.extend({
   alignColumns (headerSelecter, bodySelector) {
     const cellRowSelector = this._categoryRowSelector(headerSelecter)
     const headerCells = this.$(`${headerSelecter} ${cellRowSelector} .frost-table-header-cell`)
+    let totalWidth = 0
     for (let pos = 0; pos < headerCells.length; ++pos) {
       const curBodyColumn = this.$(`${bodySelector} .frost-table-row .frost-table-row-cell:nth-child(${pos + 1})`)
       const curHeaderCell = headerCells.eq(pos)
-      const bodyCellWidth = curBodyColumn.outerWidth(true)
+
+      const bodyCellFlexBasis = parseFloat(curBodyColumn.css('flex-basis'))
       const headerCellWidth = curHeaderCell.outerWidth(true)
 
-      const width = bodyCellWidth > headerCellWidth ? bodyCellWidth : headerCellWidth
-
-      const cssWidth = `${width}px`
-      const cssProperties = {
-        'width': cssWidth,
-        'flex-basis': cssWidth
+      if (isNaN(bodyCellFlexBasis) || headerCellWidth > bodyCellFlexBasis) {
+        curHeaderCell.css('flex-basis', `${headerCellWidth}px`)
+        curBodyColumn.css('flex-basis', `${headerCellWidth}px`)
+        totalWidth += headerCellWidth
+      } else {
+        curHeaderCell.css('flex-basis', `${bodyCellFlexBasis}px`)
+        curBodyColumn.css('flex-basis', `${bodyCellFlexBasis}px`)
+        totalWidth += bodyCellFlexBasis
       }
-      curHeaderCell.css(cssProperties)
-      curBodyColumn.css(cssProperties)
     }
+    return totalWidth
   },
 
   setShift (event) {
     if (!this.isDestroyed) {
       this.set('_isShiftDown', event.shiftKey)
     }
+  },
+
+  setMinimumCellWidths (bodySelector, numColumns, accountForSelection) {
+    for (let pos = 1; pos <= numColumns; ++pos) {
+      const curBodyColumn = this.$(`${bodySelector} .frost-table-row .frost-table-row-cell:nth-child(` +
+        `${accountForSelection ? this.accountForSelectionColumn(pos) : pos})`)
+
+      // Get width of widest body cell in the column
+      const cellWidths = curBodyColumn.toArray().map((col) => {
+        return this.$(col).outerWidth(true)
+      })
+      const width = Math.max.apply(null, cellWidths)
+
+      curBodyColumn.css('flex', `1 0 ${width}px`)
+    }
+  },
+
+  accountForSelectionColumn (num) {
+    if (this.get('_isSelectable')) {
+      return num + 1
+    }
+    return num
   },
 
   // == DOM Events ============================================================
@@ -450,10 +475,29 @@ export default Component.extend({
     this._super(...arguments)
     this.setupBodyHeights()
     this.setupHoverProxy()
-    this.setupLeftAndRightWidths() // Needs to happen before setting up middle section
-    this.setupMiddleWidths()
-    this.setupMiddleMargins()
     this.setupScrollSync()
+  },
+
+  didInsertElement () {
+    // Only should do these operations on first insertion
+    this._super(...arguments)
+
+    // Selection column does not need to grow
+    const selectable = this.get('_isSelectable')
+    if (selectable) {
+      this.$('.frost-table-header-selection-cell').css({
+        'flex-grow': 0,
+        'flex-shrink': 0
+      })
+      this.$('.frost-table-row-selection').css({
+        'flex-grow': 0,
+        'flex-shrink': 0
+      })
+    }
+
+    this.setupLeftWidths()
+    this.setupMiddleWidths()
+    this.setupRightWidths()
   },
 
   // == Actions ===============================================================

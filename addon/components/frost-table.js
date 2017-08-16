@@ -97,15 +97,18 @@ export default Component.extend({
     const curBodyColumn = this.$(`.frost-table-row .frost-table-body-cell:nth-child(${position})`)
     const curHeaderCell = this.$(`.frost-table-header ${cellRowSelector} .frost-table-cell:nth-child(${position})`)
 
-    const bodyCellWidth = curBodyColumn.outerWidth(true)
+    const bodyCellFlexBasis = parseFloat(curBodyColumn.css('flex-basis'))
     const headerCellWidth = curHeaderCell.outerWidth(true)
 
-    const width = bodyCellWidth > headerCellWidth ? bodyCellWidth : headerCellWidth
-
-    curHeaderCell.css('width', `${width}px`)
-    curBodyColumn.css('width', `${width}px`)
-
-    return width
+    if (isNaN(bodyCellFlexBasis) || headerCellWidth > bodyCellFlexBasis) {
+      curHeaderCell.css('flex-basis', `${headerCellWidth}px`)
+      curBodyColumn.css('flex-basis', `${headerCellWidth}px`)
+      return headerCellWidth
+    } else {
+      curHeaderCell.css('flex-basis', `${bodyCellFlexBasis}px`)
+      curBodyColumn.css('flex-basis', `${bodyCellFlexBasis}px`)
+      return bodyCellFlexBasis
+    }
   },
 
   accountForSelectionColumn (num) {
@@ -130,18 +133,28 @@ export default Component.extend({
     $(document).off(`keyup.${this.elementId} keydown.${this.elementId}`, this._keyHandler)
   },
 
-  didRender () {
+  didInsertElement () {
+    this._super(...arguments)
     const selectable = this.get('_isSelectable')
     let totalWidth = 0
     if (selectable) {
+      // Selection column does not need to grow
+      this.$('.frost-table-header-selection-cell').css({
+        'flex-grow': 0,
+        'flex-shrink': 0
+      })
+      this.$('.frost-table-row-selection').css({
+        'flex-grow': 0,
+        'flex-shrink': 0
+      })
       totalWidth += this.setCellWidths(1)
     }
     this.columns.forEach((column, index) => {
-      const position = index + this.accountForSelectionColumn(1)
+      const position = this.accountForSelectionColumn(index + 1)
       totalWidth += this.setCellWidths(position)
     })
-    this.$('.frost-table-header').css('width', `${totalWidth}px`)
-    this.$('.frost-table-body').css('width', `${totalWidth}px`)
+
+    this.$().css('min-width', `${totalWidth}px`)
   },
 
   // == Actions ===============================================================
