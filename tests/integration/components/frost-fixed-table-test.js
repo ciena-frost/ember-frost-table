@@ -423,8 +423,11 @@ describe(test.label, function () {
     })
 
     it('first column has selection checkboxes', function () {
-      expect($hook('myTable-header-left-selectionCell')).to.have.length(1)
       expect($hook('myTable-left-selectionCell')).to.have.length(heroes.length)
+    })
+
+    it('header should have clear selection cell', function () {
+      expect($hook('myTable-header-left-selectionCell')).to.have.length(1)
     })
 
     let _assertRowsSelected = (...rows) => {
@@ -504,6 +507,21 @@ describe(test.label, function () {
         it('only the second row selected should be in selected state', function () {
           _assertRowsSelected(1)
         })
+      })
+    })
+
+    describe('clearing the selection', function () {
+      beforeEach(function () {
+        rowBodySingleSelect('myTable-left', 0)
+        return wait().then(() => {
+          _assertRowsSelected(0)
+          $hook('myTable-header-left-selectionCell').click()
+          return wait()
+        })
+      })
+
+      it('no row should be selected', function () {
+        expect(this.$('.is-selected')).to.have.length(0)
       })
     })
   })
