@@ -227,6 +227,45 @@ describe(test.label, function () {
         })
       })
     })
+
+    describe('haveCategories', function () {
+      describe('have columns with categories', function () {
+        beforeEach(function () {
+          component.setProperties({columns})
+        })
+
+        it('haveCategories should be true', function () {
+          expect(component.get('haveCategories')).to.equal(true)
+        })
+      })
+
+      describe('no columns with categories', function () {
+        beforeEach(function () {
+          component.setProperties({
+            columns: [
+              {
+                frozen: true,
+                propertyName: 'name'
+              },
+              {
+                frozen: true,
+                propertyName: 'description'
+              },
+              {
+                propertyName: 'info1'
+              },
+              {
+                propertyName: 'info2'
+              }
+            ]
+          })
+        })
+
+        it('haveCategories should be false', function () {
+          expect(component.get('haveCategories')).to.equal(false)
+        })
+      })
+    })
   })
 
   describe('.didRender()', function () {
@@ -270,11 +309,6 @@ describe(test.label, function () {
     it('should set up left widths', function () {
       expect(component.setupRightWidths).to.have.callCount(1)
     })
-  })
-
-  describe('._calculateWidth()', function () {
-    // TODO: add tests, need to figure out how to stub Ember.$ properly for this one
-
   })
 
   describe('.setupBodyHeights()', function () {

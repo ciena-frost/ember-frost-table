@@ -252,21 +252,6 @@ export default Component.extend({
 
   // == Functions =============================================================
 
-  /**
-   * Get the width of the middle section by adding up the widths of all the cells
-   * @param {String} cellSelector - the selector to use to find the cells
-   * @returns {Number} the combined outer width of all cells (in pixels)
-   */
-  _calculateWidth (cellSelector) {
-    let width = 0
-
-    this.$(cellSelector).toArray().forEach((el) => {
-      width += $(el).outerWidth()
-    })
-
-    return width
-  },
-
   _categoryRowSelector (sectionSelector) {
     return this.$(`${sectionSelector} .frost-table-header-columns`).length === 1
       ? '.frost-table-header-columns' : ''
