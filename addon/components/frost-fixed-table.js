@@ -479,16 +479,14 @@ export default Component.extend({
     },
 
     _select ({isRangeSelect, isSpecificSelect, item}) {
-      if (this.get('_isSelectable')) {
-        const items = this.get('items')
-        const itemKey = this.get('itemKey')
-        const clonedSelectedItems = A(this.get('selectedItems').slice())
-        const _rangeState = this.get('_rangeState')
+      const items = this.get('items')
+      const itemKey = this.get('itemKey')
+      const clonedSelectedItems = A(this.get('selectedItems').slice())
+      const _rangeState = this.get('_rangeState')
 
-        select(isRangeSelect, isSpecificSelect, item, itemKey, items, clonedSelectedItems, _rangeState)
+      select(isRangeSelect, isSpecificSelect, item, itemKey, items, clonedSelectedItems, _rangeState)
 
-        this.onSelectionChange(clonedSelectedItems)
-      }
+      this.onSelectionChange(clonedSelectedItems)
     }
   }
 })
