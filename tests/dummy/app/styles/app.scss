@@ -192,3 +192,14 @@ dl {
   width: 90px;
 }
 // END-SNIPPET
+
+.frost-table {
+  max-height: 500px;
+}
+
+
+// BEGIN-SNIPPET multi-line-renderer
+.line {
+  white-space: pre-line;
+}
+//END-SNIPPET

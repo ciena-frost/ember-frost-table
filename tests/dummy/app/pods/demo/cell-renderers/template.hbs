@@ -1,0 +1,68 @@
+{{! template-lint-disable bare-strings }}
+{{!-- BEGIN-SNIPPET cell-renderer }}
+  {{component 'cell-renderer'
+    hook= // e.g. myCellRenderer
+    item= // item associated with the cell's row
+    value // item value to display in this cell
+  }}
+{{ END-SNIPPET --}}
+
+
+<div class='frost-demo-api'>
+  <div class='frost-demo-title'>
+    Selection API
+  </div>
+  <br>
+  <div class='frost-demo-notes'>
+    Can be applied to body or header cells for a particular column
+  </div>
+  <div class='frost-demo-snippet'>
+    {{code-snippet name='cell-renderer.hbs'}}
+  </div>
+  <div class='frost-demo-title'>
+    Examples
+  </div>
+  <div class='frost-demo-notes'>
+    text-input-renderer
+  </div>
+  <div class='frost-demo-snippet'>
+    {{code-snippet name='text-input-renderer.js'}}
+    {{code-snippet name='text-input-renderer.hbs'}}
+  </div>
+  <div class='frost-demo-notes'>
+    multi-line-renderer
+  </div>
+  <div class='frost-demo-snippet'>
+    {{code-snippet name='multi-line-renderer.js'}}
+    {{code-snippet name='multi-line-renderer.hbs'}}
+    {{code-snippet name='multi-line-renderer.scss'}}
+  </div>
+</div>
+<div class='frost-demo-live'>
+  <div class='frost-demo-title'>
+    Live demo
+  </div>
+  <div class='frost-demo-snippet'>
+    {{code-snippet name='cell-renderer-table.hbs'}}
+  </div>
+  <div class='frost-demo-launch'>
+    {{! BEGIN-SNIPPET cell-renderer-table }}
+    {{frost-table
+      columns=(array
+        (hash
+          label='Name'
+          propertyName='name'
+          renderer=(component 'text-input-renderer')
+        )
+        (hash
+          label='Team Affiliations'
+          propertyName='teamAffiliations'
+          renderer=(component 'multi-line-renderer')
+        )
+      )
+      hook='myTable'
+      items=heroes
+    }}
+    {{! END-SNIPPET }}
+  </div>
+</div>
