@@ -64,19 +64,21 @@ export default Component.extend({
   // == DOM Events ============================================================
 
   click (event) {
-    const isRangeSelect = event.shiftKey
-    const isSpecificSelect = false
+    if (this.get('isSelectable')) {
+      const isRangeSelect = event.shiftKey
+      const isSpecificSelect = false
 
-    // Only process simple clicks or clicks with the acceptable modifiers
-    if (isSimpleClick(event) || isRangeSelect) {
-      event.preventDefault()
-      event.stopPropagation()
+      // Only process simple clicks or clicks with the acceptable modifiers
+      if (isSimpleClick(event) || isRangeSelect) {
+        event.preventDefault()
+        event.stopPropagation()
 
-      this.onSelect({
-        isRangeSelect,
-        isSpecificSelect,
-        item: this.get('item')
-      })
+        this.onSelect({
+          isRangeSelect,
+          isSpecificSelect,
+          item: this.get('item')
+        })
+      }
     }
   },
 
