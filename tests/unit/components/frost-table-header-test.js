@@ -102,40 +102,6 @@ describe(test.label, function () {
   })
 
   describe('Computed Properties', function () {
-    describe('_categoryRowClass', function () {
-      it('should have set categories row CSS class', function () {
-        expect(component.get('_categoryRowClass')).to.equal('frost-table-header-categories')
-      })
-    })
-
-    describe('_columnRowClass', function () {
-      it('should have set columns row CSS class', function () {
-        expect(component.get('_columnRowClass')).to.equal('frost-table-header-columns')
-      })
-    })
-
-    describe('_hasCategories', function () {
-      describe('with categories set', function () {
-        beforeEach(function () {
-          component.setProperties({columns: columnsWithCategories})
-        })
-
-        it('should have detected categories', function () {
-          expect(component.get('_hasCategories')).to.eql(true)
-        })
-      })
-
-      describe('without categories set', function () {
-        beforeEach(function () {
-          component.setProperties({columns})
-        })
-
-        it('should have detected no categories', function () {
-          expect(component.get('_hasCategories')).to.eql(false)
-        })
-      })
-    })
-
     describe('_categoryColumns', function () {
       describe('with categories set', function () {
         beforeEach(function () {
@@ -183,19 +149,19 @@ describe(test.label, function () {
     beforeEach(function () {
       sandbox.stub(component, 'setupRows')
       sandbox.stub(component, 'alignCategories')
-      sandbox.stub(component, 'alignColumns')
+      sandbox.stub(component, 'setMinimumCellWidths')
     })
 
     describe('with categories', function () {
       beforeEach(function () {
-        sandbox.stub(component, 'get').withArgs('_hasCategories').returns(true)
+        sandbox.stub(component, 'get').withArgs('haveCategories').returns(true)
 
         component.didInsertElement()
 
         return wait()
       })
 
-      it('should havewrapped header cells in row tags', function () {
+      it('should have wrapped header cells in row tags', function () {
         expect(component.setupRows).to.have.callCount(1)
       })
 
@@ -204,7 +170,7 @@ describe(test.label, function () {
       })
 
       it('should not have aligned the column cells', function () {
-        expect(component.alignColumns).to.have.callCount(1)
+        expect(component.setMinimumCellWidths).to.have.callCount(1)
       })
     })
 
@@ -222,7 +188,7 @@ describe(test.label, function () {
       })
 
       it('should not have aligned the column cells', function () {
-        expect(component.alignColumns).to.have.callCount(1)
+        expect(component.setMinimumCellWidths).to.have.callCount(1)
       })
     })
   })
@@ -282,8 +248,82 @@ describe(test.label, function () {
     })
   })
 
-  describe('._alignCategories()', function () {
-    // TODO: add tests, need to figure out how to stub Ember.$ properly for this one
+  describe('.alignCategories()', function () {
+    let categoriesStub, columnsStub, columnStubs, categoryStubs
+    beforeEach(function () {
+      component.setProperties({columns: columnsWithCategories})
 
+      columnsStub = createSelectorStub('slice')
+      categoriesStub = createSelectorStub('eq')
+
+      sandbox.stub(component, '$')
+        .withArgs('.frost-table-header-columns .frost-table-cell').returns(columnsStub)
+        .withArgs('.frost-table-header-categories .frost-table-cell').returns(categoriesStub)
+
+      columnStubs = columnsWithCategories.map((item, index) => {
+        const stub = createSelectorStub('css')
+        stub.css.withArgs('flex-basis').returns(`${5 * (index + 1)}px`)
+        stub.css.withArgs('flex-grow').returns(1)
+        stub.css.withArgs('flex-shrink').returns(0)
+        component.$.withArgs(stub).returns(stub)
+        return stub
+      })
+
+      categoryStubs = component.get('_categoryColumns').map((item, index) => {
+        return createSelectorStub('css')
+      })
+
+      let startColumn = 0
+      component.get('_categoryColumns').forEach((item, index) => {
+        const endColumn = startColumn + item.span
+        const sliceStub = createSelectorStub('toArray')
+        columnsStub.slice.withArgs(startColumn, endColumn).returns(sliceStub)
+        sliceStub.toArray.returns(columnStubs.slice(startColumn, endColumn))
+        categoriesStub.eq.withArgs(index).returns(categoryStubs[index])
+        startColumn = endColumn
+      })
+
+      component.alignCategories()
+    })
+
+    it('should have set correct minimum width for first category', function () {
+      expect(categoryStubs[0].css).to.have.been.calledWithExactly({
+        'flex-grow': 1,
+        'flex-shrink': 0,
+        'flex-basis': '5px'
+      })
+    })
+
+    it('should have set correct minimum width for second category', function () {
+      expect(categoryStubs[1].css).to.have.been.calledWithExactly({
+        'flex-grow': 4,
+        'flex-shrink': 0,
+        'flex-basis': '70px'
+      })
+    })
+
+    it('should have set correct minimum width for third category', function () {
+      expect(categoryStubs[2].css).to.have.been.calledWithExactly({
+        'flex-grow': 2,
+        'flex-shrink': 0,
+        'flex-basis': '65px'
+      })
+    })
+
+    it('should have set correct minimum width for fourth category', function () {
+      expect(categoryStubs[3].css).to.have.been.calledWithExactly({
+        'flex-grow': 1,
+        'flex-shrink': 0,
+        'flex-basis': '40px'
+      })
+    })
+
+    it('should have set correct minimum width for fifth category', function () {
+      expect(categoryStubs[4].css).to.have.been.calledWithExactly({
+        'flex-grow': 1,
+        'flex-shrink': 0,
+        'flex-basis': '45px'
+      })
+    })
   })
 })

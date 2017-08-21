@@ -2,56 +2,36 @@
  * Component definition for the frost-fixed-table component
  */
 import Ember from 'ember'
-const {$, A, isNone} = Ember
+const {isNone} = Ember
 import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
-import {ColumnPropType, ItemPropType, ItemsPropType} from 'ember-frost-table/typedefs'
+import {ItemsPropType} from 'ember-frost-table/typedefs'
 import {PropTypes} from 'ember-prop-types'
 
+import SelectionMixin from '../mixins/selection'
+import TableMixin from '../mixins/table'
 import layout from '../templates/components/frost-fixed-table'
-import {select} from '../utils/selection'
 
-export default Component.extend({
+export default Component.extend(SelectionMixin, TableMixin, {
   // == Dependencies ==========================================================
 
   // == Keyword Properties ====================================================
 
-  classNameBindings: ['_isShiftDown:shift-down'],
   layout,
 
   // == PropTypes =============================================================
 
   propTypes: {
     // options:
-    columns: PropTypes.arrayOf(ColumnPropType).isRequired,
     items: ItemsPropType.isRequired,
-    itemKey: PropTypes.string,
-    selectedItems: PropTypes.arrayOf(ItemPropType),
 
     // callbacks
-    onCallback: PropTypes.func,
-    onSelectionChange: PropTypes.func,
-
-    // state
-    _isShiftDown: PropTypes.bool,
-    _itemComparator: PropTypes.func,
-
-    _rangeState: PropTypes.shape({
-      anchor: PropTypes.oneOfType([
-        PropTypes.EmberObject,
-        PropTypes.object
-      ]),
-      endpoint: PropTypes.oneOfType([
-        PropTypes.EmberObject,
-        PropTypes.object
-      ])
-    })
+    onCallback: PropTypes.func
   },
 
   getDefaultProps () {
     return {
       // options
-      columns: [],
       items: [],
       // do nothing by default, as the grid may not have any custom renderers that would need to emit events
       onCallback () {},
@@ -140,17 +120,6 @@ export default Component.extend({
    */
   indexedColumns (columns) {
     return columns.map((column, index) => Object.assign({index}, column))
-  },
-
-  @readOnly
-  @computed('columns')
-  /**
-   * Pre-computed indices
-   * @param {Column[]} columns - the column data we want to present
-   * @returns {Boolean} true if the table will have categories, false otherwise
-   */
-  haveCategories (columns) {
-    return columns.reduce((cur, column) => { return cur || !isNone(column.category) }, false)
   },
 
   @readOnly
@@ -244,18 +213,7 @@ export default Component.extend({
     return frozenColumns.reverse()
   },
 
-  @readOnly
-  @computed()
-  _isSelectable () {
-    return !isNone(this.get('onSelectionChange'))
-  },
-
   // == Functions =============================================================
-
-  _categoryRowSelector (sectionSelector) {
-    return this.$(`${sectionSelector} .frost-table-header-columns`).length === 1
-      ? '.frost-table-header-columns' : ''
-  },
 
   /**
    * Make the three body sections (left, middle, right) the correct height to stay within the bounds of the
@@ -313,25 +271,49 @@ export default Component.extend({
   },
 
   setupLeftWidths () {
-    this.setMinimumCellWidths(this.get('_bodyLeftSelector'), this.get('leftColumns').length, true)
+    this.setMinimumCellWidths(this.get('_bodyLeftSelector'))
     const leftWidth = this.alignColumns(this.get('_headerLeftSelector'), this.get('_bodyLeftSelector'))
-    this.$(`${this.get('_headerLeftSelector')}`).css('flex', `1 0 ${leftWidth}px`)
-    this.$(`${this.get('_bodyLeftSelector')}`).parent().css('flex', `1 0 ${leftWidth}px`)
+    this.$(`${this.get('_headerLeftSelector')}`).css({
+      'flex-grow': 1,
+      'flex-shrink': 0,
+      'flex-basis': `${leftWidth}px`
+    })
+    this.$(`${this.get('_bodyLeftSelector')}`).parent().css({
+      'flex-grow': 1,
+      'flex-shrink': 0,
+      'flex-basis': `${leftWidth}px`
+    })
   },
 
   setupMiddleWidths () {
-    this.setMinimumCellWidths(this.get('_bodyMiddleSelector'), this.get('middleColumns').length, false)
+    this.setMinimumCellWidths(this.get('_bodyMiddleSelector'))
     const middleWidth = this.alignColumns(this.get('_headerMiddleSelector'), this.get('_bodyMiddleSelector'))
-    this.$(`${this.get('_headerMiddleSelector')}`).parent().css('flex', `1 1 ${middleWidth}px`)
-    this.$(`${this.get('_bodyMiddleSelector')}`).parent().css('flex', `1 1 ${middleWidth}px`)
+    this.$(`${this.get('_headerMiddleSelector')}`).parent().css({
+      'flex-grow': 1,
+      'flex-shrink': 1,
+      'flex-basis': `${middleWidth}px`
+    })
+    this.$(`${this.get('_bodyMiddleSelector')}`).parent().css({
+      'flex-grow': 1,
+      'flex-shrink': 1,
+      'flex-basis': `${middleWidth}px`
+    })
     this.$(`${this.get('_bodyMiddleSelector')} .frost-table-row`).css('min-width', `${middleWidth}px`)
   },
 
   setupRightWidths () {
-    this.setMinimumCellWidths(this.get('_bodyRightSelector'), this.get('rightColumns').length, false)
+    this.setMinimumCellWidths(this.get('_bodyRightSelector'))
     const rightWidth = this.alignColumns(this.get('_headerRightSelector'), this.get('_bodyRightSelector'))
-    this.$(`${this.get('_headerRightSelector')}`).css('flex', `1 0 ${rightWidth}px`)
-    this.$(`${this.get('_bodyRightSelector')}`).parent().css('flex', `1 0 ${rightWidth}px`)
+    this.$(`${this.get('_headerRightSelector')}`).css({
+      'flex-grow': 1,
+      'flex-shrink': 0,
+      'flex-basis': `${rightWidth}px`
+    })
+    this.$(`${this.get('_bodyRightSelector')}`).parent().css({
+      'flex-grow': 1,
+      'flex-shrink': 0,
+      'flex-basis': `${rightWidth}px`
+    })
   },
 
   /**
@@ -387,71 +369,9 @@ export default Component.extend({
     })
   },
 
-  alignColumns (headerSelecter, bodySelector) {
-    const cellRowSelector = this._categoryRowSelector(headerSelecter)
-    const headerCells = this.$(`${headerSelecter} ${cellRowSelector} .frost-table-header-cell`)
-    let totalWidth = 0
-    for (let pos = 0; pos < headerCells.length; ++pos) {
-      const curBodyColumn = this.$(`${bodySelector} .frost-table-row .frost-table-row-cell:nth-child(${pos + 1})`)
-      const curHeaderCell = headerCells.eq(pos)
-
-      const bodyCellFlexBasis = parseFloat(curBodyColumn.css('flex-basis'))
-      const headerCellWidth = curHeaderCell.outerWidth(true)
-
-      if (isNaN(bodyCellFlexBasis) || headerCellWidth > bodyCellFlexBasis) {
-        curHeaderCell.css('flex-basis', `${headerCellWidth}px`)
-        curBodyColumn.css('flex-basis', `${headerCellWidth}px`)
-        totalWidth += headerCellWidth
-      } else {
-        curHeaderCell.css('flex-basis', `${bodyCellFlexBasis}px`)
-        curBodyColumn.css('flex-basis', `${bodyCellFlexBasis}px`)
-        totalWidth += bodyCellFlexBasis
-      }
-    }
-    return totalWidth
-  },
-
-  setShift (event) {
-    if (!this.isDestroyed) {
-      this.set('_isShiftDown', event.shiftKey)
-    }
-  },
-
-  setMinimumCellWidths (bodySelector, numColumns, accountForSelection) {
-    for (let pos = 1; pos <= numColumns; ++pos) {
-      const curBodyColumn = this.$(`${bodySelector} .frost-table-row .frost-table-row-cell:nth-child(` +
-        `${accountForSelection ? this.accountForSelectionColumn(pos) : pos})`)
-
-      // Get width of widest body cell in the column
-      const cellWidths = curBodyColumn.toArray().map((col) => {
-        return this.$(col).outerWidth(true)
-      })
-      const width = Math.max.apply(null, cellWidths)
-
-      curBodyColumn.css('flex', `1 0 ${width}px`)
-    }
-  },
-
-  accountForSelectionColumn (num) {
-    if (this.get('_isSelectable')) {
-      return num + 1
-    }
-    return num
-  },
-
   // == DOM Events ============================================================
 
   // == Lifecycle Hooks =======================================================
-
-  init () {
-    this._super(...arguments)
-    this._keyHandler = this.setShift.bind(this)
-    $(document).on(`keyup.${this.elementId} keydown.${this.elementId}`, this._keyHandler)
-  },
-
-  willDestroy () {
-    $(document).off(`keyup.${this.elementId} keydown.${this.elementId}`, this._keyHandler)
-  },
 
   /**
    * Set up synced scrolling as well as calculating padding for middle sections
@@ -466,20 +386,6 @@ export default Component.extend({
   didInsertElement () {
     // Only should do these operations on first insertion
     this._super(...arguments)
-
-    // Selection column does not need to grow
-    const selectable = this.get('_isSelectable')
-    if (selectable) {
-      this.$('.frost-table-header-selection-cell').css({
-        'flex-grow': 0,
-        'flex-shrink': 0
-      })
-      this.$('.frost-table-row-selection').css({
-        'flex-grow': 0,
-        'flex-shrink': 0
-      })
-    }
-
     this.setupLeftWidths()
     this.setupMiddleWidths()
     this.setupRightWidths()
@@ -505,19 +411,6 @@ export default Component.extend({
       const leftSectionRow = this.$(`${this.get('_bodyLeftSelector')} .frost-table-row`).eq(row)
       event.target = leftSectionRow[0]
       leftSectionRow.trigger(event)
-    },
-
-    _select ({isRangeSelect, isSpecificSelect, item}) {
-      if (this.get('_isSelectable')) {
-        const items = this.get('items')
-        const itemKey = this.get('itemKey')
-        const clonedSelectedItems = A(this.get('selectedItems').slice())
-        const _rangeState = this.get('_rangeState')
-
-        select(isRangeSelect, isSpecificSelect, item, itemKey, items, clonedSelectedItems, _rangeState)
-
-        this.onSelectionChange(clonedSelectedItems)
-      }
     }
   }
 })

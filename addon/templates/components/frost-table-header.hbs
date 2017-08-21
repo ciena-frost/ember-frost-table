@@ -1,6 +1,6 @@
 {{! Template for the frost-table-header component }}
 
-{{#if _hasCategories}}
+{{#if haveCategories}}
   {{#each _categoryColumns as |column|}}
     {{frost-table-cell
       cellRenderer=column.renderer

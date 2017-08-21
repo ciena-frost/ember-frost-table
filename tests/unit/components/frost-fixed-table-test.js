@@ -208,7 +208,7 @@ describe(test.label, function () {
       })
     })
 
-    describe('_isSelectable', function () {
+    describe('isSelectable', function () {
       describe('selection is enabled', function () {
         beforeEach(function () {
           component.setProperties({
@@ -216,14 +216,14 @@ describe(test.label, function () {
           })
         })
 
-        it('_isSelectable should be true', function () {
-          expect(component.get('_isSelectable')).to.equal(true)
+        it('isSelectable should be true', function () {
+          expect(component.get('isSelectable')).to.equal(true)
         })
       })
 
       describe('selection is not enabled', function () {
-        it('_isSelectable should be false', function () {
-          expect(component.get('_isSelectable')).to.equal(false)
+        it('isSelectable should be false', function () {
+          expect(component.get('isSelectable')).to.equal(false)
         })
       })
     })
@@ -492,9 +492,7 @@ describe(test.label, function () {
     it('should have called .setMinimumCellWidths() for left table cells', function () {
       expect(component.setMinimumCellWidths, 'Called incorrect number of times').to.have.callCount(1)
       expect(component.setMinimumCellWidths, 'Called with incorrect parameters').to.have.been.calledWithExactly(
-        '.frost-fixed-table-left .frost-scroll',
-        2,
-        true
+        '.frost-fixed-table-left .frost-scroll'
       )
     })
 
@@ -508,18 +506,20 @@ describe(test.label, function () {
 
     it('should have set left header section minimum width', function () {
       expect(leftHeaderStub.css, 'Called incorrect number of times').to.have.callCount(1)
-      expect(leftHeaderStub.css, 'Called with incorrect parameters').to.have.been.calledWithExactly(
-        'flex',
-        `1 0 ${RETURNED_WIDTH}px`
-      )
+      expect(leftHeaderStub.css, 'Called with incorrect parameters').to.have.been.calledWithExactly({
+        'flex-grow': 1,
+        'flex-shrink': 0,
+        'flex-basis': `${RETURNED_WIDTH}px`
+      })
     })
 
     it('should have set left body section minimum width', function () {
       expect(leftBodyStub.css, 'Called incorrect number of times').to.have.callCount(1)
-      expect(leftBodyStub.css, 'Called with incorrect parameters').to.have.been.calledWithExactly(
-        'flex',
-        `1 0 ${RETURNED_WIDTH}px`
-      )
+      expect(leftBodyStub.css, 'Called with incorrect parameters').to.have.been.calledWithExactly({
+        'flex-grow': 1,
+        'flex-shrink': 0,
+        'flex-basis': `${RETURNED_WIDTH}px`
+      })
     })
   })
 
@@ -550,9 +550,7 @@ describe(test.label, function () {
     it('should have called .setMinimumCellWidths() for middle table cells', function () {
       expect(component.setMinimumCellWidths, 'Called incorrect number of times').to.have.callCount(1)
       expect(component.setMinimumCellWidths, 'Called with incorrect parameters').to.have.been.calledWithExactly(
-        '.frost-fixed-table-middle .frost-scroll',
-        3,
-        false
+        '.frost-fixed-table-middle .frost-scroll'
       )
     })
 
@@ -566,18 +564,20 @@ describe(test.label, function () {
 
     it('should have set middle header section minimum width', function () {
       expect(middleHeaderStub.css, 'Called incorrect number of times').to.have.callCount(1)
-      expect(middleHeaderStub.css, 'Called with incorrect parameters').to.have.been.calledWithExactly(
-        'flex',
-        `1 1 ${RETURNED_WIDTH}px`
-      )
+      expect(middleHeaderStub.css, 'Called with incorrect parameters').to.have.been.calledWithExactly({
+        'flex-grow': 1,
+        'flex-shrink': 1,
+        'flex-basis': `${RETURNED_WIDTH}px`
+      })
     })
 
     it('should have set middle body section minimum width', function () {
       expect(middleBodyStub.css, 'Called incorrect number of times').to.have.callCount(1)
-      expect(middleBodyStub.css, 'Called with incorrect parameters').to.have.been.calledWithExactly(
-        'flex',
-        `1 1 ${RETURNED_WIDTH}px`
-      )
+      expect(middleBodyStub.css, 'Called with incorrect parameters').to.have.been.calledWithExactly({
+        'flex-grow': 1,
+        'flex-shrink': 1,
+        'flex-basis': `${RETURNED_WIDTH}px`
+      })
     })
 
     it('should have set middle rows minimum width', function () {
@@ -612,9 +612,7 @@ describe(test.label, function () {
     it('should have called .setMinimumCellWidths() for left table cells', function () {
       expect(component.setMinimumCellWidths, 'Called incorrect number of times').to.have.callCount(1)
       expect(component.setMinimumCellWidths, 'Called with incorrect parameters').to.have.been.calledWithExactly(
-        '.frost-fixed-table-right .frost-scroll',
-        2,
-        false
+        '.frost-fixed-table-right .frost-scroll'
       )
     })
 
@@ -628,18 +626,20 @@ describe(test.label, function () {
 
     it('should have set left header section minimum width', function () {
       expect(rightHeaderStub.css, 'Called incorrect number of times').to.have.callCount(1)
-      expect(rightHeaderStub.css, 'Called with incorrect parameters').to.have.been.calledWithExactly(
-        'flex',
-        `1 0 ${RETURNED_WIDTH}px`
-      )
+      expect(rightHeaderStub.css, 'Called with incorrect parameters').to.have.been.calledWithExactly({
+        'flex-grow': 1,
+        'flex-shrink': 0,
+        'flex-basis': `${RETURNED_WIDTH}px`
+      })
     })
 
     it('should have set left body section minimum width', function () {
       expect(rightBodyStub.css, 'Called incorrect number of times').to.have.callCount(1)
-      expect(rightBodyStub.css, 'Called with incorrect parameters').to.have.been.calledWithExactly(
-        'flex',
-        `1 0 ${RETURNED_WIDTH}px`
-      )
+      expect(rightBodyStub.css, 'Called with incorrect parameters').to.have.been.calledWithExactly({
+        'flex-grow': 1,
+        'flex-shrink': 0,
+        'flex-basis': `${RETURNED_WIDTH}px`
+      })
     })
   })
 
@@ -792,143 +792,7 @@ describe(test.label, function () {
     })
   })
 
-  describe('.alignColumns()', function () {
-    let headerStub, headerColumnsStub, headerColumn1Stub, headerColumn2Stub, bodyColumn1Stub, bodyColumn2Stub
-    beforeEach(function () {
-      headerStub = createSelectorStub()
-      headerColumnsStub = createSelectorStub('eq', 'length')
-      headerColumn1Stub = createSelectorStub('css', 'outerWidth')
-      headerColumn2Stub = createSelectorStub('css', 'outerWidth')
-      bodyColumn1Stub = createSelectorStub('css')
-      bodyColumn2Stub = createSelectorStub('css')
-      sandbox.stub(component, '_categoryRowSelector').returns('.frost-table-header-columns')
-      sandbox.stub(component, '$')
-        .withArgs('.header-class .frost-table-header-columns .frost-table-header-cell')
-          .returns(headerColumnsStub)
-        .withArgs('.body-class .frost-table-row .frost-table-row-cell:nth-child(1)')
-          .returns(bodyColumn1Stub)
-        .withArgs('.body-class .frost-table-row .frost-table-row-cell:nth-child(2)')
-          .returns(bodyColumn2Stub)
-        .withArgs('.has-categories')
-          .returns(headerStub)
-
-      headerStub.length = 1
-      headerColumnsStub.length = 2
-      headerColumnsStub.eq.withArgs(0).returns(headerColumn1Stub)
-      headerColumnsStub.eq.withArgs(1).returns(headerColumn2Stub)
-
-      headerColumn1Stub.outerWidth.returns(100)
-      headerColumn2Stub.outerWidth.returns(20)
-
-      bodyColumn1Stub.css.withArgs('flex-basis').returns(20)
-      bodyColumn2Stub.css.withArgs('flex-basis').returns(100)
-
-      component.alignColumns('.header-class', '.body-class')
-    })
-
-    it('should set width and flex-basis of body columns', function () {
-      expect(bodyColumn1Stub.css).to.have.been.calledWithExactly('flex-basis', '100px')
-      expect(bodyColumn2Stub.css).to.have.been.calledWithExactly('flex-basis', '100px')
-    })
-
-    it('should set width and flex-basis of header columns', function () {
-      expect(headerColumn1Stub.css).to.have.been.calledWithExactly('flex-basis', '100px')
-      expect(headerColumn2Stub.css).to.have.been.calledWithExactly('flex-basis', '100px')
-    })
-  })
-
-  describe('.setMinimumCellWidths()', function () {
-    let column1Stub, column2Stub, cell1Stub, cell2Stub, cell3Stub, cell4Stub
-    beforeEach(function () {
-      column1Stub = createSelectorStub('css', 'toArray')
-      column2Stub = createSelectorStub('css', 'toArray')
-      cell1Stub = createSelectorStub('outerWidth')
-      cell2Stub = createSelectorStub('outerWidth')
-      cell3Stub = createSelectorStub('outerWidth')
-      cell4Stub = createSelectorStub('outerWidth')
-
-      column1Stub.toArray.returns([cell1Stub, cell2Stub])
-      column2Stub.toArray.returns([cell3Stub, cell4Stub])
-      cell1Stub.outerWidth.returns(10)
-      cell2Stub.outerWidth.returns(20)
-      cell3Stub.outerWidth.returns(40)
-      cell4Stub.outerWidth.returns(30)
-    })
-
-    describe('when no selection column', function () {
-      beforeEach(function () {
-        sandbox.stub(component, '$')
-          .withArgs('.foo .frost-table-row .frost-table-row-cell:nth-child(1)')
-            .returns(column1Stub)
-          .withArgs('.foo .frost-table-row .frost-table-row-cell:nth-child(2)')
-            .returns(column2Stub)
-          .withArgs(cell1Stub)
-            .returns(cell1Stub)
-          .withArgs(cell2Stub)
-            .returns(cell2Stub)
-          .withArgs(cell3Stub)
-            .returns(cell3Stub)
-          .withArgs(cell4Stub)
-            .returns(cell4Stub)
-        component.setMinimumCellWidths('.foo', 2, false)
-      })
-
-      it('should set correct minimum width for first column', function () {
-        expect(column1Stub.css).to.have.been.calledWithExactly('flex', '1 0 20px')
-      })
-
-      it('should set correct minimum width for second column', function () {
-        expect(column2Stub.css).to.have.been.calledWithExactly('flex', '1 0 40px')
-      })
-    })
-
-    describe('when selection column', function () {
-      let selectionColumnStub, selectionCell1Stub, selectionCell2Stub
-      beforeEach(function () {
-        selectionColumnStub = createSelectorStub('css', 'toArray')
-        selectionCell1Stub = createSelectorStub('outerWidth')
-        selectionCell2Stub = createSelectorStub('outerWidth')
-        selectionColumnStub.toArray.returns([selectionCell1Stub, selectionCell2Stub])
-
-        sandbox.stub(component, '$')
-          .withArgs('.foo .frost-table-row .frost-table-row-cell:nth-child(1)')
-            .returns(selectionColumnStub)
-          .withArgs('.foo .frost-table-row .frost-table-row-cell:nth-child(2)')
-            .returns(column1Stub)
-          .withArgs('.foo .frost-table-row .frost-table-row-cell:nth-child(3)')
-            .returns(column2Stub)
-          .withArgs(cell1Stub)
-            .returns(cell1Stub)
-          .withArgs(cell2Stub)
-            .returns(cell2Stub)
-          .withArgs(cell3Stub)
-            .returns(cell3Stub)
-          .withArgs(cell4Stub)
-            .returns(cell4Stub)
-          .withArgs(selectionCell1Stub)
-            .returns(selectionCell1Stub)
-          .withArgs(selectionCell2Stub)
-            .returns(selectionCell2Stub)
-
-        component.setProperties({onSelectionChange: () => {}})
-        component.setMinimumCellWidths('.foo', 2, true)
-      })
-
-      it('should set correct minimum width for first column', function () {
-        expect(column1Stub.css).to.have.been.calledWithExactly('flex', '1 0 20px')
-      })
-
-      it('should set correct minimum width for second column', function () {
-        expect(column2Stub.css).to.have.been.calledWithExactly('flex', '1 0 40px')
-      })
-
-      it('should done nothing to the selection column', function () {
-        expect(selectionColumnStub.css).to.have.callCount(0)
-      })
-    })
-  })
-
-  describe('.accountForSelectionColumn()', function () {
+  describe('.getColIndex()', function () {
     describe('selection is enabled', function () {
       beforeEach(function () {
         component.setProperties({
@@ -937,13 +801,13 @@ describe(test.label, function () {
       })
 
       it('should increment passed number', function () {
-        expect(component.accountForSelectionColumn(1)).to.eql(2)
+        expect(component.getColIndex(1)).to.eql(2)
       })
     })
 
     describe('selection not enabled', function () {
       it('should return passed number', function () {
-        expect(component.accountForSelectionColumn(1)).to.eql(1)
+        expect(component.getColIndex(1)).to.eql(1)
       })
     })
   })

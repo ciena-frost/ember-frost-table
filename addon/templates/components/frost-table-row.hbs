@@ -1,6 +1,6 @@
 {{! Template for the frost-table-row component }}
 {{#if isSelectable}}
-  <td class='frost-table-cell frost-table-body-cell frost-table-row-cell frost-table-row-selection'>
+  <td class={{concat cellCss '-cell frost-table-cell frost-table-row-selection'}}>
     {{frost-table-row-selection
       hook=(concat hookPrefix '-selectionCell')
       hookQualifiers=(extend hookQualifiers column=column.index)
