@@ -4,12 +4,13 @@
 
 import {expect} from 'chai'
 import Ember from 'ember'
-const {$, get} = Ember
+const {$, A, get} = Ember
 import {$hook} from 'ember-hook'
 import wait from 'ember-test-helpers/wait'
 import {integration} from 'ember-test-utils/test-support/setup-component-test'
 import hbs from 'htmlbars-inline-precompile'
 import {beforeEach, describe, it} from 'mocha'
+import sinon from 'sinon'
 
 import {columns, heroes} from './data'
 
@@ -106,6 +107,92 @@ describe(test.label, function () {
       it('should have one text-input-renderer components', function () {
         expect(this.$('.text-input-renderer')).to.have.length(1)
       })
+    })
+  })
+
+  describe('after render with selection functionality', function () {
+    let onSelectStub
+    beforeEach(function () {
+      let selectedItems = A([])
+      let onSelect = function ({isRangeSelect, isSpecificSelect, item}) {
+        selectedItems.pushObject(item)
+      }
+      onSelectStub = sinon.spy(onSelect)
+      this.setProperties({
+        selectedItems,
+        isSelectable: true,
+        onSelect: onSelectStub,
+        itemKey: 'name'
+      })
+      this.render(hbs`
+        {{frost-table-row
+          columns=columns
+          hook=myHook
+          item=hero
+          onCallback=onCallback
+          isSelectable=isSelectable
+          itemKey=itemKey
+          onSelect=onSelect
+          selectedItems=selectedItems
+        }}
+      `)
+
+      return wait()
+    })
+
+    it('should have selectable class', function () {
+      expect($hook('myTableRow')).to.have.class('selectable')
+    })
+
+    it('should have not have is-selected class', function () {
+      expect($hook('myTableRow')).to.not.have.class('is-selected')
+    })
+
+    it('should have row selection cell', function () {
+      expect($hook('myTableRow-selectionCell')).to.have.length(1)
+    })
+
+    describe('after clicking row', function () {
+      beforeEach(function () {
+        $hook('myTableRow').click()
+        return wait()
+      })
+
+      it('should have have is-selected class', function () {
+        expect($hook('myTableRow')).to.have.class('is-selected')
+      })
+
+      it('should have called onSelect method', function () {
+        expect(onSelectStub).to.have.callCount(1)
+      })
+    })
+  })
+
+  describe('after render with custom row tag', function () {
+    beforeEach(function () {
+      this.render(hbs`
+        {{frost-table-row
+          columns=columns
+          hook=myHook
+          item=hero
+          tagName='div'
+          onCallback=onCallback
+        }}
+      `)
+
+      return wait()
+    })
+
+    it('should have rendered with correct class', function () {
+      expect($hook('myTableRow')).to.have.class('frost-table-row')
+    })
+
+    it('should be of type div', function () {
+      expect($hook('myTableRow').prop('tagName').toLowerCase()).to.eql('div')
+    })
+
+    it('should have not change cell tag name', function () {
+      expect($hook('myTableRow-cell').prop('tagName').toLowerCase()).to.eql('td')
     })
   })
 })

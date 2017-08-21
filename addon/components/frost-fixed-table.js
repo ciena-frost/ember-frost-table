@@ -2,56 +2,36 @@
  * Component definition for the frost-fixed-table component
  */
 import Ember from 'ember'
-const {$, A, isNone} = Ember
+const {isNone} = Ember
 import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
-import {ColumnPropType, ItemPropType, ItemsPropType} from 'ember-frost-table/typedefs'
+import {ItemsPropType} from 'ember-frost-table/typedefs'
 import {PropTypes} from 'ember-prop-types'
 
+import SelectionMixin from '../mixins/selection'
+import TableMixin from '../mixins/table'
 import layout from '../templates/components/frost-fixed-table'
-import {select} from '../utils/selection'
 
-export default Component.extend({
+export default Component.extend(SelectionMixin, TableMixin, {
   // == Dependencies ==========================================================
 
   // == Keyword Properties ====================================================
 
-  classNameBindings: ['_isShiftDown:shift-down'],
   layout,
 
   // == PropTypes =============================================================
 
   propTypes: {
     // options:
-    columns: PropTypes.arrayOf(ColumnPropType).isRequired,
     items: ItemsPropType.isRequired,
-    itemKey: PropTypes.string,
-    selectedItems: PropTypes.arrayOf(ItemPropType),
 
     // callbacks
-    onCallback: PropTypes.func,
-    onSelectionChange: PropTypes.func,
-
-    // state
-    _isShiftDown: PropTypes.bool,
-    _itemComparator: PropTypes.func,
-
-    _rangeState: PropTypes.shape({
-      anchor: PropTypes.oneOfType([
-        PropTypes.EmberObject,
-        PropTypes.object
-      ]),
-      endpoint: PropTypes.oneOfType([
-        PropTypes.EmberObject,
-        PropTypes.object
-      ])
-    })
+    onCallback: PropTypes.func
   },
 
   getDefaultProps () {
     return {
       // options
-      columns: [],
       items: [],
       // do nothing by default, as the grid may not have any custom renderers that would need to emit events
       onCallback () {},
@@ -143,7 +123,7 @@ export default Component.extend({
   },
 
   @readOnly
-  @computed('indexedColumns')
+  @computed('indexedColumns', 'haveCategories')
   /**
    * Get the set of columns that are supposed to be frozen on the left
    *
@@ -151,13 +131,17 @@ export default Component.extend({
    * starting with the first column until we reach one w/o `frozen` === `true`
    *
    * @param {Column[]} columns - all the columns
+   * @param {Boolean} haveCategories - if the header has categories
    * @returns {Column[]} just the left-most frozen columns
    */
-  leftColumns (columns) {
+  leftColumns (columns, haveCategories) {
     const frozenColumns = []
     for (let i = 0; i < columns.length; i++) {
       const column = columns[i]
       if (column.frozen) {
+        if (haveCategories && isNone(column.category)) {
+          column.category = ''
+        }
         frozenColumns.push(column)
       } else {
         return frozenColumns
@@ -168,7 +152,7 @@ export default Component.extend({
   },
 
   @readOnly
-  @computed('indexedColumns')
+  @computed('indexedColumns', 'haveCategories')
   /**
    * Get the set of columns that are supposed to be in the middle (between the frozen left and frozen right columns)
    *
@@ -176,9 +160,10 @@ export default Component.extend({
    * starting with whatever the first column is with `frozen` === `false` until we reach one with `frozen` === `true`
    *
    * @param {Column[]} columns - all the columns
+   * @param {Boolean} haveCategories - if the header has categories
    * @returns {Column[]} just the middle columns
    */
-  middleColumns (columns) {
+  middleColumns (columns, haveCategories) {
     const unFrozenColumns = []
     let foundUnFrozen = false
     for (let i = 0; i < columns.length; i++) {
@@ -188,6 +173,9 @@ export default Component.extend({
           return unFrozenColumns
         }
       } else {
+        if (haveCategories && isNone(column.category)) {
+          column.category = ''
+        }
         foundUnFrozen = true
         unFrozenColumns.push(column)
       }
@@ -197,7 +185,7 @@ export default Component.extend({
   },
 
   @readOnly
-  @computed('indexedColumns')
+  @computed('indexedColumns', 'haveCategories')
   /**
    * Get the set of columns that are supposed to be frozen on the right
    *
@@ -205,13 +193,17 @@ export default Component.extend({
    * starting with the first `frozen` === `true` column after we've seen at least one `frozen` === `false` column.
    *
    * @param {Column[]} columns - all the columns
+   * @param {Boolean} haveCategories - if the header has categories
    * @returns {Column[]} just the middle columns
    */
-  rightColumns (columns) {
+  rightColumns (columns, haveCategories) {
     const frozenColumns = []
     for (let i = columns.length - 1; i > 0; i--) {
       const column = columns[i]
       if (column.frozen) {
+        if (haveCategories && isNone(column.category)) {
+          column.category = ''
+        }
         frozenColumns.push(column)
       } else {
         return frozenColumns.reverse()
@@ -221,33 +213,7 @@ export default Component.extend({
     return frozenColumns.reverse()
   },
 
-  @readOnly
-  @computed()
-  _isSelectable () {
-    return !isNone(this.get('onSelectionChange'))
-  },
-
   // == Functions =============================================================
-
-  /**
-   * Get the width of the middle section by adding up the widths of all the cells
-   * @param {String} cellSelector - the selector to use to find the cells
-   * @returns {Number} the combined outer width of all cells (in pixels)
-   */
-  _calculateWidth (cellSelector) {
-    let width = 0
-
-    this.$(cellSelector).toArray().forEach((el) => {
-      width += $(el).outerWidth()
-    })
-
-    return width
-  },
-
-  _categoryRowSelector (sectionSelector) {
-    return this.$(`${sectionSelector} .frost-table-header-columns`).length === 1
-      ? '.frost-table-header-columns' : ''
-  },
 
   /**
    * Make the three body sections (left, middle, right) the correct height to stay within the bounds of the
@@ -304,49 +270,50 @@ export default Component.extend({
     })
   },
 
-  /**
-   * Calculate the widths of the left and right side and set the marings of the middle accordingly.
-   */
-  setupMiddleMargins () {
-    const bodyLeftSelector = this.get('_bodyLeftSelector')
-    const bodyRightSelector = this.get('_bodyRightSelector')
-
-    const leftWidth = this.$(bodyLeftSelector).outerWidth()
-    const rightWidth = this.$(bodyRightSelector).outerWidth()
-
-    const headerMiddleSelector = this.get('_headerMiddleSelector')
-    const bodyMiddleSelector = this.get('_bodyMiddleSelector')
-    ;[headerMiddleSelector, bodyMiddleSelector].forEach((selector) => {
-      this.$(selector).css({
-        'margin-left': `${leftWidth}px`,
-        'margin-right': `${rightWidth}px`
-      })
+  setupLeftWidths () {
+    this.setMinimumCellWidths(this.get('_bodyLeftSelector'))
+    const leftWidth = this.alignColumns(this.get('_headerLeftSelector'), this.get('_bodyLeftSelector'))
+    this.$(`${this.get('_headerLeftSelector')}`).css({
+      'flex-grow': 1,
+      'flex-shrink': 0,
+      'flex-basis': `${leftWidth}px`
+    })
+    this.$(`${this.get('_bodyLeftSelector')}`).parent().css({
+      'flex-grow': 1,
+      'flex-shrink': 0,
+      'flex-basis': `${leftWidth}px`
     })
   },
 
-  /**
-   * Calculate how wide the middle sections should be by adding the sum of all the inner cells, then set that width
-   */
   setupMiddleWidths () {
-    const headerMiddleSelector = this.get('_headerMiddleSelector')
-    const bodyMiddleSelector = this.get('_bodyMiddleSelector')
-    const cellRowSelector = this._categoryRowSelector(headerMiddleSelector)
-
-    const width = this._calculateWidth(`${headerMiddleSelector} ${cellRowSelector} .frost-table-cell`)
-    const cssWidth = `${width}px`
-    const cssProperties = {
-      'width': cssWidth,
-      'flex-basis': cssWidth
-    }
-    this.$(`${headerMiddleSelector} .frost-table-header`).css(cssProperties)
-    this.$(`${bodyMiddleSelector} .frost-table-row`).css(cssProperties)
-
-    this.alignColumns(headerMiddleSelector, bodyMiddleSelector)
+    this.setMinimumCellWidths(this.get('_bodyMiddleSelector'))
+    const middleWidth = this.alignColumns(this.get('_headerMiddleSelector'), this.get('_bodyMiddleSelector'))
+    this.$(`${this.get('_headerMiddleSelector')}`).parent().css({
+      'flex-grow': 1,
+      'flex-shrink': 1,
+      'flex-basis': `${middleWidth}px`
+    })
+    this.$(`${this.get('_bodyMiddleSelector')}`).parent().css({
+      'flex-grow': 1,
+      'flex-shrink': 1,
+      'flex-basis': `${middleWidth}px`
+    })
+    this.$(`${this.get('_bodyMiddleSelector')} .frost-table-row`).css('min-width', `${middleWidth}px`)
   },
 
-  setupLeftAndRightWidths () {
-    this.alignColumns(this.get('_headerLeftSelector'), this.get('_bodyLeftSelector'))
-    this.alignColumns(this.get('_headerRightSelector'), this.get('_bodyRightSelector'))
+  setupRightWidths () {
+    this.setMinimumCellWidths(this.get('_bodyRightSelector'))
+    const rightWidth = this.alignColumns(this.get('_headerRightSelector'), this.get('_bodyRightSelector'))
+    this.$(`${this.get('_headerRightSelector')}`).css({
+      'flex-grow': 1,
+      'flex-shrink': 0,
+      'flex-basis': `${rightWidth}px`
+    })
+    this.$(`${this.get('_bodyRightSelector')}`).parent().css({
+      'flex-grow': 1,
+      'flex-shrink': 0,
+      'flex-basis': `${rightWidth}px`
+    })
   },
 
   /**
@@ -402,46 +369,9 @@ export default Component.extend({
     })
   },
 
-  alignColumns (headerSelecter, bodySelector) {
-    const cellRowSelector = this._categoryRowSelector(headerSelecter)
-    const headerCells = this.$(`${headerSelecter} ${cellRowSelector} .frost-table-header-cell`)
-    for (let pos = 0; pos < headerCells.length; ++pos) {
-      const curBodyColumn = this.$(`${bodySelector} .frost-table-row .frost-table-row-cell:nth-child(${pos + 1})`)
-      const curHeaderCell = headerCells.eq(pos)
-      const bodyCellWidth = curBodyColumn.outerWidth(true)
-      const headerCellWidth = curHeaderCell.outerWidth(true)
-
-      const width = bodyCellWidth > headerCellWidth ? bodyCellWidth : headerCellWidth
-
-      const cssWidth = `${width}px`
-      const cssProperties = {
-        'width': cssWidth,
-        'flex-basis': cssWidth
-      }
-      curHeaderCell.css(cssProperties)
-      curBodyColumn.css(cssProperties)
-    }
-  },
-
-  setShift (event) {
-    if (!this.isDestroyed) {
-      this.set('_isShiftDown', event.shiftKey)
-    }
-  },
-
   // == DOM Events ============================================================
 
   // == Lifecycle Hooks =======================================================
-
-  init () {
-    this._super(...arguments)
-    this._keyHandler = this.setShift.bind(this)
-    $(document).on(`keyup.${this.elementId} keydown.${this.elementId}`, this._keyHandler)
-  },
-
-  willDestroy () {
-    $(document).off(`keyup.${this.elementId} keydown.${this.elementId}`, this._keyHandler)
-  },
 
   /**
    * Set up synced scrolling as well as calculating padding for middle sections
@@ -450,10 +380,15 @@ export default Component.extend({
     this._super(...arguments)
     this.setupBodyHeights()
     this.setupHoverProxy()
-    this.setupLeftAndRightWidths() // Needs to happen before setting up middle section
-    this.setupMiddleWidths()
-    this.setupMiddleMargins()
     this.setupScrollSync()
+  },
+
+  didInsertElement () {
+    // Only should do these operations on first insertion
+    this._super(...arguments)
+    this.setupLeftWidths()
+    this.setupMiddleWidths()
+    this.setupRightWidths()
   },
 
   // == Actions ===============================================================
@@ -476,17 +411,6 @@ export default Component.extend({
       const leftSectionRow = this.$(`${this.get('_bodyLeftSelector')} .frost-table-row`).eq(row)
       event.target = leftSectionRow[0]
       leftSectionRow.trigger(event)
-    },
-
-    _select ({isRangeSelect, isSpecificSelect, item}) {
-      const items = this.get('items')
-      const itemKey = this.get('itemKey')
-      const clonedSelectedItems = A(this.get('selectedItems').slice())
-      const _rangeState = this.get('_rangeState')
-
-      select(isRangeSelect, isSpecificSelect, item, itemKey, items, clonedSelectedItems, _rangeState)
-
-      this.onSelectionChange(clonedSelectedItems)
     }
   }
 })

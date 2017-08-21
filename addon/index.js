@@ -11,4 +11,5 @@ export {default as Row} from './components/frost-table-row'
 export {default as RowSelection} from './components/frost-table-row-selection'
 export {default as Table} from './components/frost-table'
 
-export {default as selection} from './utils/selection'
+export {default as SelectionMixin} from './mixins/selection'
+export {default as TableMixin} from './mixins/table'

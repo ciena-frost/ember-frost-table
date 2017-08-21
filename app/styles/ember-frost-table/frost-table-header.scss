@@ -1,6 +1,7 @@
 .frost-table-header-selection {
-  text-align: center;
-  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &.frost-button {
     &.small {
@@ -9,8 +10,19 @@
   }
 }
 
-.frost-table-header-categories {
-  .frost-table-header-cell {
-    text-align: center;
+.has-categories {
+  flex-direction: column;
+  height: 100%;
+
+  .frost-table-header-categories {
+    flex: 1 0 50%;
+
+    .frost-table-header-cell {
+      justify-content: center;
+    }
+  }
+
+  .frost-table-header-columns {
+    flex: 1 0 50%;
   }
 }

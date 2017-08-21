@@ -29,6 +29,8 @@ export default Component.extend({
     cellTagName: PropTypes.string,
     columns: PropTypes.arrayOf(ColumnPropType),
     item: ItemPropType,
+    isSelectable: PropTypes.bool,
+    onSelect: PropTypes.func,
 
     // callbacks
     onCallback: PropTypes.func.isRequired
@@ -42,7 +44,8 @@ export default Component.extend({
       cellTagName: 'td',
       cellCss: this.get('css'),
       columns: [],
-      item: {}
+      item: {},
+      isSelectable: false
 
       // state
     }
