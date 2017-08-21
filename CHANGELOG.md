@@ -1,3 +1,7 @@
+# 1.4.5 (2017-08-18)
+ * **Fixed** issue #33
+
+
 # 1.4.4 (2017-08-11)
 * Upgrade ember-cli 2.12.3 inter-dependencies
 
