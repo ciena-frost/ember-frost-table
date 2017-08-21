@@ -1,3 +1,8 @@
+# 1.5.0 (2017-08-21)
+ * **Fixed** issue #30 by changing `frost-table` and `frost-fixed-table` components to use a flexbox approach
+ * **Fixed** issue #18 by providing some meaningful tests
+
+
 # 1.4.5 (2017-08-18)
  * **Fixed** issue #33
 
