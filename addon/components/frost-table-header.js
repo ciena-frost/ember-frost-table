@@ -108,9 +108,10 @@ export default Component.extend(TableMixin, {
       let categoryFlexGrow = 0
       let categoryFlexShrink = 0
       this.$(columnSelector).slice(startColumn, startColumn + category.span).toArray().forEach((el) => {
-        const flexBasis = parseFloat(this.$(el).css('flex-basis'))
-        const flexGrow = parseFloat(this.$(el).css('flex-grow'))
-        const flexShrink = parseFloat(this.$(el).css('flex-shrink'))
+        const col = this.$(el)
+        const flexBasis = parseFloat(col.css('flex-basis'))
+        const flexGrow = parseFloat(col.css('flex-grow'))
+        const flexShrink = parseFloat(col.css('flex-shrink'))
 
         categoryFlexBasis += flexBasis
         categoryFlexGrow += flexGrow
