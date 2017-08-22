@@ -273,6 +273,9 @@ describe(test.label, function () {
       sandbox.stub(component, 'setupBodyHeights')
       sandbox.stub(component, 'setupHoverProxy')
       sandbox.stub(component, 'setupScrollSync')
+      sandbox.stub(component, 'setupLeftWidths')
+      sandbox.stub(component, 'setupMiddleWidths')
+      sandbox.stub(component, 'setupRightWidths')
 
       component.didRender()
     })
@@ -287,15 +290,6 @@ describe(test.label, function () {
 
     it('should set up the scroll syncing', function () {
       expect(component.setupScrollSync).to.have.callCount(1)
-    })
-  })
-
-  describe('.didInsertElement()', function () {
-    beforeEach(function () {
-      sandbox.stub(component, 'setupLeftWidths')
-      sandbox.stub(component, 'setupMiddleWidths')
-      sandbox.stub(component, 'setupRightWidths')
-      component.didInsertElement()
     })
 
     it('should set up left widths', function () {
@@ -788,26 +782,6 @@ describe(test.label, function () {
 
       it('should set scrollTop on the third destination', function () {
         expect(dst3Stub.scrollTop).to.have.been.calledWith(123)
-      })
-    })
-  })
-
-  describe('.getColIndex()', function () {
-    describe('selection is enabled', function () {
-      beforeEach(function () {
-        component.setProperties({
-          onSelectionChange: () => {}
-        })
-      })
-
-      it('should increment passed number', function () {
-        expect(component.getColIndex(1)).to.eql(2)
-      })
-    })
-
-    describe('selection not enabled', function () {
-      it('should return passed number', function () {
-        expect(component.getColIndex(1)).to.eql(1)
       })
     })
   })

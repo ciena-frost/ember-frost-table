@@ -1,5 +1,5 @@
 /**
- * Unit test for the frost-table-headercomponent
+ * Unit test for the frost-table-header component
  */
 
 import {expect} from 'chai'
@@ -145,7 +145,7 @@ describe(test.label, function () {
     })
   })
 
-  describe('.didInsertElement()', function () {
+  describe('.didRender()', function () {
     beforeEach(function () {
       sandbox.stub(component, 'setupRows')
       sandbox.stub(component, 'alignCategories')
@@ -156,7 +156,7 @@ describe(test.label, function () {
       beforeEach(function () {
         sandbox.stub(component, 'get').withArgs('haveCategories').returns(true)
 
-        component.didInsertElement()
+        component.didRender()
 
         return wait()
       })
@@ -176,7 +176,7 @@ describe(test.label, function () {
 
     describe('without categories', function () {
       beforeEach(function () {
-        component.didInsertElement()
+        component.didRender()
       })
 
       it('should not have wrapped header cells in row tags', function () {

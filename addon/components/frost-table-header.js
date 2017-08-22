@@ -25,6 +25,7 @@ export default Component.extend(TableMixin, {
     // options
     cellTagName: PropTypes.string,
     rowTagName: PropTypes.string,
+    isSelectable: PropTypes.bool,
 
     // callbacks
     onCallback: PropTypes.func.isRequired
@@ -36,7 +37,8 @@ export default Component.extend(TableMixin, {
     return {
       // options
       cellTagName: 'th',
-      rowTagName: 'tr'
+      rowTagName: 'tr',
+      isSelectable: false
 
       // state
     }
@@ -83,20 +85,6 @@ export default Component.extend(TableMixin, {
       `<${rowTagName} class='${HEADER_COLUMNS_CLASS} frost-table-row frost-table-header-row'></${rowTagName}>`)
   },
 
-  setMinimumCellWidths () {
-    const columnSelector = this.get('headerColumnSelector')
-    this.$(columnSelector).toArray().forEach((el) => {
-      if (isNaN(parseFloat(this.$(el).css('flex-basis')))) {
-        const width = this.$(el).outerWidth(true)
-        this.$(el).css({
-          'flex-grow': 1,
-          'flex-shrink': 0,
-          'flex-basis': `${width}px`
-        })
-      }
-    })
-  },
-
   alignCategories () {
     const _categoryColumns = this.get('_categoryColumns')
     const categorySelector = `.${HEADER_CATEGORIES_CLASS} .frost-table-cell`
@@ -126,19 +114,11 @@ export default Component.extend(TableMixin, {
     })
   },
 
-  parseFloatOrDefault (string, defaultVal) {
-    const float = parseFloat(string)
-    if (!isNaN(float)) {
-      return float
-    }
-    return defaultVal
-  },
-
   // == DOM Events ============================================================
 
   // == Lifecycle Hooks =======================================================
 
-  didInsertElement () {
+  didRender () {
     this._super(...arguments)
     if (this.get('haveCategories')) {
       this.setupRows()
@@ -146,7 +126,7 @@ export default Component.extend(TableMixin, {
         this.alignCategories()
       })
     }
-    this.setMinimumCellWidths()
+    this.setMinimumCellWidths(this.get('headerColumnsSelector'))
   },
 
   // == Actions ===============================================================

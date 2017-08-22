@@ -55,9 +55,9 @@ export default Component.extend(TableMixin, {
 
   // == Lifecycle Hooks =======================================================
 
-  didInsertElement () {
+  didRender () {
     this._super(...arguments)
-    this.$().css('flex', `1 0 ${this.setMinimumCellWidths('')}px`)
+    this.$().css('flex', `1 0 ${this.setMinimumCellWidths('.frost-table-row')}px`)
   },
 
   // == Actions ===============================================================

@@ -97,21 +97,20 @@ describe('Unit / Mixins / table', function () {
     })
   })
 
-  describe('.didInsertElement()', function () {
+  describe('.didRender()', function () {
     let rowSelectionStub, headerSelectionStub
     beforeEach(function () {
       rowSelectionStub = createSelectorStub('css')
       headerSelectionStub = createSelectorStub('css')
       mixin.$ = sinon.stub()
-      mixin.$.withArgs('.frost-table-row-selection').returns(rowSelectionStub)
       mixin.$.withArgs('.frost-table-header-selection-cell').returns(headerSelectionStub)
+      mixin.$.withArgs('.frost-table-row-selection').returns(rowSelectionStub)
     })
 
     describe('selection enabled', function () {
       beforeEach(function () {
-        sandbox.stub(mixin, 'get')
-          .withArgs('isSelectable').returns(true)
-        mixin.didInsertElement()
+        mixin.set('isSelectable', true)
+        mixin.didRender()
       })
 
       it('should ensure row selection cells do not grow', function () {
@@ -131,9 +130,8 @@ describe('Unit / Mixins / table', function () {
 
     describe('selection disabled', function () {
       beforeEach(function () {
-        sandbox.stub(mixin, 'get')
-          .withArgs('isSelectable').returns(false)
-        mixin.didInsertElement()
+        mixin.set('isSelectable', false)
+        mixin.didRender()
       })
 
       it('should ensure row selection cells do not grow', function () {
@@ -151,8 +149,8 @@ describe('Unit / Mixins / table', function () {
     beforeEach(function () {
       headerStub = createSelectorStub()
       headerColumnsStub = createSelectorStub('eq', 'length')
-      headerColumn1Stub = createSelectorStub('css', 'outerWidth')
-      headerColumn2Stub = createSelectorStub('css', 'outerWidth')
+      headerColumn1Stub = createSelectorStub('css')
+      headerColumn2Stub = createSelectorStub('css')
       bodyColumn1Stub = createSelectorStub('css')
       bodyColumn2Stub = createSelectorStub('css')
       mixin.$ = sinon.stub()
@@ -170,8 +168,8 @@ describe('Unit / Mixins / table', function () {
       headerColumnsStub.eq.withArgs(0).returns(headerColumn1Stub)
       headerColumnsStub.eq.withArgs(1).returns(headerColumn2Stub)
 
-      headerColumn1Stub.outerWidth.returns(100)
-      headerColumn2Stub.outerWidth.returns(20)
+      headerColumn1Stub.css.withArgs('flex-basis').returns(100)
+      headerColumn2Stub.css.withArgs('flex-basis').returns(20)
 
       bodyColumn1Stub.css.withArgs('flex-basis').returns(20)
       bodyColumn2Stub.css.withArgs('flex-basis').returns(100)
@@ -196,10 +194,10 @@ describe('Unit / Mixins / table', function () {
     beforeEach(function () {
       column1Stub = createSelectorStub('css', 'toArray')
       column2Stub = createSelectorStub('css', 'toArray')
-      cell1Stub = createSelectorStub('outerWidth')
-      cell2Stub = createSelectorStub('outerWidth')
-      cell3Stub = createSelectorStub('outerWidth')
-      cell4Stub = createSelectorStub('outerWidth')
+      cell1Stub = createSelectorStub('css', 'outerWidth')
+      cell2Stub = createSelectorStub('css', 'outerWidth')
+      cell3Stub = createSelectorStub('css', 'outerWidth')
+      cell4Stub = createSelectorStub('css', 'outerWidth')
       rowsStub = createSelectorStub('eq')
       firstRowStub = createSelectorStub('children')
       firstRowColumnsStub = createSelectorStub('length')
@@ -218,11 +216,11 @@ describe('Unit / Mixins / table', function () {
       beforeEach(function () {
         firstRowColumnsStub.length = 2
         mixin.$ = sinon.stub()
-        mixin.$.withArgs('.foo .frost-table-row')
+        mixin.$.withArgs('.foo')
           .returns(rowsStub)
-        mixin.$.withArgs('.foo .frost-table-row .frost-table-cell:nth-child(1)')
+        mixin.$.withArgs('.foo .frost-table-cell:nth-child(1)')
           .returns(column1Stub)
-        mixin.$.withArgs('.foo .frost-table-row .frost-table-cell:nth-child(2)')
+        mixin.$.withArgs('.foo .frost-table-cell:nth-child(2)')
           .returns(column2Stub)
         mixin.$.withArgs(cell1Stub)
           .returns(cell1Stub)
@@ -256,21 +254,21 @@ describe('Unit / Mixins / table', function () {
       let selectionColumnStub, selectionCell1Stub, selectionCell2Stub
       beforeEach(function () {
         selectionColumnStub = createSelectorStub('css', 'toArray')
-        selectionCell1Stub = createSelectorStub('outerWidth')
-        selectionCell2Stub = createSelectorStub('outerWidth')
+        selectionCell1Stub = createSelectorStub('css', 'outerWidth')
+        selectionCell2Stub = createSelectorStub('css', 'outerWidth')
         selectionColumnStub.toArray.returns([selectionCell1Stub, selectionCell2Stub])
         selectionCell1Stub.outerWidth.returns(10)
         selectionCell2Stub.outerWidth.returns(20)
         firstRowColumnsStub.length = 3
 
         mixin.$ = sinon.stub()
-        mixin.$.withArgs('.foo .frost-table-row')
+        mixin.$.withArgs('.foo')
           .returns(rowsStub)
-        mixin.$.withArgs('.foo .frost-table-row .frost-table-cell:nth-child(1)')
+        mixin.$.withArgs('.foo .frost-table-cell:nth-child(1)')
           .returns(selectionColumnStub)
-        mixin.$.withArgs('.foo .frost-table-row .frost-table-cell:nth-child(2)')
+        mixin.$.withArgs('.foo .frost-table-cell:nth-child(2)')
           .returns(column1Stub)
-        mixin.$.withArgs('.foo .frost-table-row .frost-table-cell:nth-child(3)')
+        mixin.$.withArgs('.foo .frost-table-cell:nth-child(3)')
           .returns(column2Stub)
         mixin.$.withArgs(cell1Stub)
           .returns(cell1Stub)

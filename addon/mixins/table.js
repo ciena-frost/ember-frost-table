@@ -53,23 +53,34 @@ export default Mixin.create({
   /**
    * Pre-computed indices
    * @param {Boolean} haveCategories - whether the table header has categories or not
+   * @returns {String} jQuery selector string for getting the header column row
+   */
+  headerColumnsSelector (haveCategories) {
+    return `${haveCategories ? '.frost-table-header-columns' : ''}`
+  },
+
+  @readOnly
+  @computed('haveCategories')
+  /**
+   * Pre-computed indices
+   * @param {Boolean} haveCategories - whether the table header has categories or not
    * @returns {String} jQuery selector string for getting the header column cells
    */
-  headerColumnSelector (haveCategories) {
+  headerColumnCellSelector (haveCategories) {
     return `${haveCategories ? '.frost-table-header-columns ' : ''}.frost-table-header-cell`
   },
 
   // == Functions =============================================================
 
-  setMinimumCellWidths (bodySelector) {
+  setMinimumCellWidths (bodyRowSelector) {
     let totalWidth = 0
-    const numColumns = this.$(`${bodySelector} .frost-table-row`).eq(0).children('.frost-table-cell').length
+    const numColumns = this.$(`${bodyRowSelector}`).eq(0).children('.frost-table-cell').length
     for (let pos = 1; pos <= numColumns; ++pos) {
-      const curBodyColumn = this.$(`${bodySelector} .frost-table-row .frost-table-cell:nth-child(${pos})`)
+      const curBodyColumn = this.$(`${bodyRowSelector} .frost-table-cell:nth-child(${pos})`)
 
       // Get width of widest body cell in the column
       const cellWidths = curBodyColumn.toArray().map((col) => {
-        return this.$(col).outerWidth(true)
+        return parseFloat(this.$(col).css('flex-basis')) || this.$(col).outerWidth(true)
       })
       const width = Math.max(...cellWidths)
       totalWidth += width
@@ -83,24 +94,23 @@ export default Mixin.create({
   },
 
   alignColumns (headerSelecter, bodySelector) {
-    const headerCells = this.$(`${headerSelecter} ${this.get('headerColumnSelector')}`)
+    const headerCells = this.$(`${headerSelecter} ${this.get('headerColumnCellSelector')}`)
     let totalWidth = 0
     for (let pos = 0; pos < headerCells.length; ++pos) {
       const curBodyColumn = this.$(`${bodySelector} .frost-table-row .frost-table-cell:nth-child(${pos + 1})`)
       const curHeaderCell = headerCells.eq(pos)
 
+      /*
+       * At this point expect the flex-basis property has been set for all cells
+       * corresponding to the minimum width of the cell
+       */
       const bodyCellFlexBasis = parseFloat(curBodyColumn.css('flex-basis'))
-      const headerCellWidth = curHeaderCell.outerWidth(true)
+      const headerCellFlexBasis = parseFloat(curHeaderCell.css('flex-basis'))
 
-      if (isNaN(bodyCellFlexBasis) || headerCellWidth > bodyCellFlexBasis) {
-        curHeaderCell.css('flex-basis', `${headerCellWidth}px`)
-        curBodyColumn.css('flex-basis', `${headerCellWidth}px`)
-        totalWidth += headerCellWidth
-      } else {
-        curHeaderCell.css('flex-basis', `${bodyCellFlexBasis}px`)
-        curBodyColumn.css('flex-basis', `${bodyCellFlexBasis}px`)
-        totalWidth += bodyCellFlexBasis
-      }
+      const sharedBasis = Math.max(bodyCellFlexBasis, headerCellFlexBasis)
+      curHeaderCell.css('flex-basis', `${sharedBasis}px`)
+      curBodyColumn.css('flex-basis', `${sharedBasis}px`)
+      totalWidth += sharedBasis
     }
     return totalWidth
   },
@@ -109,9 +119,8 @@ export default Mixin.create({
 
   // == Lifecycle Hooks =======================================================
 
-  didInsertElement () {
+  didRender () {
     this._super(...arguments)
-    // Selection column does not need to grow
     if (this.get('isSelectable')) {
       this.$(`.${HEADER_SELECTION_CLASS}`).css({
         'flex-grow': 0,

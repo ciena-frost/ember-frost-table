@@ -76,7 +76,7 @@ describe(test.label, function () {
     })
   })
 
-  describe('.didInsertElement()', function () {
+  describe('.didRender()', function () {
     let tableStub
     beforeEach(function () {
       tableStub = createSelectorStub('css')
@@ -84,7 +84,7 @@ describe(test.label, function () {
         .withArgs().returns(tableStub)
       sandbox.stub(component, 'alignColumns')
       component.alignColumns.returns(100)
-      component.didInsertElement()
+      component.didRender()
     })
 
     it('should have called alignColumns() with correct paramaters', function () {

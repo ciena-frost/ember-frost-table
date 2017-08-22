@@ -381,11 +381,6 @@ export default Component.extend(SelectionMixin, TableMixin, {
     this.setupBodyHeights()
     this.setupHoverProxy()
     this.setupScrollSync()
-  },
-
-  didInsertElement () {
-    // Only should do these operations on first insertion
-    this._super(...arguments)
     this.setupLeftWidths()
     this.setupMiddleWidths()
     this.setupRightWidths()

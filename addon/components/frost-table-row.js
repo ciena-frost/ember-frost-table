@@ -10,9 +10,10 @@ import {Component} from 'ember-frost-core'
 import {ColumnPropType, ItemPropType} from 'ember-frost-table/typedefs'
 import {PropTypes} from 'ember-prop-types'
 
+import TableMixin from '../mixins/table'
 import layout from '../templates/components/frost-table-row'
 
-export default Component.extend({
+export default Component.extend(TableMixin, {
   // == Dependencies ==========================================================
 
   // == Keyword Properties ====================================================
@@ -86,6 +87,15 @@ export default Component.extend({
   },
 
   // == Lifecycle Hooks =======================================================
+
+  didRender () {
+    this._super(...arguments)
+    this.$().css({
+      'flex-grow': 1,
+      'flex-shrink': 0,
+      'flex-basis': `${this.setMinimumCellWidths('')}px`
+    })
+  },
 
   // == Actions ===============================================================
 
