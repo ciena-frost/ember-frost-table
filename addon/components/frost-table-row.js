@@ -89,12 +89,12 @@ export default Component.extend(TableMixin, {
   // == Lifecycle Hooks =======================================================
 
   didRender () {
-    this._super(...arguments)
     this.$().css({
       'flex-grow': 1,
       'flex-shrink': 0,
       'flex-basis': `${this.setMinimumCellWidths('')}px`
     })
+    this._super(...arguments)
   },
 
   // == Actions ===============================================================

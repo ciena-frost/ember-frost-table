@@ -119,7 +119,6 @@ export default Component.extend(TableMixin, {
   // == Lifecycle Hooks =======================================================
 
   didRender () {
-    this._super(...arguments)
     if (this.get('haveCategories')) {
       this.setupRows()
       run.next(this, () => {
@@ -127,6 +126,7 @@ export default Component.extend(TableMixin, {
       })
     }
     this.setMinimumCellWidths(this.get('headerColumnsSelector'))
+    this._super(...arguments)
   },
 
   // == Actions ===============================================================

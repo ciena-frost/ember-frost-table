@@ -120,7 +120,6 @@ export default Mixin.create({
   // == Lifecycle Hooks =======================================================
 
   didRender () {
-    this._super(...arguments)
     if (this.get('isSelectable')) {
       this.$(`.${HEADER_SELECTION_CLASS}`).css({
         'flex-grow': 0,
@@ -131,6 +130,7 @@ export default Mixin.create({
         'flex-shrink': 0
       })
     }
+    this._super(...arguments)
   },
 
   // == Actions ===============================================================

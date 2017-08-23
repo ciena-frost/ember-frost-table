@@ -377,13 +377,13 @@ export default Component.extend(SelectionMixin, TableMixin, {
    * Set up synced scrolling as well as calculating padding for middle sections
    */
   didRender () {
-    this._super(...arguments)
     this.setupBodyHeights()
     this.setupHoverProxy()
     this.setupScrollSync()
     this.setupLeftWidths()
     this.setupMiddleWidths()
     this.setupRightWidths()
+    this._super(...arguments)
   },
 
   // == Actions ===============================================================
