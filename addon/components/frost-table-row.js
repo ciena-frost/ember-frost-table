@@ -92,7 +92,7 @@ export default Component.extend(TableMixin, {
     this.$().css({
       'flex-grow': 1,
       'flex-shrink': 0,
-      'flex-basis': `${this.setMinimumCellWidths('')}px`
+      'flex-basis': `${this.setMinimumCellWidths()}px`
     })
     this._super(...arguments)
   },

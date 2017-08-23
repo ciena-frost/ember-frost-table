@@ -56,7 +56,7 @@ export default Mixin.create({
    * @returns {String} jQuery selector string for getting the header column row
    */
   headerColumnsSelector (haveCategories) {
-    return `${haveCategories ? '.frost-table-header-columns' : ''}`
+    return haveCategories ? '.frost-table-header-columns' : ''
   },
 
   @readOnly
@@ -67,12 +67,12 @@ export default Mixin.create({
    * @returns {String} jQuery selector string for getting the header column cells
    */
   headerColumnCellSelector (haveCategories) {
-    return `${haveCategories ? '.frost-table-header-columns ' : ''}.frost-table-header-cell`
+    return `${this.get('headerColumnsSelector')} .frost-table-header-cell`.trim()
   },
 
   // == Functions =============================================================
 
-  setMinimumCellWidths (bodyRowSelector) {
+  setMinimumCellWidths (bodyRowSelector = '') {
     let totalWidth = 0
     const numColumns = this.$(`${bodyRowSelector}`).eq(0).children('.frost-table-cell').length
     for (let pos = 1; pos <= numColumns; ++pos) {
