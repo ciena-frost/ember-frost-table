@@ -1,8 +1,10 @@
 import {expect} from 'chai'
+import {$hook} from 'ember-hook'
 import wait from 'ember-test-helpers/wait'
 import {integration} from 'ember-test-utils/test-support/setup-component-test'
 import hbs from 'htmlbars-inline-precompile'
 import {beforeEach, describe, it} from 'mocha'
+import sinon from 'sinon'
 
 const test = integration('frost-table-header-selection')
 describe(test.label, function () {
@@ -11,21 +13,39 @@ describe(test.label, function () {
   beforeEach(function () {
     this.render(hbs`
       {{frost-table-header-selection
-        hook='sel'
-        hookQualifiers=(hash foo='bar')
+        hook='mySelection'
+        onSelectionChange=onSelectionChange
       }}
     `)
 
     return wait()
   })
 
-  // I'm adding this here so something shows up in the lint output at least, I've also opened an issue
-  // https://github.com/ciena-frost/ember-frost-table/issues/18 to track it (@job13er 2017-06-08)
-  it.skip('should have real tests', function () {
-    expect(true).to.equal(false)
+  it('should render', function () {
+    expect(this.$()).to.have.length(1)
   })
 
-  it('should render something', function () {
-    expect(this.$()).to.have.length(1)
+  it('should have correct class set', function () {
+    expect($hook('mySelection')).to.have.class('frost-table-header-selection')
+  })
+
+  it('should have correct default label', function () {
+    expect($hook('mySelection').text().trim()).to.eql('Clear')
+  })
+
+  describe('Events', function () {
+    let onSelectionChangeStub
+    beforeEach(function () {
+      onSelectionChangeStub = sinon.stub()
+      this.set('onSelectionChange', onSelectionChangeStub)
+
+      $hook('mySelection').click()
+
+      return wait()
+    })
+
+    it('should pass empty array to onSelectionChange handler', function () {
+      expect(onSelectionChangeStub).to.have.been.calledWithExactly([])
+    })
   })
 })

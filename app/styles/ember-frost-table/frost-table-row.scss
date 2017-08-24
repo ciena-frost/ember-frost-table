@@ -1,16 +1,40 @@
 $frost-table-row-border-transparent: rgba(0, 0, 0, 0);
+$frost-table-row-border-width: 1px;
 
 .frost-table-row {
-  td {
-    padding: calc(#{$frost-table-cell-padding} + 1px) $frost-table-cell-padding;
-  }
-
   &.is-selected {
-    border: 1px solid $frost-color-blue-1;
+    border: $frost-table-row-border-width solid $frost-color-blue-1;
 
-    td {
-      padding-top: $frost-table-cell-padding;
+    // The styling below is so there is not a thick
+    // border between adjacent selected rows
+    // sass-lint:disable nesting-depth
+    + .frost-table-row {
+      &.is-selected {
+        border-top: 0;
+
+        .frost-table-cell {
+          margin-top: 0;
+        }
+      }
     }
+    // sass-lint:enable nesting-depth
+
+    // The styling below prevents the jumping of cell values
+    // when the border is added to the row
+    // sass-lint:disable nesting-depth
+    .frost-table-cell {
+      margin-top: -$frost-table-row-border-width;
+      margin-bottom: -$frost-table-row-border-width;
+
+      &:nth-child(1) {
+        margin-left: -$frost-table-row-border-width;
+      }
+
+      &:nth-last-child(1) {
+        margin-right: -$frost-table-row-border-width;
+      }
+    }
+    // sass-lint:enable nesting-depth
   }
 
   &.selectable {

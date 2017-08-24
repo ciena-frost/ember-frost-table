@@ -1,17 +1,6 @@
 {{! Template for the frost-table-header component }}
 
-{{#if _hasCategories}}
-  {{#if isSelectable}}
-    {{! blank cell}}
-    {{frost-table-cell
-      hook=(concat hookPrefix '-cell')
-      class=(concat css '-cell')
-      tagName=cellTagName
-      value=''
-
-      onCallback=(action onCallback -1)
-    }}
-  {{/if}}
+{{#if haveCategories}}
   {{#each _categoryColumns as |column|}}
     {{frost-table-cell
       cellRenderer=column.renderer
@@ -27,7 +16,7 @@
 {{/if}}
 
 {{#if isSelectable}}
-  <th class='frost-table-header-cell frost-table-cell'>
+  <th class='frost-table-header-cell frost-table-header-selection-cell frost-table-cell'>
     {{frost-table-header-selection
       hook=(concat hookPrefix '-selectionCell')
       hookQualifiers=(extend hookQualifiers column=column.index)

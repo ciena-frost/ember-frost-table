@@ -83,4 +83,28 @@ describe(test.label, function () {
       expect($hook('myThing-renderer-text-input').val()).to.equal('my value')
     })
   })
+
+  describe('after render with custom cell tag', function () {
+    beforeEach(function () {
+      this.render(hbs`
+        {{frost-table-cell
+          hook=myHook
+          value=value
+          tagName='div'
+
+          onCallback=handleCallback
+        }}
+      `)
+
+      return wait()
+    })
+
+    it('should have rendered with correct class', function () {
+      expect($hook('myThing')).to.have.class('frost-table-cell')
+    })
+
+    it('should be of type div', function () {
+      expect($hook('myThing').prop('tagName').toLowerCase()).to.eql('div')
+    })
+  })
 })

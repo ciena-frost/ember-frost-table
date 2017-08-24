@@ -414,17 +414,20 @@ describe(test.label, function () {
       return wait()
     })
 
-    it('rows should have "selectable" class', function () {
+    it('should have "selectable" class for each row', function () {
       expect(this.$('.frost-table-row')).to.have.class('selectable')
     })
 
-    it('no row has "is-selected" class', function () {
+    it('should have no row with "is-selected" class', function () {
       expect(this.$('.frost-table-row')).to.not.have.class('is-selected')
     })
 
-    it('first column has selection checkboxes', function () {
-      expect($hook('myTable-header-left-selectionCell')).to.have.length(1)
+    it('should have selection checkboxes in first coulmn', function () {
       expect($hook('myTable-left-selectionCell')).to.have.length(heroes.length)
+    })
+
+    it('should have clear selection cell in header', function () {
+      expect($hook('myTable-header-left-selectionCell')).to.have.length(1)
     })
 
     let _assertRowsSelected = (...rows) => {
@@ -439,7 +442,7 @@ describe(test.label, function () {
         return wait()
       })
 
-      it('first row is in selected state for all sections', function () {
+      it('should have first row in selected state for all sections', function () {
         _assertRowsSelected(0)
       })
     })
@@ -451,7 +454,7 @@ describe(test.label, function () {
           return wait()
         })
 
-        it('first row is in selected state for all sections', function () {
+        it('should have first row in selected state for all sections', function () {
           _assertRowsSelected(0)
         })
       })
@@ -463,7 +466,7 @@ describe(test.label, function () {
         return wait()
       })
 
-      it('first 5 rows are in selected for all sections', function () {
+      it('should have first 5 rows in selected state for all sections', function () {
         _assertRowsSelected(0, 1, 2, 3, 4)
       })
     })
@@ -475,7 +478,7 @@ describe(test.label, function () {
           return wait()
         })
 
-        it('first 5 rows are in selected state', function () {
+        it('should have first 5 rows in selected state', function () {
           _assertRowsSelected(0, 1, 2, 3, 4)
         })
       })
@@ -488,7 +491,7 @@ describe(test.label, function () {
         return wait()
       })
 
-      it('both rows should be in selected state', function () {
+      it('should have both rows in selected state', function () {
         _assertRowsSelected(0, 1)
       })
     })
@@ -501,9 +504,24 @@ describe(test.label, function () {
           return wait()
         })
 
-        it('only the second row selected should be in selected state', function () {
+        it('should only have first row in selected state', function () {
           _assertRowsSelected(1)
         })
+      })
+    })
+
+    describe('clearing the selection', function () {
+      beforeEach(function () {
+        rowBodySingleSelect('myTable-left', 0)
+        return wait().then(() => {
+          _assertRowsSelected(0)
+          $hook('myTable-header-left-selectionCell').click()
+          return wait()
+        })
+      })
+
+      it('should not have any row in selected state', function () {
+        expect(this.$('.is-selected')).to.have.length(0)
       })
     })
   })
@@ -550,7 +568,7 @@ describe(test.label, function () {
             return wait()
           })
 
-          it('it should be emitted by the table', function () {
+          it('should be emitted by the table', function () {
             expect(onCallback).to.have.been.calledWith(_action({row: headerRow, col: 0}))
           })
         })
@@ -568,7 +586,7 @@ describe(test.label, function () {
               return wait()
             })
 
-            it('it should be emitted by the table', function () {
+            it('should be emitted by the table', function () {
               expect(onCallback).to.have.been.calledWith(_action({row: headerRow, col: globalIndex}))
             })
           })
@@ -584,7 +602,7 @@ describe(test.label, function () {
             return wait()
           })
 
-          it('it should be emitted by the table (with global column index 3)', function () {
+          it('should be emitted by the table (with global column index 3)', function () {
             expect(onCallback).to.have.been.calledWith(_action({row: headerRow, col: 3}))
           })
         })
@@ -606,7 +624,7 @@ describe(test.label, function () {
                 return wait()
               })
 
-              it('it should be emitted by the table', function () {
+              it('should be emitted by the table', function () {
                 expect(onCallback).to.have.been.calledWith(_action({row: rowIndex, col: index}))
               })
             })
@@ -629,7 +647,7 @@ describe(test.label, function () {
                 return wait()
               })
 
-              it(`it should be emitted by the table (with global column index ${globalIndex})`, function () {
+              it(`should be emitted by the table (with global column index ${globalIndex})`, function () {
                 expect(onCallback).to.have.been.calledWith(_action({row: rowIndex, col: globalIndex}))
               })
             })
@@ -652,7 +670,7 @@ describe(test.label, function () {
                 return wait()
               })
 
-              it(`it should be emitted by the table (with global column index ${globalIndex})`, function () {
+              it(`should be emitted by the table (with global column index ${globalIndex})`, function () {
                 expect(onCallback).to.have.been.calledWith(_action({row: rowIndex, col: globalIndex}))
               })
             })
