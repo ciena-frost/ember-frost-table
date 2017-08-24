@@ -10,9 +10,10 @@ import {Component} from 'ember-frost-core'
 import {ColumnPropType, ItemPropType} from 'ember-frost-table/typedefs'
 import {PropTypes} from 'ember-prop-types'
 
+import TableMixin, {ROW_SELECTION_CLASS} from '../mixins/table'
 import layout from '../templates/components/frost-table-row'
 
-export default Component.extend({
+export default Component.extend(TableMixin, {
   // == Dependencies ==========================================================
 
   // == Keyword Properties ====================================================
@@ -86,6 +87,17 @@ export default Component.extend({
   },
 
   // == Lifecycle Hooks =======================================================
+
+  didInsertElement () {
+    this.setMinimumCellWidths()
+    if (this.get('isSelectable')) {
+      this.$(`.${ROW_SELECTION_CLASS}`).css({
+        'flex-grow': 0,
+        'flex-shrink': 0
+      })
+    }
+    this._super(...arguments)
+  },
 
   // == Actions ===============================================================
 
