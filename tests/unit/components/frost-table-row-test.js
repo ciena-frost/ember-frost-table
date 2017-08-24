@@ -60,22 +60,45 @@ describe(test.label, function () {
     })
   })
 
-  describe('.didRender()', function () {
-    let rowStub
+  describe('.didInsertElement()', function () {
+    let rowSelectorStub
     beforeEach(function () {
-      rowStub = createSelectorStub('css')
+      rowSelectorStub = createSelectorStub('css')
       sandbox.stub(component, '$')
-        .withArgs().returns(rowStub)
+        .withArgs('.frost-table-row-selection').returns(rowSelectorStub)
       sandbox.stub(component, 'setMinimumCellWidths')
-        .withArgs('').returns(100)
-      component.didRender()
     })
 
-    it('should have set minimum row width', function () {
-      expect(rowStub.css).to.have.been.calledWithExactly({
-        'flex-grow': 1,
-        'flex-shrink': 0,
-        'flex-basis': '100px'
+    describe('row is selectable', function () {
+      beforeEach(function () {
+        component.set('isSelectable', true)
+        component.didInsertElement()
+      })
+
+      it('should have set minimum cell widths', function () {
+        expect(component.setMinimumCellWidths).to.have.been.callCount(1)
+      })
+
+      it('should ensured selection cell doesn\'t grow', function () {
+        expect(rowSelectorStub.css).to.have.been.calledWithExactly({
+          'flex-grow': 0,
+          'flex-shrink': 0
+        })
+      })
+    })
+
+    describe('row is not selectable', function () {
+      beforeEach(function () {
+        component.set('isSelectable', false)
+        component.didInsertElement()
+      })
+
+      it('should have set minimum cell widths', function () {
+        expect(component.setMinimumCellWidths).to.have.been.callCount(1)
+      })
+
+      it('should not have set flex parameters for selection cell', function () {
+        expect(rowSelectorStub.css).to.have.callCount(0)
       })
     })
   })

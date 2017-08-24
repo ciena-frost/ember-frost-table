@@ -72,66 +72,66 @@ export default Mixin.create({
 
   // == Functions =============================================================
 
-  setMinimumCellWidths (bodyRowSelector = '') {
-    let totalWidth = 0
-    const numColumns = this.$(`${bodyRowSelector}`).eq(0).children('.frost-table-cell').length
+  /**
+   * @param {String} rowSelector - JQuery selector matching a single row
+   */
+  setMinimumCellWidths (rowSelector = '') {
+    const numColumns = this.$(`${rowSelector}`).eq(0).children('.frost-table-cell').length
     for (let pos = 1; pos <= numColumns; ++pos) {
-      const curBodyColumn = this.$(`${bodyRowSelector} .frost-table-cell:nth-child(${pos})`)
-
-      // Get width of widest body cell in the column
-      const cellWidths = curBodyColumn.toArray().map((col) => {
-        return parseFloat(this.$(col).css('flex-basis')) || this.$(col).outerWidth(true)
-      })
-      const width = Math.max(...cellWidths)
-      totalWidth += width
+      const curBodyColumn = this.$(`${rowSelector} .frost-table-cell:nth-child(${pos})`)
+      const width = curBodyColumn.outerWidth(true)
       curBodyColumn.css({
         'flex-grow': 1,
         'flex-shrink': 0,
         'flex-basis': `${width}px`
       })
     }
+  },
+
+  /**
+   * @param {String} headerSelector - JQuery selector matching the header
+   * @param {String} bodySelector - JQuery selector matching the body
+   * @returns {Integer} - the total width of all columns
+   */
+  alignHeaderAndBody (headerSelector, bodySelector) {
+    return this.alignColumns(
+      `${headerSelector} ${this.get('headerColumnsSelector')}, ${bodySelector} .frost-table-row`
+    )
+  },
+
+  /**
+   * @param {String} selector - JQuery selector matching all the rows
+   * @returns {Integer} - the total width of all columns
+   */
+  alignColumns (selector) {
+    const numColumns = this.$(selector).eq(0).children().length
+    let totalWidth = 0
+    for (let pos = 1; pos <= numColumns; ++pos) {
+      totalWidth += this.alignColumn(this.$(selector).children(`:nth-child(${pos})`))
+    }
     return totalWidth
   },
 
-  alignColumns (headerSelecter, bodySelector) {
-    const headerCells = this.$(`${headerSelecter} ${this.get('headerColumnCellSelector')}`)
-    let totalWidth = 0
-    for (let pos = 0; pos < headerCells.length; ++pos) {
-      const curBodyColumn = this.$(`${bodySelector} .frost-table-row .frost-table-cell:nth-child(${pos + 1})`)
-      const curHeaderCell = headerCells.eq(pos)
-
-      /*
-       * At this point expect the flex-basis property has been set for all cells
-       * corresponding to the minimum width of the cell
-       */
-      const bodyCellFlexBasis = parseFloat(curBodyColumn.css('flex-basis'))
-      const headerCellFlexBasis = parseFloat(curHeaderCell.css('flex-basis'))
-
-      const sharedBasis = Math.max(bodyCellFlexBasis, headerCellFlexBasis)
-      curHeaderCell.css('flex-basis', `${sharedBasis}px`)
-      curBodyColumn.css('flex-basis', `${sharedBasis}px`)
-      totalWidth += sharedBasis
-    }
-    return totalWidth
+  /**
+   * @param {String} selector - JQuery object matching all cells in a given column
+   * @returns {Integer} - the column's width
+   */
+  alignColumn (selector) {
+    /*
+     * At this point expect the flex-basis property has been set for all cells
+     * corresponding to the minimum width of the cell
+     */
+    const cellWidths = selector.toArray().map((col) => {
+      return parseFloat(this.$(col).css('flex-basis'))
+    })
+    const sharedBasis = Math.max(...cellWidths)
+    selector.css('flex-basis', `${sharedBasis}px`)
+    return sharedBasis
   },
 
   // == DOM Events ============================================================
 
   // == Lifecycle Hooks =======================================================
-
-  didRender () {
-    if (this.get('isSelectable')) {
-      this.$(`.${HEADER_SELECTION_CLASS}`).css({
-        'flex-grow': 0,
-        'flex-shrink': 0
-      })
-      this.$(`.${ROW_SELECTION_CLASS}`).css({
-        'flex-grow': 0,
-        'flex-shrink': 0
-      })
-    }
-    this._super(...arguments)
-  },
 
   // == Actions ===============================================================
   actions: {

@@ -57,7 +57,7 @@ export default Component.extend(SelectionMixin, TableMixin, {
   // == Lifecycle Hooks =======================================================
 
   didRender () {
-    this.$().css('min-width', `${this.alignColumns('.frost-table-header', '.frost-table-body')}px`)
+    this.$().css('min-width', `${this.alignHeaderAndBody('.frost-table-header', '.frost-table-body')}px`)
     this._super(...arguments)
   },
 

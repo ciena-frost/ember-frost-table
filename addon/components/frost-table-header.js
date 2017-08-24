@@ -7,7 +7,7 @@ import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
-import TableMixin, {HEADER_CATEGORIES_CLASS, HEADER_COLUMNS_CLASS} from '../mixins/table'
+import TableMixin, {HEADER_CATEGORIES_CLASS, HEADER_COLUMNS_CLASS, HEADER_SELECTION_CLASS} from '../mixins/table'
 import layout from '../templates/components/frost-table-header'
 
 export default Component.extend(TableMixin, {
@@ -118,7 +118,7 @@ export default Component.extend(TableMixin, {
 
   // == Lifecycle Hooks =======================================================
 
-  didRender () {
+  didInsertElement () {
     if (this.get('haveCategories')) {
       this.setupRows()
       run.next(this, () => {
@@ -126,6 +126,12 @@ export default Component.extend(TableMixin, {
       })
     }
     this.setMinimumCellWidths(this.get('headerColumnsSelector'))
+    if (this.get('isSelectable')) {
+      this.$(`.${HEADER_SELECTION_CLASS}`).css({
+        'flex-grow': 0,
+        'flex-shrink': 0
+      })
+    }
     this._super(...arguments)
   },
 

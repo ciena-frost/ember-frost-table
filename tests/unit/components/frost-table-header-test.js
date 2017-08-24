@@ -145,18 +145,47 @@ describe(test.label, function () {
     })
   })
 
-  describe('.didRender()', function () {
+  describe('.didInsertElement()', function () {
+    let headerSelectionStub
     beforeEach(function () {
       sandbox.stub(component, 'setupRows')
       sandbox.stub(component, 'alignCategories')
       sandbox.stub(component, 'setMinimumCellWidths')
+      headerSelectionStub = createSelectorStub('css')
+      sandbox.stub(component, '$')
+        .withArgs('.frost-table-header-selection-cell').returns(headerSelectionStub)
+    })
+
+    describe('selection enabled', function () {
+      beforeEach(function () {
+        component.set('isSelectable', true)
+        component.didInsertElement()
+      })
+
+      it('should ensured selection cell doesn\'t grow', function () {
+        expect(headerSelectionStub.css).to.have.been.calledWithExactly({
+          'flex-grow': 0,
+          'flex-shrink': 0
+        })
+      })
+    })
+
+    describe('selection disabled', function () {
+      beforeEach(function () {
+        component.set('isSelectable', false)
+        component.didInsertElement()
+      })
+
+      it('should not have set flex parameters for selection cell', function () {
+        expect(headerSelectionStub.css).to.have.been.callCount(0)
+      })
     })
 
     describe('with categories', function () {
       beforeEach(function () {
         sandbox.stub(component, 'get').withArgs('haveCategories').returns(true)
 
-        component.didRender()
+        component.didInsertElement()
 
         return wait()
       })
@@ -176,7 +205,7 @@ describe(test.label, function () {
 
     describe('without categories', function () {
       beforeEach(function () {
-        component.didRender()
+        component.didInsertElement()
       })
 
       it('should not have wrapped header cells in row tags', function () {
