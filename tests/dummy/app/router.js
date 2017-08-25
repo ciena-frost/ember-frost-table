@@ -10,6 +10,7 @@ const DemoRouter = Router.extend({
 DemoRouter.map(function () {
   this.route('demo', {path: '/'}, function () {
     this.route('overview', {path: '/'})
+    this.route('cell-renderers')
     this.route('frost-fixed-table')
     this.route('frost-table')
     this.route('frost-table-body')

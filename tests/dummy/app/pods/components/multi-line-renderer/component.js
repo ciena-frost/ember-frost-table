@@ -4,7 +4,7 @@
 import {CellRenderer} from 'ember-frost-table'
 import layout from './template'
 
-// BEGIN-SNIPPET text-input-renderer
+// BEGIN-SNIPPET multi-line-renderer
 export default CellRenderer.extend({
 
   layout,

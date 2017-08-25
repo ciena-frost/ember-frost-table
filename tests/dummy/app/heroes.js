@@ -18,13 +18,13 @@ const heroes = [
   {
     name: 'Wonder Woman',
     realName: 'Diana Prince',
-    teamAffiliations: ['JLA'],
+    teamAffiliations: ['JLA', 'Amazons of Themyscira'],
     universe: 'DC'
   },
   {
     name: 'Aquaman',
     realName: 'Arthur Curry',
-    teamAffiliations: ['JLA'],
+    teamAffiliations: ['JLA', 'Atlanteans'],
     universe: 'DC'
   },
   {
@@ -78,7 +78,7 @@ const heroes = [
   {
     name: 'Iron Man',
     realName: 'Tony Stark',
-    teamAffiliations: ['Avengers'],
+    teamAffiliations: ['Avengers', 'The Iron Legion'],
     universe: 'Marvel'
   },
   {
@@ -102,19 +102,19 @@ const heroes = [
   {
     name: 'Hulk',
     realName: 'Dr. Robert Bruce Banner',
-    teamAffiliations: ['Avengers'],
+    teamAffiliations: ['Avengers', 'S.M.A.S.H.'],
     universe: 'Marvel'
   },
   {
     name: 'Captain America',
     realName: 'Steve Rogers',
-    teamAffiliations: ['Avengers'],
+    teamAffiliations: ['Avengers', 'Howling Commandos'],
     universe: 'Marvel'
   },
   {
     name: 'Hawkeye',
     realName: 'Clinton Francis Barton',
-    teamAffiliations: ['Avengers'],
+    teamAffiliations: ['Avengers', 'S.H.I.E.L.D.'],
     universe: 'Marvel'
   },
   {
@@ -138,7 +138,7 @@ const heroes = [
   {
     name: 'Black Widow',
     realName: 'Natasha Alianovna Romanoff',
-    teamAffiliations: ['Avengers'],
+    teamAffiliations: ['Avengers', 'S.H.I.E.L.D.'],
     universe: 'Marvel'
   },
   {
@@ -156,7 +156,7 @@ const heroes = [
   {
     name: 'War Machine',
     realName: 'James Rupert "Rhodey" Rhodes',
-    teamAffiliations: ['Avengers'],
+    teamAffiliations: ['Avengers', 'The Iron Legion'],
     universe: 'Marvel'
   }
 ]
