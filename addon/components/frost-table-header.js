@@ -7,7 +7,7 @@ import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
 import {PropTypes} from 'ember-prop-types'
 
-import TableMixin, {HEADER_CATEGORIES_CLASS, HEADER_COLUMNS_CLASS} from '../mixins/table'
+import TableMixin, {HEADER_CATEGORIES_CLASS, HEADER_COLUMNS_CLASS, HEADER_SELECTION_CLASS} from '../mixins/table'
 import layout from '../templates/components/frost-table-header'
 
 export default Component.extend(TableMixin, {
@@ -25,6 +25,7 @@ export default Component.extend(TableMixin, {
     // options
     cellTagName: PropTypes.string,
     rowTagName: PropTypes.string,
+    isSelectable: PropTypes.bool,
 
     // callbacks
     onCallback: PropTypes.func.isRequired
@@ -36,7 +37,8 @@ export default Component.extend(TableMixin, {
     return {
       // options
       cellTagName: 'th',
-      rowTagName: 'tr'
+      rowTagName: 'tr',
+      isSelectable: false
 
       // state
     }
@@ -83,20 +85,6 @@ export default Component.extend(TableMixin, {
       `<${rowTagName} class='${HEADER_COLUMNS_CLASS} frost-table-row frost-table-header-row'></${rowTagName}>`)
   },
 
-  setMinimumCellWidths () {
-    const columnSelector = this.get('headerColumnSelector')
-    this.$(columnSelector).toArray().forEach((el) => {
-      if (isNaN(parseFloat(this.$(el).css('flex-basis')))) {
-        const width = this.$(el).outerWidth(true)
-        this.$(el).css({
-          'flex-grow': 1,
-          'flex-shrink': 0,
-          'flex-basis': `${width}px`
-        })
-      }
-    })
-  },
-
   alignCategories () {
     const _categoryColumns = this.get('_categoryColumns')
     const categorySelector = `.${HEADER_CATEGORIES_CLASS} .frost-table-cell`
@@ -126,27 +114,25 @@ export default Component.extend(TableMixin, {
     })
   },
 
-  parseFloatOrDefault (string, defaultVal) {
-    const float = parseFloat(string)
-    if (!isNaN(float)) {
-      return float
-    }
-    return defaultVal
-  },
-
   // == DOM Events ============================================================
 
   // == Lifecycle Hooks =======================================================
 
   didInsertElement () {
-    this._super(...arguments)
     if (this.get('haveCategories')) {
       this.setupRows()
       run.next(this, () => {
         this.alignCategories()
       })
     }
-    this.setMinimumCellWidths()
+    this.setMinimumCellWidths(this.get('headerColumnsSelector'))
+    if (this.get('isSelectable')) {
+      this.$(`.${HEADER_SELECTION_CLASS}`).css({
+        'flex-grow': 0,
+        'flex-shrink': 0
+      })
+    }
+    this._super(...arguments)
   },
 
   // == Actions ===============================================================

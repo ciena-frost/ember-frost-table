@@ -84,6 +84,7 @@
     }}
       {{#each items as |item index|}}
         {{frost-table-row
+          class=(if isSelectable 'selectable' '')
           cellTagName='div'
           columns=middleColumns
           hook=(concat hookPrefix '-middle')
@@ -106,6 +107,7 @@
     }}
       {{#each items as |item index|}}
         {{frost-table-row
+          class=(if isSelectable 'selectable' '')
           cellTagName='div'
           columns=rightColumns
           hook=(concat hookPrefix '-right')

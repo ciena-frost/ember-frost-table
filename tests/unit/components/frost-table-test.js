@@ -76,19 +76,19 @@ describe(test.label, function () {
     })
   })
 
-  describe('.didInsertElement()', function () {
+  describe('.didRender()', function () {
     let tableStub
     beforeEach(function () {
       tableStub = createSelectorStub('css')
       sandbox.stub(component, '$')
         .withArgs().returns(tableStub)
-      sandbox.stub(component, 'alignColumns')
-      component.alignColumns.returns(100)
-      component.didInsertElement()
+      sandbox.stub(component, 'alignHeaderAndBody')
+      component.alignHeaderAndBody.returns(100)
+      component.didRender()
     })
 
     it('should have called alignColumns() with correct paramaters', function () {
-      expect(component.alignColumns).to.have.been.calledWithExactly('.frost-table-header', '.frost-table-body')
+      expect(component.alignHeaderAndBody).to.have.been.calledWithExactly('.frost-table-header', '.frost-table-body')
     })
 
     it('should have set the table min-width', function () {

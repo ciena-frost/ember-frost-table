@@ -1,3 +1,7 @@
+# 1.5.1 (2017-08-24)
+ * **Fixed** column alignment issue when new rows were added after first render 
+
+
 # 1.5.0 (2017-08-21)
  * **Fixed** issue #30 by changing `frost-table` and `frost-fixed-table` components to use a flexbox approach
  * **Fixed** issue #18 by providing some meaningful tests

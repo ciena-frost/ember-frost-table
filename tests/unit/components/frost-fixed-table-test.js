@@ -273,6 +273,9 @@ describe(test.label, function () {
       sandbox.stub(component, 'setupBodyHeights')
       sandbox.stub(component, 'setupHoverProxy')
       sandbox.stub(component, 'setupScrollSync')
+      sandbox.stub(component, 'setupLeftWidths')
+      sandbox.stub(component, 'setupMiddleWidths')
+      sandbox.stub(component, 'setupRightWidths')
 
       component.didRender()
     })
@@ -287,15 +290,6 @@ describe(test.label, function () {
 
     it('should set up the scroll syncing', function () {
       expect(component.setupScrollSync).to.have.callCount(1)
-    })
-  })
-
-  describe('.didInsertElement()', function () {
-    beforeEach(function () {
-      sandbox.stub(component, 'setupLeftWidths')
-      sandbox.stub(component, 'setupMiddleWidths')
-      sandbox.stub(component, 'setupRightWidths')
-      component.didInsertElement()
     })
 
     it('should set up left widths', function () {
@@ -478,9 +472,8 @@ describe(test.label, function () {
       leftHeaderStub = createSelectorStub('css')
       leftBodyScrollStub.parent.returns(leftBodyStub)
 
-      sandbox.stub(component, 'alignColumns')
+      sandbox.stub(component, 'alignHeaderAndBody')
         .returns(RETURNED_WIDTH)
-      sandbox.stub(component, 'setMinimumCellWidths')
       sandbox.stub(component, '$')
         .withArgs('.frost-fixed-table-left .frost-scroll').returns(leftBodyScrollStub)
         .withArgs('.frost-fixed-table-header-left').returns(leftHeaderStub)
@@ -489,17 +482,10 @@ describe(test.label, function () {
       component.setupLeftWidths()
     })
 
-    it('should have called .setMinimumCellWidths() for left table cells', function () {
-      expect(component.setMinimumCellWidths, 'Called incorrect number of times').to.have.callCount(1)
-      expect(component.setMinimumCellWidths, 'Called with incorrect parameters').to.have.been.calledWithExactly(
-        '.frost-fixed-table-left .frost-scroll'
-      )
-    })
-
-    it('should have called .alignColumns() for left table cells', function () {
-      expect(component.alignColumns, 'Called incorrect number of times').to.have.callCount(1)
-      expect(component.alignColumns, 'Called with incorrect parameters').to.have.been.calledWithExactly(
-        '.frost-fixed-table-header-left',
+    it('should have called .alignHeaderAndBody() for left table cells', function () {
+      expect(component.alignHeaderAndBody, 'Called incorrect number of times').to.have.callCount(1)
+      expect(component.alignHeaderAndBody, 'Called with incorrect parameters').to.have.been.calledWithExactly(
+        '.frost-fixed-table-header-left .frost-table-header',
         '.frost-fixed-table-left .frost-scroll'
       )
     })
@@ -535,9 +521,8 @@ describe(test.label, function () {
       middleBodyScrollStub.parent.returns(middleBodyStub)
       middleHeaderScrollStub.parent.returns(middleHeaderStub)
 
-      sandbox.stub(component, 'alignColumns')
+      sandbox.stub(component, 'alignHeaderAndBody')
         .returns(RETURNED_WIDTH)
-      sandbox.stub(component, 'setMinimumCellWidths')
       sandbox.stub(component, '$')
         .withArgs('.frost-fixed-table-middle .frost-scroll').returns(middleBodyScrollStub)
         .withArgs('.frost-fixed-table-middle .frost-scroll .frost-table-row').returns(middleBodyRowStub)
@@ -547,17 +532,10 @@ describe(test.label, function () {
       component.setupMiddleWidths()
     })
 
-    it('should have called .setMinimumCellWidths() for middle table cells', function () {
-      expect(component.setMinimumCellWidths, 'Called incorrect number of times').to.have.callCount(1)
-      expect(component.setMinimumCellWidths, 'Called with incorrect parameters').to.have.been.calledWithExactly(
-        '.frost-fixed-table-middle .frost-scroll'
-      )
-    })
-
-    it('should have called .alignColumns() for middle table cells', function () {
-      expect(component.alignColumns, 'Called incorrect number of times').to.have.callCount(1)
-      expect(component.alignColumns, 'Called with incorrect parameters').to.have.been.calledWithExactly(
-        '.frost-fixed-table-header-middle .frost-scroll',
+    it('should have called .alignHeaderAndBody() for middle table cells', function () {
+      expect(component.alignHeaderAndBody, 'Called incorrect number of times').to.have.callCount(1)
+      expect(component.alignHeaderAndBody, 'Called with incorrect parameters').to.have.been.calledWithExactly(
+        '.frost-fixed-table-header-middle .frost-scroll .frost-table-header',
         '.frost-fixed-table-middle .frost-scroll'
       )
     })
@@ -598,9 +576,8 @@ describe(test.label, function () {
       rightHeaderStub = createSelectorStub('css')
       rightBodyScrollStub.parent.returns(rightBodyStub)
 
-      sandbox.stub(component, 'alignColumns')
+      sandbox.stub(component, 'alignHeaderAndBody')
         .returns(RETURNED_WIDTH)
-      sandbox.stub(component, 'setMinimumCellWidths')
       sandbox.stub(component, '$')
         .withArgs('.frost-fixed-table-right .frost-scroll').returns(rightBodyScrollStub)
         .withArgs('.frost-fixed-table-header-right').returns(rightHeaderStub)
@@ -609,22 +586,15 @@ describe(test.label, function () {
       component.setupRightWidths()
     })
 
-    it('should have called .setMinimumCellWidths() for left table cells', function () {
-      expect(component.setMinimumCellWidths, 'Called incorrect number of times').to.have.callCount(1)
-      expect(component.setMinimumCellWidths, 'Called with incorrect parameters').to.have.been.calledWithExactly(
+    it('should have called .alignHeaderAndBody() for right table cells', function () {
+      expect(component.alignHeaderAndBody, 'Called incorrect number of times').to.have.callCount(1)
+      expect(component.alignHeaderAndBody, 'Called with incorrect parameters').to.have.been.calledWithExactly(
+        '.frost-fixed-table-header-right .frost-table-header',
         '.frost-fixed-table-right .frost-scroll'
       )
     })
 
-    it('should have called .alignColumns() for left table cells', function () {
-      expect(component.alignColumns, 'Called incorrect number of times').to.have.callCount(1)
-      expect(component.alignColumns, 'Called with incorrect parameters').to.have.been.calledWithExactly(
-        '.frost-fixed-table-header-right',
-        '.frost-fixed-table-right .frost-scroll'
-      )
-    })
-
-    it('should have set left header section minimum width', function () {
+    it('should have set right header section minimum width', function () {
       expect(rightHeaderStub.css, 'Called incorrect number of times').to.have.callCount(1)
       expect(rightHeaderStub.css, 'Called with incorrect parameters').to.have.been.calledWithExactly({
         'flex-grow': 1,
@@ -633,7 +603,7 @@ describe(test.label, function () {
       })
     })
 
-    it('should have set left body section minimum width', function () {
+    it('should have set right body section minimum width', function () {
       expect(rightBodyStub.css, 'Called incorrect number of times').to.have.callCount(1)
       expect(rightBodyStub.css, 'Called with incorrect parameters').to.have.been.calledWithExactly({
         'flex-grow': 1,
@@ -788,26 +758,6 @@ describe(test.label, function () {
 
       it('should set scrollTop on the third destination', function () {
         expect(dst3Stub.scrollTop).to.have.been.calledWith(123)
-      })
-    })
-  })
-
-  describe('.getColIndex()', function () {
-    describe('selection is enabled', function () {
-      beforeEach(function () {
-        component.setProperties({
-          onSelectionChange: () => {}
-        })
-      })
-
-      it('should increment passed number', function () {
-        expect(component.getColIndex(1)).to.eql(2)
-      })
-    })
-
-    describe('selection not enabled', function () {
-      it('should return passed number', function () {
-        expect(component.getColIndex(1)).to.eql(1)
       })
     })
   })

@@ -271,8 +271,10 @@ export default Component.extend(SelectionMixin, TableMixin, {
   },
 
   setupLeftWidths () {
-    this.setMinimumCellWidths(this.get('_bodyLeftSelector'))
-    const leftWidth = this.alignColumns(this.get('_headerLeftSelector'), this.get('_bodyLeftSelector'))
+    const leftWidth = this.alignHeaderAndBody(
+      `${this.get('_headerLeftSelector')} .frost-table-header`,
+      this.get('_bodyLeftSelector')
+    )
     this.$(`${this.get('_headerLeftSelector')}`).css({
       'flex-grow': 1,
       'flex-shrink': 0,
@@ -286,8 +288,10 @@ export default Component.extend(SelectionMixin, TableMixin, {
   },
 
   setupMiddleWidths () {
-    this.setMinimumCellWidths(this.get('_bodyMiddleSelector'))
-    const middleWidth = this.alignColumns(this.get('_headerMiddleSelector'), this.get('_bodyMiddleSelector'))
+    const middleWidth = this.alignHeaderAndBody(
+      `${this.get('_headerMiddleSelector')} .frost-table-header`,
+      this.get('_bodyMiddleSelector')
+    )
     this.$(`${this.get('_headerMiddleSelector')}`).parent().css({
       'flex-grow': 1,
       'flex-shrink': 1,
@@ -302,8 +306,10 @@ export default Component.extend(SelectionMixin, TableMixin, {
   },
 
   setupRightWidths () {
-    this.setMinimumCellWidths(this.get('_bodyRightSelector'))
-    const rightWidth = this.alignColumns(this.get('_headerRightSelector'), this.get('_bodyRightSelector'))
+    const rightWidth = this.alignHeaderAndBody(
+      `${this.get('_headerRightSelector')} .frost-table-header`,
+      this.get('_bodyRightSelector')
+    )
     this.$(`${this.get('_headerRightSelector')}`).css({
       'flex-grow': 1,
       'flex-shrink': 0,
@@ -377,18 +383,13 @@ export default Component.extend(SelectionMixin, TableMixin, {
    * Set up synced scrolling as well as calculating padding for middle sections
    */
   didRender () {
-    this._super(...arguments)
     this.setupBodyHeights()
     this.setupHoverProxy()
     this.setupScrollSync()
-  },
-
-  didInsertElement () {
-    // Only should do these operations on first insertion
-    this._super(...arguments)
     this.setupLeftWidths()
     this.setupMiddleWidths()
     this.setupRightWidths()
+    this._super(...arguments)
   },
 
   // == Actions ===============================================================
