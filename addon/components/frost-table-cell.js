@@ -3,10 +3,9 @@
  */
 
 import {Component} from 'ember-frost-core'
+import layout from '../templates/components/frost-table-cell'
 import {ItemPropType} from 'ember-frost-table/typedefs'
 import {PropTypes} from 'ember-prop-types'
-
-import layout from '../templates/components/frost-table-cell'
 
 export default Component.extend({
   // == Dependencies ==========================================================

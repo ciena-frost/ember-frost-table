@@ -15,8 +15,13 @@ import sinon from 'sinon'
 
 import {columns, columnsWithCustomRenderers, heroes} from './data'
 import {startMirage, stopMirage} from 'dummy/tests/helpers/mirage'
-import {assertRowsSelected, rowBodyRangeSelect, rowBodySingleSelect, rowCheckboxRangeSelect,
-        rowCheckboxSingleSelect} from 'dummy/tests/helpers/selection'
+import {
+  assertRowsSelected,
+  rowBodyRangeSelect,
+  rowBodySingleSelect,
+  rowCheckboxRangeSelect,
+  rowCheckboxSingleSelect
+} from 'dummy/tests/helpers/selection'
 
 const test = integration('frost-table')
 describe(test.label, function () {
@@ -145,19 +150,19 @@ describe(test.label, function () {
       return wait()
     })
 
-    it('rows should have "selectable" class', function () {
+    it('should have "selectable" class on rows', function () {
       expect(this.$('.frost-table-row')).to.have.class('selectable')
     })
 
-    it('no row has "is-selected" class', function () {
+    it('should not have "is-selected" class on row', function () {
       expect(this.$('.frost-table-row')).to.not.have.class('is-selected')
     })
 
-    it('first column has selection checkboxes', function () {
+    it('should have selection checkboxes on first column', function () {
       expect($hook('myTable-body-row-selectionCell')).to.have.length(heroes.length)
     })
 
-    it('header should have clear selection cell', function () {
+    it('should have clear selection cell on header', function () {
       expect($hook('myTable-header-selectionCell')).to.have.length(1)
     })
 
@@ -167,7 +172,7 @@ describe(test.label, function () {
         return wait()
       })
 
-      it('first row is in selected state', function () {
+      it('should have first row in selected state', function () {
         assertRowsSelected('myTable-body-row', 0)
       })
     })
@@ -178,7 +183,7 @@ describe(test.label, function () {
         return wait()
       })
 
-      it('first row is in selected state', function () {
+      it('should have first row in selected state', function () {
         assertRowsSelected('myTable-body-row', 0)
       })
     })
@@ -189,7 +194,7 @@ describe(test.label, function () {
         return wait()
       })
 
-      it('first 5 rows are in selected state', function () {
+      it('should have first 5 rows in selected state', function () {
         assertRowsSelected('myTable-body-row', 0, 1, 2, 3, 4)
       })
     })
@@ -200,7 +205,7 @@ describe(test.label, function () {
         return wait()
       })
 
-      it('first 5 rows are in selected state', function () {
+      it('should have first 5 rows in selected state', function () {
         assertRowsSelected('myTable-body-row', 0, 1, 2, 3, 4)
       })
     })
@@ -212,7 +217,7 @@ describe(test.label, function () {
         return wait()
       })
 
-      it('both rows should be in selected state', function () {
+      it('should have selected state for both rows', function () {
         assertRowsSelected('myTable-body-row', 0, 1)
       })
     })
@@ -224,7 +229,7 @@ describe(test.label, function () {
         return wait()
       })
 
-      it('only the second row selected should be in selected state', function () {
+      it('should have only the second row in selected state', function () {
         assertRowsSelected('myTable-body-row', 1)
       })
     })
@@ -239,7 +244,7 @@ describe(test.label, function () {
         })
       })
 
-      it('no row should be selected', function () {
+      it('should not have any row be selected', function () {
         expect(this.$('.is-selected')).to.have.length(0)
       })
     })
@@ -275,7 +280,7 @@ describe(test.label, function () {
     })
 
     describe('the header', function () {
-      const headerRow = -1  // differentiates from data row 0
+      const headerRow = -1 // differentiates from data row 0
 
       columnsWithCustomRenderers.forEach((column, index) => {
         describe(`when the renderer for column ${index} triggers an event`, function () {
@@ -286,7 +291,7 @@ describe(test.label, function () {
             return wait()
           })
 
-          it('it should be emitted by the table', function () {
+          it('should be emitted by the table', function () {
             expect(onCallback).to.have.been.calledWith(_action({row: headerRow, col: index}))
           })
         })

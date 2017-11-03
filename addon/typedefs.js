@@ -11,7 +11,8 @@ import {PropTypes} from 'ember-prop-types'
  * @property {Number} [index] - the column index of this column. Added by the table components.
  * @property {String} label - the column header label
  * @property {String} propertyName - the name of the property in the data record to display in this column
- * @property {Boolean} [frozen=false] - true if this column should be frozen (on either the left or right side of the table)
+ * @property {Boolean} [frozen=false] - true if this column should be frozen (on either the left or right
+ * side of the table)
  * @property {Component} [renderer] - the cell renderer to use for all data cells in this column
  * @property {String} [category] - the category the column belongs to
  * @property {String} [categoryClassName] - the css class name of the category the column belongs to
