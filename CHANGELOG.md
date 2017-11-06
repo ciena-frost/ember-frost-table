@@ -1,3 +1,8 @@
+# 1.5.2 (2017-11-06)
+* **Updated** testing dependencies
+* **Removed** unneeded testing packages from `bower.json`
+
+
 # 1.5.1 (2017-08-24)
  * **Fixed** column alignment issue when new rows were added after first render 
 
