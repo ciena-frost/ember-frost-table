@@ -15,8 +15,13 @@ import sinon from 'sinon'
 
 import {fixedColumns, fixedColumnsWithCustomRenderers, heroes} from './data'
 import {startMirage, stopMirage} from 'dummy/tests/helpers/mirage'
-import {assertRowsSelected, rowBodyRangeSelect, rowBodySingleSelect, rowCheckboxRangeSelect,
-        rowCheckboxSingleSelect} from 'dummy/tests/helpers/selection'
+import {
+  assertRowsSelected,
+  rowBodyRangeSelect,
+  rowBodySingleSelect,
+  rowCheckboxRangeSelect,
+  rowCheckboxSingleSelect
+} from 'dummy/tests/helpers/selection'
 
 const test = integration('frost-fixed-table')
 describe(test.label, function () {
@@ -556,7 +561,7 @@ describe(test.label, function () {
     })
 
     describe('the header', function () {
-      const headerRow = -1  // differentiates from data row 0
+      const headerRow = -1 // differentiates from data row 0
 
       describe('the left section', function () {
         describe('when an event is triggered by a renderer', function () {
@@ -577,7 +582,7 @@ describe(test.label, function () {
       describe('the middle section', function () {
         const middleColumns = fixedColumnsWithCustomRenderers.slice(1, 3)
         middleColumns.forEach((column, index) => {
-          const globalIndex = index + 1  // offset by single left column
+          const globalIndex = index + 1 // offset by single left column
           describe(`when the renderer for column ${globalIndex} triggers an event`, function () {
             beforeEach(function () {
               // FIXME: Fix this to use qualifiers on '...renderer-input' hook
@@ -637,7 +642,7 @@ describe(test.label, function () {
 
         heroes.forEach((hero, rowIndex) => {
           middleColumns.forEach((column, index) => {
-            const globalIndex = index + 1  // left column count offsets all of our hooks + events
+            const globalIndex = index + 1 // left column count offsets all of our hooks + events
             describe(`when an event is triggered from the cell in row: ${rowIndex}, column: ${index}`, function () {
               beforeEach(function () {
                 // FIXME: Fix this to use qualifiers on '...renderer-input' hook
@@ -660,7 +665,7 @@ describe(test.label, function () {
 
         heroes.forEach((hero, rowIndex) => {
           rightColumns.forEach((column, index) => {
-            const globalIndex = index + 3  // left + right column count offsets all of our hooks + events
+            const globalIndex = index + 3 // left + right column count offsets all of our hooks + events
             describe(`when an event is triggered from the cell in row: ${rowIndex}, column: ${index}`, function () {
               beforeEach(function () {
                 // FIXME: Fix this to use qualifiers on '...renderer-input' hook

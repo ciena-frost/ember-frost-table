@@ -4,11 +4,10 @@
 
 import {expect} from 'chai'
 import Ember from 'ember'
+import {createSelectorStub} from 'dummy/tests/helpers/selector-stub'
 import TableMixin from 'ember-frost-table/mixins/table'
 import {afterEach, beforeEach, describe, it} from 'mocha'
 import sinon from 'sinon'
-
-import {createSelectorStub} from 'dummy/tests/helpers/selector-stub'
 
 describe('Unit / Mixins / table', function () {
   let mixin, columns, sandbox
@@ -63,7 +62,7 @@ describe('Unit / Mixins / table', function () {
           mixin.setProperties({columns})
         })
 
-        it('haveCategories should be true', function () {
+        it('should have haveCategories set to true', function () {
           expect(mixin.get('haveCategories')).to.equal(true)
         })
       })
@@ -90,7 +89,7 @@ describe('Unit / Mixins / table', function () {
           })
         })
 
-        it('haveCategories should be false', function () {
+        it('should have haveCategories set to false', function () {
           expect(mixin.get('haveCategories')).to.equal(false)
         })
       })

@@ -4,12 +4,11 @@
 
 import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
-import {ItemsPropType} from 'ember-frost-table/typedefs'
-import {PropTypes} from 'ember-prop-types'
-
 import SelectionMixin from '../mixins/selection'
 import TableMixin from '../mixins/table'
 import layout from '../templates/components/frost-table'
+import {ItemsPropType} from 'ember-frost-table/typedefs'
+import {PropTypes} from 'ember-prop-types'
 
 export default Component.extend(SelectionMixin, TableMixin, {
   // == Dependencies ==========================================================

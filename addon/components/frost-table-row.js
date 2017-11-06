@@ -7,11 +7,10 @@ const {ViewUtils, isEmpty} = Ember
 const {isSimpleClick} = ViewUtils
 import computed, {readOnly} from 'ember-computed-decorators'
 import {Component} from 'ember-frost-core'
-import {ColumnPropType, ItemPropType} from 'ember-frost-table/typedefs'
-import {PropTypes} from 'ember-prop-types'
-
 import TableMixin, {ROW_SELECTION_CLASS} from '../mixins/table'
 import layout from '../templates/components/frost-table-row'
+import {ColumnPropType, ItemPropType} from 'ember-frost-table/typedefs'
+import {PropTypes} from 'ember-prop-types'
 
 export default Component.extend(TableMixin, {
   // == Dependencies ==========================================================

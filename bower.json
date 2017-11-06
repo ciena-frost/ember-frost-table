@@ -1,7 +1,6 @@
 {
   "name": "ember-frost-table",
   "dependencies": {
-    "ember-mocha-adapter": "~0.3.1",
     "perfect-scrollbar": ">=0.6.7 <2.0.0"
   }
 }

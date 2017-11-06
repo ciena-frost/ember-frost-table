@@ -216,13 +216,13 @@ describe(test.label, function () {
           })
         })
 
-        it('isSelectable should be true', function () {
+        it('should have isSelectable set to true', function () {
           expect(component.get('isSelectable')).to.equal(true)
         })
       })
 
       describe('selection is not enabled', function () {
-        it('isSelectable should be false', function () {
+        it('should have isSelectable set to false', function () {
           expect(component.get('isSelectable')).to.equal(false)
         })
       })
@@ -234,7 +234,7 @@ describe(test.label, function () {
           component.setProperties({columns})
         })
 
-        it('haveCategories should be true', function () {
+        it('should have haveCategories set to true', function () {
           expect(component.get('haveCategories')).to.equal(true)
         })
       })
@@ -261,7 +261,7 @@ describe(test.label, function () {
           })
         })
 
-        it('haveCategories should be false', function () {
+        it('should have haveCategories set to false', function () {
           expect(component.get('haveCategories')).to.equal(false)
         })
       })
