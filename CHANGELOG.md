@@ -1,3 +1,6 @@
+# 1.5.3 (2017-11-13)
+* #40 - Bind context to call of this._super.included() in index.js
+
 # 1.5.2 (2017-11-06)
 * **Updated** testing dependencies
 * **Removed** unneeded testing packages from `bower.json`

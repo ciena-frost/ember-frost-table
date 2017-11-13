@@ -1,6 +1,6 @@
 {
   "name": "ember-frost-table",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "A simple table component",
   "directories": {
     "doc": "doc",
@@ -71,6 +71,6 @@
     "configPath": "tests/dummy/config"
   },
   "pr-bumper": {
-    "coverage": 96.66
+    "coverage": 97.45
   }
 }
