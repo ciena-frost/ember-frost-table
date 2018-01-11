@@ -150,6 +150,7 @@ export default Component.extend(SelectionMixin, TableMixin, {
     return frozenColumns
   },
 
+  /* eslint-disable complexity */
   @readOnly
   @computed('indexedColumns', 'haveCategories')
   /**
@@ -182,6 +183,7 @@ export default Component.extend(SelectionMixin, TableMixin, {
 
     return unFrozenColumns
   },
+  /* eslint-enable complexity */
 
   @readOnly
   @computed('indexedColumns', 'haveCategories')
