@@ -40,7 +40,6 @@
     "ember-frost-core": "1.23.10",
     "ember-frost-notifier": "3.0.0",
     "ember-frost-test": "^4.0.0",
-    "ember-inflector": "^1.9.4",
     "ember-load-initializers": "^0.6.0",
     "ember-lodash-shim": "1.0.1",
     "ember-perfectscroll": "0.1.12",
