@@ -35,7 +35,6 @@
     "ember-cli-uglify": "^1.2.0",
     "ember-code-snippet": "1.7.0",
     "ember-data": "~2.8.0",
-    "ember-elsewhere": "1.0.1",
     "ember-export-application-global": "^1.0.5",
     "ember-frost-core": "1.23.10",
     "ember-frost-notifier": "3.0.0",
