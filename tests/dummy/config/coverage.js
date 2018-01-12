@@ -3,8 +3,8 @@ module.exports = {
   coverageFolder: 'coverage',
   useBabelInstrumenter: true,
   reporters: [
-    'json',
     'html',
+    'json-summary',
     'lcov',
     'text-summary'
   ],
