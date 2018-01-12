@@ -1,3 +1,30 @@
+# 2.0.0 (2018-01-12)
+* **Added** `bower` @ `1.8.2`
+* **Updated** `ember-frost-test` to `^4.0.0`
+* **Updated** `ember-test-utils` to `^8.1.0`
+* **Updated** `ember-cli-frost-blueprints` to `^5.0.1`
+* **Added** ignoring of `package-lock` until we are ready to move to node 8
+* **Removed** useLintTree ember-cli-mocha configuration from `ember-cli-build.js`
+* **Removed** `.remarkrc` file since it is now provided by `ember-test-utils`
+* **Added** `ember-browserify` @ `^1.2.0`
+* **Updated** pin `ember-code-snippet` to `1.7.0`
+* **Updated** `ember-cli-sass` to `7.1.1`
+* **Updated** `ember-computed-decorators` to be a dependency instead of a devDependency
+* **Updated** `ember-frost-core` to `^5.1.1` and moved to a dependency instead of a devDependency
+* **Updated** `ember-hook` to `1.4.2` and moved to a dependency instead of a devDependency
+* **Updated** `ember-prop-types` to `^6.0.1` and moved to a dependency instead of a devDependency
+* **Removed** unused `ember-spread` package
+* **Removed** unused `ember-truth-helpers` package
+* **Removed** unused `ember-concurrency` package
+* **Removed** unused `ember-elsewhere` package
+* **Removed** unused `ember-inflector` package
+* **Removed** unused `ember-lodash-shim` package
+* **Removed** `ember-perfectscroll` package (it is being brought in via `ember-frost-core` for frost-scroll)
+* **Removed** `perfect-scrollbar` bower package (it is being brought in via `ember-frost-core` for frost-scroll)
+* **Removed** unused `lodash-es` package
+* **Updated** `ember-frost-notifier` to `^7.0.0`
+* **Updated** move code coverage config file to tests/dummy/config/ and add json-summary reporter"
+
 # 1.5.3 (2017-11-13)
 * #40 - Bind context to call of this._super.included() in index.js
 
