@@ -1,3 +1,12 @@
+# 3.0.0 (2018-02-15)
+* **Removed** hardcoded version of `ua-parser-js.js` in vendor directory
+* **Added** `ua-parser-js` @ `^0.7.17`
+* **Added** `broccoli-funnel` @ `^2.0.1`
+* **Added** `broccoli-merge-trees` @ `^2.0.0`
+* **Added** vendor shim to create es6 importable module
+* **Updated** `index.js` to bring in `ua-parser-js` npm dependency
+* **Updated** `ember-frost-core` to `^6.0.0`
+
 # 2.0.0 (2018-01-12)
 * **Added** `bower` @ `1.8.2`
 * **Updated** `ember-frost-test` to `^4.0.0`
