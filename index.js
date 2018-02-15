@@ -3,6 +3,8 @@
 'use strict'
 
 const path = require('path')
+const MergeTrees = require('broccoli-merge-trees')
+const Funnel = require('broccoli-funnel')
 
 function initOptions (options) {
   options.babel = options.babel || {}
@@ -36,6 +38,15 @@ module.exports = {
 
     if (app) {
       app.import(path.join('vendor', 'ua-parser.min.js'))
+      app.import(path.join('vendor', 'shims', 'ua-parser-js.js'))
     }
+  },
+
+  treeForVendor: function (vendorTree) {
+    const packageTree = new Funnel(path.join(this.project.root, 'node_modules', 'ua-parser-js', 'dist'), {
+      files: ['ua-parser.min.js']
+    })
+
+    return new MergeTrees([vendorTree, packageTree])
   }
 }
