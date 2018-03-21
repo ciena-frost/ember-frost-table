@@ -1,6 +1,6 @@
 {
   "name": "ember-frost-table",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "A simple table component",
   "directories": {
     "doc": "doc",

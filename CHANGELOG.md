@@ -1,3 +1,16 @@
+# 4.0.0 (2018-03-21)
+* **Updated** pull request template
+* **Added** issue template
+* **Updated** to `pr-bumper` version `3`
+* **Updated** to node 8
+* **Added** slack integration
+* **Updated** `ember-frost-test` to `^4.0.1`
+* **Updated** `ember-test-utils` to `^8.1.1`
+* **Updated** `ember-cli-frost-blueprints` to `^5.0.2`
+* **Updated** `ember-prop-types` to `^7.0.1`
+* **Updated** `ember-frost-core` to `^7.0.0`
+* **Removed** ignoring of `package-lock.json` file
+
 # 3.0.0 (2018-02-15)
 * **Removed** hardcoded version of `ua-parser-js.js` in vendor directory
 * **Added** `ua-parser-js` @ `^0.7.17`
