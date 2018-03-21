@@ -71,6 +71,6 @@
     "configPath": "tests/dummy/config"
   },
   "pr-bumper": {
-    "coverage": 97.45
+    "coverage": 94.08
   }
 }
